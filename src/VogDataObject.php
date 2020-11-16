@@ -2,7 +2,7 @@
 
 namespace Vog;
 
-abstract class VogDataOject
+abstract class VogDataObject
 {
     protected string $type;
     protected string $name;

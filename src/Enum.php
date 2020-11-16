@@ -2,7 +2,7 @@
 
 namespace Vog;
 
-class Enum extends VogDataOject
+class Enum extends VogDataObject
 {
     private array $values;
 

@@ -60,7 +60,7 @@ class Vog
         return $data;
     }
 
-    private function build_vog_data_object(array $data, string $namespace): VogDataOject
+    private function build_vog_data_object(array $data, string $namespace): VogDataObject
     {
         if (!array_key_exists("name", $data)) {
             throw new UnexpectedValueException(
@@ -113,7 +113,7 @@ class Vog
         return $vog_obj;
     }
 
-    private function write_to_file(VogDataOject $dataOject)
+    private function write_to_file(VogDataObject $dataOject)
     {
         $sucess = file_put_contents($dataOject->getTargetFilepath(), $dataOject->getPhpCode());
 

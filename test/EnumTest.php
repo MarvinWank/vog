@@ -9,7 +9,6 @@ class EnumTest extends VogTestCase
     public function setUp(): void
     {
         parent::setUp();
-        require '../vendor/autoload.php';
     }
 
     /**
