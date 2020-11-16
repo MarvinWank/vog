@@ -1,5 +1,9 @@
 <?php
 
+namespace Vog;
+
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 class Vog
 {
@@ -34,7 +38,7 @@ class Vog
         $filepath = $dir . DIRECTORY_SEPARATOR . $file;
 
         if (!file_exists($dir)) {
-            throw new \InvalidArgumentException("Directory " . $dir . " does not exist");
+            throw new InvalidArgumentException("Directory " . $dir . " does not exist");
         }
         if ($file === null && !file_exists($dir . DIRECTORY_SEPARATOR . 'value.json')) {
             throw new InvalidArgumentException("No 'value.json' was found at " . $dir . 'Please create one or provide a filename');
@@ -49,7 +53,7 @@ class Vog
             $file = file_get_contents($dir . DIRECTORY_SEPARATOR . 'value.json');
         }
 
-        $data = json_decode($file, true);
+        $data = \json_decode($file, true);
         if ($data === null) {
             throw new UnexpectedValueException("Could not parse " . $filepath . "\n json_last_error_msg(): " . json_last_error_msg());
         }

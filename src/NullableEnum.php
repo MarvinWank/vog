@@ -1,5 +1,6 @@
 <?php
 
+namespace Vog;
 
 class NullableEnum extends Enum
 {

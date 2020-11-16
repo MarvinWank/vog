@@ -1,5 +1,6 @@
 <?php
 
+namespace Vog;
 
 abstract class VogDataOject
 {

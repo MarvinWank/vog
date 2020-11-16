@@ -1,5 +1,6 @@
 <?php
 
+namespace Vog;
 
 class Enum extends VogDataOject
 {

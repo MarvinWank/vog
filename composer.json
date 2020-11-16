@@ -2,20 +2,20 @@
     "name": "marvinwank/vog",
     "description": "A simple php value object generator",
     "type": "library",
-    "license": "WWTFPL – Do What the Fuck You Want to Public License http://www.wtfpl.net",
+    "license": "MIT",
     "authors": [
         {
-            "name": "MarvinWank",
+            "name": "Marvin Wank",
             "email": "marvin.wank@outlook.de"
         }
     ],
     "require": {
+        "ext-json": "*"
     },
     "autoload": {
-        "classmap": [
-            "src",
-            "test"
-        ]
+        "psr-4": {
+            "Vog\\": "src/"
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "^9"
