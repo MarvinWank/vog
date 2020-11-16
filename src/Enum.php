@@ -27,6 +27,17 @@ class Enum extends VogDataOject
 
         $phpcode .= "\n\n";
 
+        $phpcode = $this->generate_const_options($phpcode);
+        $phpcode = $this->generate_constructor($phpcode);
+        $phpcode = $this->generate_methods($phpcode);
+        $phpcode = $this->generate_generic_functions($phpcode);
+
+        $phpcode .= "\n\n}";
+        return $phpcode;
+    }
+
+    private function generate_const_options(string $phpcode): string
+    {
         $values_as_array_string = "[";
         foreach ($this->values as $name => $value) {
             $values_as_array_string .= ' "' . $name . '" => ' . '"' . $value . '",';
@@ -41,7 +52,11 @@ class Enum extends VogDataOject
             $phpcode .= "\tpublic const $name = '$value';";
         }
         $phpcode .= "\n";
+        return $phpcode;
+    }
 
+    private function generate_constructor(string $phpcode): string
+    {
         $phpcode .= <<<'EOT'
         
     private string $name;
@@ -53,7 +68,11 @@ class Enum extends VogDataOject
         $this->value = self::OPTIONS[$name];
     }
 EOT;
+        return $phpcode;
+    }
 
+    private function generate_methods(string $phpcode): string
+    {
         $phpcode .= "\n";
         foreach ($this->values as $name => $value) {
             $phpcode .= "\n\n";
@@ -63,7 +82,11 @@ EOT;
             $phpcode .= "\n\t}";
         }
         $phpcode .= "\n\n";
+        return $phpcode;
+    }
 
+    private function generate_generic_functions(string $phpcode): string
+    {
         $phpcode .= <<<'EOT'
     public static function fromValue(string $input_value): self
     {
@@ -110,10 +133,6 @@ EOT;
         return $this->name;
     }
 EOT;
-
-
-        $phpcode .= "\n\n}";
         return $phpcode;
     }
-
 }
