@@ -11,7 +11,7 @@
       }
     },
     {
-      "type": "enum",
+      "type": "nullableEnum",
       "name": "Cuisine",
       "values": {
         "DEUTSCH": "deutsch",

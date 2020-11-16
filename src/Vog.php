@@ -5,7 +5,7 @@ class Vog
 {
     private string $root_path;
 
-    private const ALL_DATA_TYPES = ["enum"];
+    private const ALL_DATA_TYPES = ["enum", "nullableEnum"];
 
     public function run(string $dir, ?string $file = null)
     {
@@ -23,7 +23,7 @@ class Vog
                 $success = $this->write_to_file($object);
 
                 if($success){
-                    echo "\n Object ". $object->getName() . " sucessfully written to ". $object->getTargetFilepath();
+                    echo "\n Object ". $object->getName() . " sucessfully written to ". $object->getTargetFilepath(). " \n";
                 }
             }
         }
@@ -91,6 +91,10 @@ class Vog
         switch ($data['type']) {
             case "enum":
                 $vog_obj = new Enum($data['name']);
+                $vog_obj->setValues($data['values']);
+                break;
+            case "nullableEnum":
+                $vog_obj = new NullableEnum($data['name']);
                 $vog_obj->setValues($data['values']);
                 break;
             default:
