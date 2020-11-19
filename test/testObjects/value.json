@@ -5,20 +5,9 @@
       "type": "enum",
       "name": "DietStyle",
       "values": {
-        "ALLES": "alles",
-        "VEGETARISCH": "vegetarisch",
+        "EVERYTHING": "everything",
+        "VEGETARIAN": "vegetarian",
         "VEGAN": "vegan"
-      }
-    },
-    {
-      "type": "nullableEnum",
-      "name": "Cuisine",
-      "values": {
-        "DEUTSCH": "deutsch",
-        "MEDITERAN": "mediteran",
-        "ASIATISCH": "asiatisch",
-        "AMERIKANISCH": "amerikanisch",
-        "INDISCH": "indisch"
       }
     }
   ]
