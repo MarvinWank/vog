@@ -21,13 +21,13 @@ class Vog
         $this->root_path = $data['root_path'];
         unset($data['root_path']);
 
-        foreach ($data as $namespace => $objects) {
+        foreach ($data as $target_filepath => $objects) {
             foreach ($objects as $object) {
-                $object = $this->build_vog_data_object($object, $namespace);
+                $object = $this->build_vog_data_object($object, $target_filepath);
                 $success = $this->write_to_file($object);
 
-                if($success){
-                    echo "\n Object ". $object->getName() . " sucessfully written to ". $object->getTargetFilepath(). " \n";
+                if ($success) {
+                    echo "\n Object " . $object->getName() . " sucessfully written to " . $object->getTargetFilepath() . " \n";
                 }
             }
         }
@@ -60,14 +60,14 @@ class Vog
         return $data;
     }
 
-    private function build_vog_data_object(array $data, string $namespace): VogDataObject
+    private function build_vog_data_object(array $data, string $target_filepath): VogDataObject
     {
         if (!array_key_exists("name", $data)) {
             throw new UnexpectedValueException(
                 "No name was given for an object"
             );
         }
-        if (!$namespace || $namespace === "") {
+        if (!$target_filepath || $target_filepath === "") {
             throw new UnexpectedValueException(
                 "No namespace was given" . " for object " . $data['name']
             );
@@ -106,9 +106,9 @@ class Vog
                 implemented. Please open an issue on GitHub");
         }
 
-        $target_filepath = $this->get_target_filepath($namespace);
+        $target_namespacee = $this->get_target_namespace($target_filepath);
+        $vog_obj->setNamespace($target_namespacee);
         $vog_obj->setTargetFilepath($target_filepath);
-        $vog_obj->setNamespace($namespace);
 
         return $vog_obj;
     }
@@ -120,18 +120,20 @@ class Vog
         return $sucess;
     }
 
-    private function get_target_filepath(string $namespace)
+    private function get_target_namespace(string $target_filepath)
     {
-        $filePath = str_replace("\\", DIRECTORY_SEPARATOR, $namespace);
-
-        if (file_exists($filePath)) {
-            return $filePath;
-        }
-        $filePath = strtolower($filePath);
-        if (!file_exists($this->root_path . DIRECTORY_SEPARATOR . $filePath)) {
-            throw new UnexpectedValueException("Directory " . $this->root_path . DIRECTORY_SEPARATOR . $filePath . " does not exist");
+        if (!file_exists($target_filepath)) {
+            throw new UnexpectedValueException("Directory " . $target_filepath . " does not exist");
         }
 
-        return $this->root_path . DIRECTORY_SEPARATOR . $filePath;
+
+        $filePath_as_array = explode(DIRECTORY_SEPARATOR, $target_filepath);
+        foreach ($filePath_as_array as $key => $path){
+            $filePath_as_array[$key] = ucfirst($path);
+        }
+        $target_filepath = implode(DIRECTORY_SEPARATOR, $filePath_as_array);
+        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $target_filepath);
+
+        return $namespace;
     }
 }

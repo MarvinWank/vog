@@ -1,7 +1,7 @@
 <?php
 
 
-use Test\Test_Objects\Cuisine;
+use Test\TestObjects\Cuisine;
 
 class NullableEnumTest extends VogTestCase
 {

@@ -2,7 +2,7 @@
 
 
 use PHPUnit\Framework\TestCase;
-use Test\Test_Objects\DietStyle;
+use Test\TestObjects\DietStyle;
 
 class EnumTest extends VogTestCase
 {

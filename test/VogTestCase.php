@@ -12,6 +12,6 @@ class VogTestCase extends TestCase
         parent::setUp();
 
         $vog = new Vog();
-        $vog->run(__DIR__."/test_objects");
+        $vog->run(__DIR__."/testObjects");
     }
 }

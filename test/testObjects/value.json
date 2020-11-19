@@ -1,6 +1,6 @@
 {
   "root_path": "/home/marvw/Projekte/Privat/value_object_generator",
-  "Test\\Test_Objects": [
+  "test/testObjects": [
     {
       "type": "enum",
       "name": "DietStyle",
