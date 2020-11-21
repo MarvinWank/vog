@@ -23,6 +23,8 @@ class ValueObject extends VogDataObject
         $phpcode = $this->generate_construtctor($phpcode);
         $phpcode = $this->generate_getters($phpcode);
         $phpcode = $this->generate_with_methods($phpcode);
+        $phpcode = $this->generate_to_array($phpcode);
+        $phpcode = $this->generate_from_array($phpcode);
 
 
         $phpcode .= "\n}";
@@ -90,6 +92,46 @@ class ValueObject extends VogDataObject
             $phpcode .= ");";
             $phpcode .= "\n\t}";
         }
+
+        return $phpcode;
+    }
+
+    //TODO: non-primitive types
+    private function generate_to_array(string $phpcode): string
+    {
+        $phpcode .= "\n\tpublic function toArray(): array";
+        $phpcode .= "\n\t{";
+
+        $phpcode .=  "\n\t\t return [";
+        foreach ($this->values as $name => $datatype){
+            $phpcode .= "\n\t\t\t '$name' => \$this->$name, ";
+        }
+        $phpcode .=  "\n\t\t];";
+
+        $phpcode .= "\n\t}";
+        return $phpcode;
+    }
+
+    private function generate_from_array(string $phpcode): string
+    {
+        $phpcode .= "\n\n\tpublic function fromArray(array \$array): self";
+        $phpcode .= "\n\t{";
+
+        foreach ($this->values as $name => $datatype){
+            $phpcode .= "\n\t\tif(!array_key_exists('$name', \$array)){";
+            $phpcode .= "\n\t\t\t throw new \\UnexpectedValueException('Array key $name does not exist');";
+            $phpcode .= "\n\t\t}";
+        }
+
+        $phpcode .= "\n";
+
+        $phpcode .= "\n\t\treturn new self(";
+        foreach ($this->values as $name => $datatype){
+            $phpcode .= "\$array['$name'],";
+        }
+        $phpcode .= ");";
+
+        $phpcode .= "\n\t}";
 
         return $phpcode;
     }
