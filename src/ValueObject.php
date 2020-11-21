@@ -114,7 +114,7 @@ class ValueObject extends VogDataObject
 
     private function generate_from_array(string $phpcode): string
     {
-        $phpcode .= "\n\n\tpublic function fromArray(array \$array): self";
+        $phpcode .= "\n\n\tpublic static function fromArray(array \$array): self";
         $phpcode .= "\n\t{";
 
         foreach ($this->values as $name => $datatype){

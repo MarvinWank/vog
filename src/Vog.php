@@ -112,7 +112,7 @@ class Vog
 
         $target_namespacee = $this->get_target_namespace($target_filepath);
         $vog_obj->setNamespace($target_namespacee);
-        $vog_obj->setTargetFilepath($target_filepath);
+        $vog_obj->setTargetFilepath($this->root_path . DIRECTORY_SEPARATOR . $target_filepath);
 
         return $vog_obj;
     }
@@ -126,7 +126,7 @@ class Vog
 
     private function get_target_namespace(string $target_filepath)
     {
-        if (!file_exists($target_filepath)) {
+        if (!file_exists($this->root_path . DIRECTORY_SEPARATOR . $target_filepath)) {
             throw new UnexpectedValueException("Directory " . $target_filepath . " does not exist");
         }
 

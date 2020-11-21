@@ -69,7 +69,7 @@ final class Recipe
 		];
 	}
 
-	public function fromArray(array $array): self
+	public static function fromArray(array $array): self
 	{
 		if(!array_key_exists('title', $array)){
 			 throw new \UnexpectedValueException('Array key title does not exist');
