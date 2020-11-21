@@ -9,7 +9,7 @@ class Vog
 {
     private string $root_path;
 
-    private const ALL_DATA_TYPES = ["enum", "nullableEnum"];
+    private const ALL_DATA_TYPES = ["enum", "nullableEnum", "valueObject"];
 
     public function run(string $dir, ?string $file = null)
     {
@@ -99,6 +99,10 @@ class Vog
                 break;
             case "nullableEnum":
                 $vog_obj = new NullableEnum($data['name']);
+                $vog_obj->setValues($data['values']);
+                break;
+            case "valueObject":
+                $vog_obj = new ValueObject($data['name']);
                 $vog_obj->setValues($data['values']);
                 break;
             default:

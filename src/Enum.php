@@ -4,22 +4,11 @@ namespace Vog;
 
 class Enum extends VogDataObject
 {
-    private array $values;
 
     public function __construct(string $name)
     {
         parent::__construct($name);
         $this->type = "enum";
-    }
-
-    public function setValues(array $values)
-    {
-        $this->values = $values;
-    }
-
-    public function getValues(): array
-    {
-        return $this->values;
     }
 
     public function getPhpCode(): string

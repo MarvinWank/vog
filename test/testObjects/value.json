@@ -5,9 +5,30 @@
       "type": "enum",
       "name": "DietStyle",
       "values": {
-        "EVERYTHING": "everything",
-        "VEGETARIAN": "vegetarian",
+        "ALLES": "alles",
+        "VEGETARISCH": "vegetarisch",
         "VEGAN": "vegan"
+      }
+    },
+    {
+      "type": "nullableEnum",
+      "name": "Cuisine",
+      "values": {
+        "DEUTSCH": "deutsch",
+        "MEDITERAN": "mediteran",
+        "ASIATISCH": "asiatisch",
+        "AMERIKANISCH": "amerikanisch",
+        "INDISCH": "indisch"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "any_value": ""
       }
     }
   ]

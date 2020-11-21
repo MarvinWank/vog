@@ -8,6 +8,7 @@ abstract class VogDataObject
     protected string $name;
     protected string $namespace;
     protected string $target_filepath;
+    protected array $values;
 
     public function __construct(string $name)
     {
@@ -39,6 +40,16 @@ abstract class VogDataObject
     public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
+    }
+
+    public function setValues(array $values)
+    {
+        $this->values = $values;
+    }
+
+    public function getValues(): array
+    {
+        return $this->values;
     }
 
     protected function getGenericPhpHeader(): string
