@@ -3,6 +3,7 @@
 
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\Recipe;
+use Test\TestObjects\RecipeIntStringValue;
 
 class ValueObjectTest extends VogTestCase
 {
@@ -51,6 +52,15 @@ class ValueObjectTest extends VogTestCase
         $this->assertEquals(30, $recipe['minutes_to_prepare']);
         $this->assertEquals(5.5, $recipe['rating']);
         $this->assertEquals("VEGAN", $recipe['diet_style']);
+    }
+
+    /**
+     * @test
+     */
+    public function es_testet_mit_int_als_string_value()
+    {
+        $recipe = new RecipeIntStringValue("Test Recipe", 30, 5.5, DietStyle::VEGAN());
+        $this->assertEquals("5.5", strval($recipe));
     }
 
 }

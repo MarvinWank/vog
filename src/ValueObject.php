@@ -159,12 +159,12 @@ class ValueObject extends VogDataObject
     {
         $phpcode .= "\n\n\tpublic function __toString(): string";
         $phpcode .= "\n\t{";
-        $phpcode .= "\n\t\treturn \$this->$this->string_value;";
+        $phpcode .= "\n\t\treturn strval(\$this->$this->string_value);";
         $phpcode .= "\n\t}";
 
         $phpcode .= "\n\n\tpublic function toString(): string";
         $phpcode .= "\n\t{";
-        $phpcode .= "\n\t\treturn \$this->$this->string_value;";
+        $phpcode .= "\n\t\treturn strval(\$this->$this->string_value);";
         $phpcode .= "\n\t}";
 
         return $phpcode;

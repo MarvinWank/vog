@@ -89,11 +89,11 @@ final class Recipe
 
 	public function __toString(): string
 	{
-		return $this->title;
+		return strval($this->title);
 	}
 
 	public function toString(): string
 	{
-		return $this->title;
+		return strval($this->title);
 	}
 }

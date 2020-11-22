@@ -41,6 +41,17 @@
         "rating": "float",
         "diet_style": "DietStyle"
       }
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeIntStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "rating"
     }
   ]
 }
