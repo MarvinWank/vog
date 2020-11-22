@@ -63,9 +63,9 @@ final class Recipe
 	{
 		 return [
 			 'title' => $this->title, 
-			 'minutes_to_prepare' => $this->minutes_to_prepare, 
+			 'minutes_to_prepare' => strval($this->minutes_to_prepare), 
 			 'rating' => $this->rating, 
-			 'diet_style' => $this->diet_style, 
+			 'diet_style' => strval($this->diet_style), 
 		];
 	}
 

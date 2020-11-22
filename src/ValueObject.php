@@ -6,6 +6,8 @@ namespace Vog;
 
 class ValueObject extends VogDataObject
 {
+    private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
+
     public function __construct(string $name)
     {
         parent::__construct($name);
@@ -96,17 +98,20 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    //TODO: non-primitive types
     private function generate_to_array(string $phpcode): string
     {
         $phpcode .= "\n\tpublic function toArray(): array";
         $phpcode .= "\n\t{";
 
-        $phpcode .=  "\n\t\t return [";
-        foreach ($this->values as $name => $datatype){
-            $phpcode .= "\n\t\t\t '$name' => \$this->$name, ";
+        $phpcode .= "\n\t\t return [";
+        foreach ($this->values as $name => $datatype) {
+            if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
+                $phpcode .= "\n\t\t\t '$name' => strval(\$this->$name), ";
+            } else {
+                $phpcode .= "\n\t\t\t '$name' => \$this->$name, ";
+            }
         }
-        $phpcode .=  "\n\t\t];";
+        $phpcode .= "\n\t\t];";
 
         $phpcode .= "\n\t}";
         return $phpcode;
@@ -117,7 +122,7 @@ class ValueObject extends VogDataObject
         $phpcode .= "\n\n\tpublic static function fromArray(array \$array): self";
         $phpcode .= "\n\t{";
 
-        foreach ($this->values as $name => $datatype){
+        foreach ($this->values as $name => $datatype) {
             $phpcode .= "\n\t\tif(!array_key_exists('$name', \$array)){";
             $phpcode .= "\n\t\t\t throw new \\UnexpectedValueException('Array key $name does not exist');";
             $phpcode .= "\n\t\t}";
@@ -126,7 +131,7 @@ class ValueObject extends VogDataObject
         $phpcode .= "\n";
 
         $phpcode .= "\n\t\treturn new self(";
-        foreach ($this->values as $name => $datatype){
+        foreach ($this->values as $name => $datatype) {
             $phpcode .= "\$array['$name'],";
         }
         $phpcode .= ");";
