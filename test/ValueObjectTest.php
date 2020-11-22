@@ -11,12 +11,12 @@ class ValueObjectTest extends VogTestCase
      */
     public function es_testet_values()
     {
-        $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::ALLES());
+        $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
 
         $this->assertEquals("Test Recipe", $recipe->title());
         $this->assertEquals(30, $recipe->minutes_to_prepare());
         $this->assertEquals(5.5, $recipe->rating());
-        $this->assertTrue(DietStyle::ALLES()->equals($recipe->diet_style()));
+        $this->assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
     }
 
     /**
@@ -28,13 +28,13 @@ class ValueObjectTest extends VogTestCase
             "title" => "Test Recipe",
             "minutes_to_prepare" => 30,
             "rating" => 5.5,
-            "diet_style" => DietStyle::VEGETARISCH()
+            "diet_style" => DietStyle::VEGETARIAN()
         ]);
 
         $this->assertEquals("Test Recipe", $recipe->title());
         $this->assertEquals(30, $recipe->minutes_to_prepare());
         $this->assertEquals(5.5, $recipe->rating());
-        $this->assertTrue(DietStyle::VEGETARISCH()->equals($recipe->diet_style()));
+        $this->assertTrue(DietStyle::VEGETARIAN()->equals($recipe->diet_style()));
     }
 
     /**
