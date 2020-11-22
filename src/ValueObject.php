@@ -38,7 +38,7 @@ class ValueObject extends VogDataObject
         $phpcode = $this->generate_to_array($phpcode);
         $phpcode = $this->generate_from_array($phpcode);
 
-        if($this->string_value){
+        if(isset($this->string_value)){
             $phpcode = $this->generate_toString($phpcode);
         }
 

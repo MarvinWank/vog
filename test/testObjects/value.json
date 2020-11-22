@@ -31,6 +31,16 @@
         "diet_style": "DietStyle"
       },
       "string_value": "title"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeNoStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      }
     }
   ]
 }
