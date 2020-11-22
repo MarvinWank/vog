@@ -16,6 +16,7 @@ It can be called from the CLI and accepts two arguments:
 2. [**optional**] The name of the value file. Default: `value.json`
 
 Example call: `./vendor/marvinwank/vog/vog.php ./app/value`
+
 Example call with custom value file name: `./vendor/marvinwank/vog/vog.php ./app/value  customNameValueFile.json`
 
 Notice the space between between the first an the second argument. 
@@ -131,3 +132,9 @@ in the value file
     /** Same es toString(), but provides support for strval() */
     public function __toString(): string
 ```
+## Nullable Enum
+
+The same as the regular Enum except it also accepts `null` in the `fromName` and `fromValue` methods and returns `null`
+on `name()`, `value()` and `toString()`. It has the same structure in the value file as the enum and its name is `nullableEnum`
+
+## ValueObject
