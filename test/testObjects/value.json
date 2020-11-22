@@ -29,7 +29,8 @@
         "minutes_to_prepare": "?int",
         "rating": "float",
         "diet_style": "DietStyle"
-      }
+      },
+      "string_value": "title"
     }
   ]
 }

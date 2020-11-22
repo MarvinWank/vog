@@ -7,11 +7,21 @@ namespace Vog;
 class ValueObject extends VogDataObject
 {
     private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
+    private string $string_value;
 
     public function __construct(string $name)
     {
         parent::__construct($name);
         $this->type = "valueObject";
+    }
+
+    public function set_string_value(string $string_value)
+    {
+        if(!array_key_exists($string_value, $this->values)){
+            throw new \UnexpectedValueException("Designated string value $string_value does not exist in values");
+        }
+
+        $this->string_value = $string_value;
     }
 
     public function getPhpCode(): string
@@ -27,6 +37,10 @@ class ValueObject extends VogDataObject
         $phpcode = $this->generate_with_methods($phpcode);
         $phpcode = $this->generate_to_array($phpcode);
         $phpcode = $this->generate_from_array($phpcode);
+
+        if($this->string_value){
+            $phpcode = $this->generate_toString($phpcode);
+        }
 
 
         $phpcode .= "\n}";
@@ -136,6 +150,21 @@ class ValueObject extends VogDataObject
         }
         $phpcode .= ");";
 
+        $phpcode .= "\n\t}";
+
+        return $phpcode;
+    }
+
+    private function generate_toString(string $phpcode)
+    {
+        $phpcode .= "\n\n\tpublic function __toString(): string";
+        $phpcode .= "\n\t{";
+        $phpcode .= "\n\t\treturn \$this->$this->string_value;";
+        $phpcode .= "\n\t}";
+
+        $phpcode .= "\n\n\tpublic function toString(): string";
+        $phpcode .= "\n\t{";
+        $phpcode .= "\n\t\treturn \$this->$this->string_value;";
         $phpcode .= "\n\t}";
 
         return $phpcode;

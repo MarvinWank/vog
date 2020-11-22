@@ -104,6 +104,9 @@ class Vog
             case "valueObject":
                 $vog_obj = new ValueObject($data['name']);
                 $vog_obj->setValues($data['values']);
+                if(array_key_exists("string_value", $data)){
+                    $vog_obj->set_string_value($data['string_value']);
+                }
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not

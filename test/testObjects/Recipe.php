@@ -86,4 +86,14 @@ final class Recipe
 
 		return new self($array['title'],$array['minutes_to_prepare'],$array['rating'],$array['diet_style'],);
 	}
+
+	public function __toString(): string
+	{
+		return $this->title;
+	}
+
+	public function toString(): string
+	{
+		return $this->title;
+	}
 }

@@ -17,6 +17,8 @@ class ValueObjectTest extends VogTestCase
         $this->assertEquals(30, $recipe->minutes_to_prepare());
         $this->assertEquals(5.5, $recipe->rating());
         $this->assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
+        $this->assertEquals("Test Recipe", strval($recipe));
+        $this->assertEquals("Test Recipe", $recipe->toString());
     }
 
     /**
