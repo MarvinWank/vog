@@ -7,11 +7,11 @@ namespace Test\TestObjects;
 final class DietStyle
 {
 
-	public const OPTIONS = [ "ALLES" => "alles", "VEGETARISCH" => "vegetarisch", "VEGAN" => "vegan",];
+	public const OPTIONS = [ "OMNIVORE" => "Omnivore", "VEGETARIAN" => "Vegetarian", "VEGAN" => "Vegan",];
 
-	public const ALLES = 'alles';
-	public const VEGETARISCH = 'vegetarisch';
-	public const VEGAN = 'vegan';
+	public const OMNIVORE = 'Omnivore';
+	public const VEGETARIAN = 'Vegetarian';
+	public const VEGAN = 'Vegan';
         
     private string $name;
     private string $value;
@@ -23,14 +23,14 @@ final class DietStyle
     }
 
 
-	public static function ALLES(): self
+	public static function OMNIVORE(): self
 	{
-		return new self('ALLES');
+		return new self('OMNIVORE');
 	}
 
-	public static function VEGETARISCH(): self
+	public static function VEGETARIAN(): self
 	{
-		return new self('VEGETARISCH');
+		return new self('VEGETARIAN');
 	}
 
 	public static function VEGAN(): self

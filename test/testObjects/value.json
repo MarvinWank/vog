@@ -5,9 +5,9 @@
       "type": "enum",
       "name": "DietStyle",
       "values": {
-        "ALLES": "alles",
-        "VEGETARISCH": "vegetarisch",
-        "VEGAN": "vegan"
+        "OMNIVORE": "Omnivore",
+        "VEGETARIAN": "Vegetarian",
+        "VEGAN": "Vegan"
       }
     },
     {

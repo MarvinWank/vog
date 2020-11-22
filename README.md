@@ -61,3 +61,27 @@ Any number of objects may be defined in each path array and any number of path a
 file and multiple value files require multiple calls.
 
 ## Enum
+
+An Enum is a class which can hold any value out of a specific array of given options. For example, the value of  
+an Enum called `DietStyle` could be any of "omnivore", "vegetarian" or "vegan". In vog, such an Enum would be defined
+as follows:
+
+```json
+{
+  "root_path": "/home/example_user/example_project/src",
+  "models/values": [
+    {
+      "type": "enum",
+      "name": "DietStyle",
+      "values": {
+        "OMNIVORE": "Omnivore",
+        "VEGETARIAN": "Vegetarian",
+        "VEGAN": "Vegan"
+      }
+    }
+  ]
+}
+```
+
+Let's have a look at the "values" object of our enum. This object defines the possible values our Enum will be able to hold
+The keys refer to the **name** of the value, while the values refer to the, well, **value**. This 

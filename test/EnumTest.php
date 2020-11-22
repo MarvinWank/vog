@@ -16,11 +16,11 @@ class EnumTest extends VogTestCase
      */
     public function es_testet_from_value()
     {
-        $diet_style = DietStyle::fromName('ALLES');
+        $diet_style = DietStyle::fromName('OMNIVORE');
 
-        $this->assertEquals("alles", $diet_style->value());
-        $this->assertEquals(DietStyle::ALLES, $diet_style->value());
-        $this->assertEquals("ALLES", $diet_style->name());
+        $this->assertEquals("Omnivore", $diet_style->value());
+        $this->assertEquals(DietStyle::OMNIVORE, $diet_style->value());
+        $this->assertEquals("OMNIVORE", $diet_style->name());
     }
 
     /**
@@ -30,7 +30,7 @@ class EnumTest extends VogTestCase
     {
         $diet_style = DietStyle::fromName("VEGAN");
 
-        $this->assertEquals("vegan", $diet_style->value());
+        $this->assertEquals("Vegan", $diet_style->value());
         $this->assertEquals("VEGAN", $diet_style->name());
     }
 
@@ -39,10 +39,10 @@ class EnumTest extends VogTestCase
      */
     public function es_testet_from_function()
     {
-        $diet_style = DietStyle::VEGETARISCH();
+        $diet_style = DietStyle::VEGETARIAN();
 
-        $this->assertEquals("vegetarisch", $diet_style->value());
-        $this->assertEquals("VEGETARISCH", $diet_style->name());
+        $this->assertEquals("Vegetarian", $diet_style->value());
+        $this->assertEquals("VEGETARIAN", $diet_style->name());
     }
 
     /**
@@ -50,8 +50,8 @@ class EnumTest extends VogTestCase
      */
     public function it_tests_equals()
     {
-        $diet_style = DietStyle::ALLES();
-        $diet_style2 = DietStyle::ALLES();
+        $diet_style = DietStyle::OMNIVORE();
+        $diet_style2 = DietStyle::OMNIVORE();
 
         $this->assertTrue($diet_style->equals($diet_style2));
         $this->assertTrue($diet_style2->equals($diet_style));
