@@ -96,6 +96,6 @@ class ValueObjectTest extends VogTestCase
         $this->assertEquals("VEGAN", $recipe_as_array['recipe1']['diet_style']);
 
         $this->assertEquals("Test Recipe 2", $recipe_as_array['recipe2']['title']);
-        $this->assertEquals("VEGETARISCH", $recipe_as_array['recipe1']['diet_style']);
+        $this->assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['diet_style']);
     }
 }

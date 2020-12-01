@@ -1,6 +1,11 @@
 # vog - value object generator
 
-vog provides an easy way to generate different kinds of type-safe value objects in php 
+vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates immutable data types based on vog definitions. 
+The syntax is not inspired by Haskell and thus readable. 
+
+## Credits
+This is basically a ripoff of https://github.com/prolic/fpp, but rewritten from scratch, with less fancy 
+but readable code, full test coverage and proper documentation. 
 
 ## Installation
 
@@ -58,10 +63,10 @@ Its namespace will be automatically generated from the path specification accord
 
 Any number of objects may be defined in each path array and any number of path arrays may be given in the value file
 
-*Note:* There can be multiple value files although this is not recommended, because you can define namespaces in the value
+*Note:* There can be multiple value files although this is not recommended, because you can define paths in the value
 file and multiple value files require multiple calls.
 
-## Enum
+## enum
 
 An Enum is a class which can hold any value out of a specific array of given options. For example, the value of  
 an Enum called `DietStyle` could be any of "omnivore", "vegetarian" or "vegan". In vog, such an Enum would be defined
@@ -96,7 +101,7 @@ generated from the value object. This will look as follows:
 	public const VEGAN = 'Vegan';
 ```
 
-### Creating an Enum
+### Instantiating a generated Enum
 
 An Enum cannot be directly constructed, instead there are 3 different ways to createn an enum
 
@@ -132,9 +137,33 @@ in the value file
     /** Same es toString(), but provides support for strval() */
     public function __toString(): string
 ```
-## Nullable Enum
+## nullableEnum
 
 The same as the regular Enum except it also accepts `null` in the `fromName` and `fromValue` methods and returns `null`
 on `name()`, `value()` and `toString()`. It has the same structure in the value file as the enum and its name is `nullableEnum`
 
-## ValueObject
+## valueObject
+
+A value object is an object that once constructed cannot be changed. It has getters, but no setters. Also, it doesn't do 
+any business logic at all. It truly is an object that holds values - and nothing more.
+
+#### vog definition
+
+```json
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "title"
+    }
+```  
+
+The properties are similar to those of the Enum. The `values` object follows the `"identifier": "datatype"` syntax. Notice
+that you may also define nullable types and object types. You have to provide the namespace to the object, but in this case,
+"DietStyle" hast the same namespace as "Recipe
+"
