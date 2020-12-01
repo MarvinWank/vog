@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-final class RecipeNoStringValue
+final class RecipeEnumStringValue
 {
 	private string $title;
 	private ?int $minutes_to_prepare;
@@ -93,5 +93,15 @@ final class RecipeNoStringValue
 			return $value->toArray();
 		}
 		return strval($value);
+	}
+
+	public function __toString(): string
+	{
+		return strval($this->diet_style);
+	}
+
+	public function toString(): string
+	{
+		return strval($this->diet_style);
 	}
 }

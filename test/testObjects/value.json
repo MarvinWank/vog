@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvw/Projekte/Privat/value_object_generator",
+  "root_path": "/home/marvinw/Projekte/vog",
   "test/testObjects": [
     {
       "type": "enum",
@@ -52,6 +52,26 @@
         "diet_style": "DietStyle"
       },
       "string_value": "rating"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeEnumStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "diet_style"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeCollection",
+      "values": {
+        "recipe1": "RecipeIntStringValue",
+        "recipe2": "RecipeEnumStringValue"
+      },
+      "string_value": "recipe1"
     }
   ]
 }

@@ -37,6 +37,7 @@ class ValueObject extends VogDataObject
         $phpcode = $this->generate_with_methods($phpcode);
         $phpcode = $this->generate_to_array($phpcode);
         $phpcode = $this->generate_from_array($phpcode);
+        $phpcode = $this->generate_value_to_array($phpcode);
 
         if(isset($this->string_value)){
             $phpcode = $this->generate_toString($phpcode);
@@ -120,7 +121,7 @@ class ValueObject extends VogDataObject
         $phpcode .= "\n\t\t return [";
         foreach ($this->values as $name => $datatype) {
             if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
-                $phpcode .= "\n\t\t\t '$name' => strval(\$this->$name), ";
+                $phpcode .= "\n\t\t\t '$name' =>  \$this->value_to_array(\$this->$name), ";
             } else {
                 $phpcode .= "\n\t\t\t '$name' => \$this->$name, ";
             }
@@ -170,5 +171,19 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
+    private function generate_value_to_array(string $phpcode)
+    {
+        $phpcode .= "\n\n\tprivate function value_to_array(\$value)\n\t{";
+
+        $phpcode .= "\n\t\tif(method_exists(\$value, 'toArray')) {";
+        $phpcode .= "\n\t\t\treturn \$value->toArray();";
+        $phpcode .= "\n\t\t}";
+
+        $phpcode .= "\n\t\treturn strval(\$value);";
+
+        $phpcode .= "\n\t}";
+
+        return $phpcode;
+    }
 
 }

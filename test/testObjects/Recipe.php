@@ -63,9 +63,9 @@ final class Recipe
 	{
 		 return [
 			 'title' => $this->title, 
-			 'minutes_to_prepare' => strval($this->minutes_to_prepare), 
+			 'minutes_to_prepare' =>  $this->value_to_array($this->minutes_to_prepare), 
 			 'rating' => $this->rating, 
-			 'diet_style' => strval($this->diet_style), 
+			 'diet_style' =>  $this->value_to_array($this->diet_style), 
 		];
 	}
 
@@ -85,6 +85,14 @@ final class Recipe
 		}
 
 		return new self($array['title'],$array['minutes_to_prepare'],$array['rating'],$array['diet_style'],);
+	}
+
+	private function value_to_array($value)
+	{
+		if(method_exists($value, 'toArray')) {
+			return $value->toArray();
+		}
+		return strval($value);
 	}
 
 	public function __toString(): string
