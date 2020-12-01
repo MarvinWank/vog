@@ -165,5 +165,4 @@ any business logic at all. It truly is an object that holds values - and nothing
 
 The properties are similar to those of the Enum. The `values` object follows the `"identifier": "datatype"` syntax. Notice
 that you may also define nullable types and object types. You have to provide the namespace to the object, but in this case,
-"DietStyle" hast the same namespace as "Recipe
-"
+"DietStyle" hast the same namespace as "Recipe"
