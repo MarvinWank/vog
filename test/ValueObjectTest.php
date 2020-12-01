@@ -84,6 +84,9 @@ class ValueObjectTest extends VogTestCase
             new RecipeEnumStringValue("Test Recipe 2", 30, 5.5, DietStyle::VEGETARIAN())
         );
 
+        //String value of recipe: $recipe_1; String value of $recipe_1: $rating
+        $this->assertEquals(5.5, strval($recipe));
+
         $recipe_as_array = $recipe->toArray();
 
         $this->assertIsArray($recipe_as_array['recipe1']);
