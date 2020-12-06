@@ -3,7 +3,20 @@
 vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates immutable data types based on vog definitions. 
 The syntax is not inspired by Haskell and thus readable. 
 
+## Table of contents
+
+1. [Credits](#Credits) 
+
+2. [Installation](#Installation)
+
+3. [Usage](Usage)
+
+4. [The value file](#The value file)
+
+5. [enum](#enum)
+
 ## Credits
+
 This is basically a ripoff of https://github.com/prolic/fpp, but rewritten from scratch, with less fancy 
 but readable code, full test coverage and proper documentation. 
 
@@ -33,11 +46,12 @@ On the root level of the value file, you have to provide the full path to your p
 No `/` is necessary at the end
 
 Example:
+
 ```json
 {
   "root_path": "/home/example_user/example_project/src",
- 
- 
+
+
   "models/values": [
       {
         "type": "enum",
@@ -94,11 +108,11 @@ The keys refer to the **name** of the value, while the values refer to the, well
 generated from the value object. This will look as follows: 
 
 ```php
-	public const OPTIONS = [ "OMNIVORE" => "Omnivore", "VEGETARIAN" => "Vegetarian", "VEGAN" => "Vegan",];
+    public const OPTIONS = [ "OMNIVORE" => "Omnivore", "VEGETARIAN" => "Vegetarian", "VEGAN" => "Vegan",];
 
-	public const OMNIVORE = 'Omnivore';
-	public const VEGETARIAN = 'Vegetarian';
-	public const VEGAN = 'Vegan';
+    public const OMNIVORE = 'Omnivore';
+    public const VEGETARIAN = 'Vegetarian';
+    public const VEGAN = 'Vegan';
 ```
 
 ### Instantiating a generated Enum
@@ -108,18 +122,22 @@ An Enum cannot be directly constructed, instead there are 3 different ways to cr
 #### 1. calling the static methods
 
 Each Enum will have public static methods named according to its **keys** defined in the value file. In this case:
+
 ```php
        public static function OMNIVORE(): self
        public static function VEGETARIAN(): self
        public static function VEGAN(): self
-``` 
+```
+
 Calling the `OMNIVORE` method will return an Enum with the value assigned to the key `OMNIVORE` in the value file
 
 #### 2. from value
+
 You can also call the static `fromValue` method, which accepts any value defined in the value file. So in this case either
 "Omnivore", "Vegetarian" or "Vegan".
 
 #### 3. from name
+
 Similarily to "fromValue", there also is static method `fromName`, where you can construct an enum form any value defined 
 in the value file 
 
@@ -137,6 +155,7 @@ in the value file
     /** Same es toString(), but provides support for strval() */
     public function __toString(): string
 ```
+
 ## nullableEnum
 
 The same as the regular Enum except it also accepts `null` in the `fromName` and `fromValue` methods and returns `null`
@@ -161,7 +180,7 @@ any business logic at all. It truly is an object that holds values - and nothing
       },
       "string_value": "title"
     }
-```  
+```
 
 The properties are similar to those of the Enum. The `values` object follows the `"identifier": "datatype"` syntax. Notice
 that you may also define nullable types and object types. You have to provide the namespace to the object, but in this case,
