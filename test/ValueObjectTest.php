@@ -6,6 +6,7 @@ use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
+use Test\TestObjects\ValueObjectNoDataType;
 
 class ValueObjectTest extends VogTestCase
 {
@@ -97,5 +98,26 @@ class ValueObjectTest extends VogTestCase
 
         $this->assertEquals("Test Recipe 2", $recipe_as_array['recipe2']['title']);
         $this->assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['diet_style']);
+    }
+
+    /**
+     * @param $value
+     * @test
+     * @dataProvider undefined_datatype_data_provider
+     */
+    public function it_tests_value_object_with_undefined_datatype($value)
+    {
+        $object = new ValueObjectNoDataType($value);
+        $this->assertEquals($object->property(), $value);
+    }
+
+    public function undefined_datatype_data_provider()
+    {
+        return [
+           "object" => [DietStyle::VEGETARIAN()],
+           "string" => ["test"],
+           "number" => [1234],
+           "null" => [null]
+        ];
     }
 }

@@ -72,6 +72,13 @@
         "recipe2": "RecipeEnumStringValue"
       },
       "string_value": "recipe1"
+    },
+    {
+      "type": "valueObject",
+      "name": "ValueObjectNoDataType",
+      "values": {
+        "property": ""
+      }
     }
   ]
 }
