@@ -6,7 +6,7 @@ class NullableEnum extends Enum
 {
     public function getPhpCode(): string
     {
-        $phpcode = $this->getGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader();
 
         $phpcode .= "\n\n";
 

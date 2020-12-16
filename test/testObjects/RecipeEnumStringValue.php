@@ -23,6 +23,7 @@ final class RecipeEnumStringValue
 		$this->rating = $rating;
 		$this->diet_style = $diet_style;
 	}
+
 	public function title(): string {
 		return $this->title;
 	}

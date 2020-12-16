@@ -14,6 +14,7 @@ final class ValueObjectNoDataType
 	{
 		$this->property = $property;
 	}
+
 	public function property() {
 		return $this->property;
 	}

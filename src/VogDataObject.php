@@ -10,9 +10,13 @@ abstract class VogDataObject
     protected string $target_filepath;
     protected array $values;
 
+    protected ?string $extends;
+    protected array $implements;
+
     public function __construct(string $name)
     {
         $this->name = $name;
+        $this->extends = null;
     }
 
     abstract public function getPhpCode(): string;
@@ -29,7 +33,7 @@ abstract class VogDataObject
 
     public function getTargetFilepath(): string
     {
-        return $this->target_filepath.DIRECTORY_SEPARATOR.$this->name.".php";
+        return $this->target_filepath . DIRECTORY_SEPARATOR . $this->name . ".php";
     }
 
     public function getNamespace(): string
@@ -52,19 +56,51 @@ abstract class VogDataObject
         return $this->values;
     }
 
-    protected function getGenericPhpHeader(): string
+    public function getExtends(): string
     {
-        return
-            <<<EOT
-<?php
+        return $this->extends;
+    }
 
-declare(strict_types=1);
+    public function setExtends(string $extends): void
+    {
+        $this->extends = $extends;
+    }
 
-namespace $this->namespace;
+    public function getImplements(): array
+    {
+        return $this->implements;
+    }
 
-final class $this->name
-{
-EOT;
+    public function setImplements(array $implements): void
+    {
+        $this->implements = $implements;
+    }
 
+
+    protected function generateGenericPhpHeader(): string
+    {
+        $header = "<?php";
+        $header .= "\n\ndeclare(strict_types=1);";
+        $header .= "\n\nnamespace $this->namespace;";
+        $header .= "\n\nfinal class $this->name";
+
+        if (!is_null($this->extends)){
+            $header .= " extends $this->extends";
+        }
+
+        if (!empty($this->implements)){
+            $header .= " implements ";
+            foreach ($this->implements as $index => $interface){
+                if ($index < count($this->implements)){
+                    $header .= "$interface, ";
+                }
+                else {
+                    $header .= "$interface";
+                }
+            }
+        }
+
+        $header .= "\n{";
+        return $header;
     }
 }

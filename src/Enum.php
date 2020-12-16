@@ -13,7 +13,7 @@ class Enum extends VogDataObject
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->getGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader();
 
         $phpcode .= "\n\n";
 

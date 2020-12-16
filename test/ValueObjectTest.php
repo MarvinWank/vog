@@ -1,6 +1,8 @@
 <?php
 
 
+use Test\TestObjects\BaseClass;
+use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
@@ -114,10 +116,19 @@ class ValueObjectTest extends VogTestCase
     public function undefined_datatype_data_provider()
     {
         return [
-           "object" => [DietStyle::VEGETARIAN()],
-           "string" => ["test"],
-           "number" => [1234],
-           "null" => [null]
+            "object" => [DietStyle::VEGETARIAN()],
+            "string" => ["test"],
+            "number" => [1234],
+            "null" => [null]
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_extension_generation()
+    {
+        $desert_recipe = new DesertRecipe(false, false);
+        $this->assertInstanceOf(BaseClass::class, $desert_recipe);
     }
 }

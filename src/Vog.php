@@ -104,7 +104,7 @@ class Vog
             case "valueObject":
                 $vog_obj = new ValueObject($data['name']);
                 $vog_obj->setValues($data['values']);
-                if(array_key_exists("string_value", $data)){
+                if (array_key_exists("string_value", $data)) {
                     $vog_obj->set_string_value($data['string_value']);
                 }
                 break;
@@ -116,6 +116,13 @@ class Vog
         $target_namespacee = $this->get_target_namespace($target_filepath);
         $vog_obj->setNamespace($target_namespacee);
         $vog_obj->setTargetFilepath($this->root_path . DIRECTORY_SEPARATOR . $target_filepath);
+
+        if (array_key_exists("extends", $data)) {
+            $vog_obj->setExtends($data['extends']);
+        }
+        if (array_key_exists("implements", $data)) {
+            $vog_obj->setImplements($data['implements']);
+        }
 
         return $vog_obj;
     }
@@ -135,7 +142,7 @@ class Vog
 
 
         $filePath_as_array = explode(DIRECTORY_SEPARATOR, $target_filepath);
-        foreach ($filePath_as_array as $key => $path){
+        foreach ($filePath_as_array as $key => $path) {
             $filePath_as_array[$key] = ucfirst($path);
         }
         $target_filepath = implode(DIRECTORY_SEPARATOR, $filePath_as_array);

@@ -26,7 +26,7 @@ class ValueObject extends VogDataObject
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->getGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader();
 
         foreach ($this->values as $name => $data_type) {
             $phpcode .= "\n\tprivate $data_type $$name;";
@@ -71,7 +71,7 @@ class ValueObject extends VogDataObject
         foreach ($this->values as $name => $data_type) {
             $phpcode .= "\n\t\t\$this->$name = $$name;";
         }
-        $phpcode .= "\n\t}";
+        $phpcode .= "\n\t}\n";
         return $phpcode;
     }
 

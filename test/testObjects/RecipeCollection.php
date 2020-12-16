@@ -17,6 +17,7 @@ final class RecipeCollection
 		$this->recipe1 = $recipe1;
 		$this->recipe2 = $recipe2;
 	}
+
 	public function recipe1(): RecipeIntStringValue {
 		return $this->recipe1;
 	}

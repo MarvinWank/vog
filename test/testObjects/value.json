@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvinw/Projekte/vog",
+  "root_path": "/home/marvw/Projekte/Privat/value_object_generator",
   "test/testObjects": [
     {
       "type": "enum",
@@ -79,6 +79,24 @@
       "values": {
         "property": ""
       }
+    },
+    {
+      "type": "valueObject",
+      "name": "DesertRecipe",
+      "values": {
+          "lactosefree": "bool",
+          "light": "bool"
+      },
+      "extends": "BaseClass"
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsMany",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["Interface1", "Interface2"]
     }
   ]
 }
