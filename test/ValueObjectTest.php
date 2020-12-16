@@ -2,12 +2,14 @@
 
 
 use Test\TestObjects\BaseClass;
+use Test\TestObjects\ChildOfNotFinal;
 use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\implementsMany;
 use Test\TestObjects\implementsOne;
 use Test\TestObjects\Interface1;
 use Test\TestObjects\Interface2;
+use Test\TestObjects\notFinal;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
@@ -154,4 +156,14 @@ class ValueObjectTest extends VogTestCase
         $this->assertInstanceOf(Interface1::class, $instance);
         $this->assertInstanceOf(Interface2::class, $instance);
     }
+
+    /**
+     * @test
+     */
+    public function it_tests_class_is_nonfinal()
+    {
+        $instance = new ChildOfNotFinal("blaze it");
+        $this->assertInstanceOf(NotFinal::class, $instance);
+    }
+
 }

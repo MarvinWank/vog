@@ -12,11 +12,13 @@ abstract class VogDataObject
 
     protected ?string $extends;
     protected array $implements;
+    protected bool $is_final;
 
     public function __construct(string $name)
     {
         $this->name = $name;
         $this->extends = null;
+        $this->is_final = true;
     }
 
     abstract public function getPhpCode(): string;
@@ -76,13 +78,28 @@ abstract class VogDataObject
         $this->implements = $implements;
     }
 
+    public function isIsFinal(): bool
+    {
+        return $this->is_final;
+    }
+
+    public function setIsFinal(bool $is_final): void
+    {
+        $this->is_final = $is_final;
+    }
 
     protected function generateGenericPhpHeader(): string
     {
         $header = "<?php";
         $header .= "\n\ndeclare(strict_types=1);";
         $header .= "\n\nnamespace $this->namespace;";
-        $header .= "\n\nfinal class $this->name";
+        $header .= "\n\n";
+
+        $class_statement = "class $this->name";
+        if ($this->is_final){
+            $class_statement = "final " . $class_statement;
+        }
+        $header .= $class_statement;
 
         if (!is_null($this->extends)){
             $header .= " extends $this->extends";

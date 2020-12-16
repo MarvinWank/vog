@@ -88,11 +88,13 @@ file and multiple value files require multiple calls.
 
 These properties of the json-Object are either avaiable or required for alle data types
 
-| name   | data type | required for | description                                                                                               |
-| ------ | --------- | ------------ | --------------------------------------------------------------------------------------------------------- |
-| type   | string    | all          | defines the type of value object to be generated                                                          |
-| name   | string    | all          | defines both the php class name and file name of the value object to be generated                         |
-| values | object    | all          | defines the values to be represented by the value object to be generated. Syntax and effect vary by type. |
+| name       | data type | default | optionality      | description                                                                                               |
+| ---------- | --------- | ------- | ---------------- | --------------------------------------------------------------------------------------------------------- |
+| type       | string    | -       | required for all | defines the type of value object to be generated                                                          |
+| name       | string    | -       | required for all | defines both the php class name and file name of the value object to be generated                         |
+| values     | object    | -       | required for all | defines the values to be represented by the value object to be generated. Syntax and effect vary by type. |
+| extends    | ?string   | ""      | optional         | Optionally states the name of the class this object should extend                                         |
+| implements | array     | []      | optional         | Optionally states the name(s) of the interface(s) this object should implement                            |
 
 ## enum
 
@@ -208,28 +210,27 @@ Vog will generate private class members according to the definition in the value
 ```php
 final class Recipe
 {
-	private string $title;
-	private ?int $minutes_to_prepare;
-	private float $rating;
-	private DietStyle $diet_style;
+    private string $title;
+    private ?int $minutes_to_prepare;
+    private float $rating;
+    private DietStyle $diet_style;
 ```
 
 The class must be regularily instantiated by a constructor and the members are avaiable by getter functions with the same name as the members: 
 
 ```php
-	public function title(): string {
-		return $this->title;
-	}
+    public function title(): string {
+        return $this->title;
+    }
 ```
 
 As it is an immutable value object, there are no setters. Instead, you'll have to create entirely new objects if you want to alter a value. This is made easy by the `with_` methods: 
 
 ```php
-	public function with_title (string $title):self
-	{
-		return new self($title,$this->minutes_to_prepare,$this->rating,$this->diet_style,);
-	}
-
+    public function with_title (string $title):self
+    {
+        return new self($title,$this->minutes_to_prepare,$this->rating,$this->diet_style,);
+    }
 ```
 
 `with_` methods will be generated for each member defined in the value file. 

@@ -123,6 +123,9 @@ class Vog
         if (array_key_exists("implements", $data)) {
             $vog_obj->setImplements($data['implements']);
         }
+        if (array_key_exists("final", $data)) {
+            $vog_obj->setIsFinal($data['final']);
+        }
 
         return $vog_obj;
     }
