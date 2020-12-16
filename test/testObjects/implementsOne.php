@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-final class implementsMany implements Interface1, Interface2
+final class implementsOne implements Interface1
 {
 	private string $foo;
 	private int $bar;

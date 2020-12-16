@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvw/Projekte/Privat/value_object_generator",
+  "root_path": "/home/marvinw/Projekte/vog",
   "test/testObjects": [
     {
       "type": "enum",
@@ -88,6 +88,15 @@
           "light": "bool"
       },
       "extends": "BaseClass"
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsOne",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["Interface1"]
     },
     {
       "type": "valueObject",

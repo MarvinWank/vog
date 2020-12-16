@@ -91,7 +91,7 @@ abstract class VogDataObject
         if (!empty($this->implements)){
             $header .= " implements ";
             foreach ($this->implements as $index => $interface){
-                if ($index < count($this->implements)){
+                if ($index < count($this->implements) - 1){
                     $header .= "$interface, ";
                 }
                 else {

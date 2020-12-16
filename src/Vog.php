@@ -27,7 +27,7 @@ class Vog
                 $success = $this->write_to_file($object);
 
                 if ($success) {
-                    echo "\n Object " . $object->getName() . " sucessfully written to " . $object->getTargetFilepath() . " \n";
+                    echo "Object " . $object->getName() . " sucessfully written to " . $object->getTargetFilepath() . " \n";
                 }
             }
         }

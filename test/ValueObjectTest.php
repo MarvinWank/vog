@@ -4,6 +4,10 @@
 use Test\TestObjects\BaseClass;
 use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
+use Test\TestObjects\implementsMany;
+use Test\TestObjects\implementsOne;
+use Test\TestObjects\Interface1;
+use Test\TestObjects\Interface2;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
@@ -130,5 +134,24 @@ class ValueObjectTest extends VogTestCase
     {
         $desert_recipe = new DesertRecipe(false, false);
         $this->assertInstanceOf(BaseClass::class, $desert_recipe);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_implementation_generation_with_one_interface()
+    {
+        $instance = new implementsOne("bar", 42);
+        $this->assertInstanceOf(Interface1::class, $instance);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_implementation_generation_with_multiple_interfaces()
+    {
+        $instance = new implementsMany("bar", 42);
+        $this->assertInstanceOf(Interface1::class, $instance);
+        $this->assertInstanceOf(Interface2::class, $instance);
     }
 }
