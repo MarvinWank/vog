@@ -4,6 +4,7 @@ namespace Vog;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
+use function json_decode;
 
 class Generate
 {
@@ -40,7 +41,7 @@ class Generate
         }
         $file = file_get_contents($filepath);
 
-        $data = \json_decode($file, true);
+        $data = json_decode($file, true);
         if ($data === null) {
             throw new UnexpectedValueException("Could not parse " . $filepath . "\n json_last_error_msg(): " . json_last_error_msg());
         }
@@ -129,7 +130,6 @@ class Generate
         if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
             throw new UnexpectedValueException("Directory " . $targetFilepath . " does not exist");
         }
-
 
         $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
         foreach ($filePathAsArray as $key => $path) {

@@ -4,8 +4,6 @@
 namespace Vog;
 
 
-use http\Exception\UnexpectedValueException;
-
 class CommandHub
 {
     private const COMMAND_GENERATE = "generate";
@@ -18,7 +16,7 @@ class CommandHub
         switch ($argv[1]){
             case self::COMMAND_GENERATE: $this->runGenerateCommand($argv[2]);
             break;
-            case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand();
+            case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv[3], $argv[4]);
             break;
             default:
                 throw new \UnexpectedValueException("Command $argv is not defined. Defined commands are: "
@@ -32,8 +30,9 @@ class CommandHub
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand()
+    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null)
     {
-
+        $fppConvert = new FppConvert();
+        $fppConvert->run($fileToConvert, $outputPath);
     }
 }
