@@ -7,24 +7,24 @@ use UnexpectedValueException;
 
 class Generate
 {
-    private string $root_path;
+    private string $rootPath;
 
     private const ALL_DATA_TYPES = ["enum", "nullableEnum", "valueObject"];
 
     public function run(string $target)
     {
-        $data = $this->parse_file($target);
+        $data = $this->parseFile($target);
 
         if (!array_key_exists("root_path", $data)) {
             throw new UnexpectedValueException("Root Path not specified");
         }
-        $this->root_path = $data['root_path'];
+        $this->rootPath = $data['root_path'];
         unset($data['root_path']);
 
-        foreach ($data as $target_filepath => $objects) {
+        foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
-                $object = $this->build_vog_data_object($object, $target_filepath);
-                $success = $this->write_to_file($object);
+                $object = $this->buildVogDataObject($object, $targetFilepath);
+                $success = $this->writeToFile($object);
 
                 if ($success) {
                     echo "Object " . $object->getName() . " sucessfully written to " . $object->getTargetFilepath() . " \n";
@@ -33,7 +33,7 @@ class Generate
         }
     }
 
-    private function parse_file(string $filepath)
+    private function parseFile(string $filepath)
     {
         if (!file_exists($filepath)) {
             throw new InvalidArgumentException("File $filepath was not found");
@@ -47,14 +47,14 @@ class Generate
         return $data;
     }
 
-    private function build_vog_data_object(array $data, string $target_filepath): VogDataObject
+    private function buildVogDataObject(array $data, string $targetFilepath): VogDataObject
     {
         if (!array_key_exists("name", $data)) {
             throw new UnexpectedValueException(
                 "No name was given for an object"
             );
         }
-        if (!$target_filepath || $target_filepath === "") {
+        if (!$targetFilepath || $targetFilepath === "") {
             throw new UnexpectedValueException(
                 "No namespace was given" . " for object " . $data['name']
             );
@@ -100,9 +100,9 @@ class Generate
                 implemented. Please open an issue on GitHub");
         }
 
-        $target_namespacee = $this->get_target_namespace($target_filepath);
+        $target_namespacee = $this->getTargetNamespace($targetFilepath);
         $vog_obj->setNamespace($target_namespacee);
-        $vog_obj->setTargetFilepath($this->root_path . DIRECTORY_SEPARATOR . $target_filepath);
+        $vog_obj->setTargetFilepath($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath);
 
         if (array_key_exists("extends", $data)) {
             $vog_obj->setExtends($data['extends']);
@@ -117,26 +117,26 @@ class Generate
         return $vog_obj;
     }
 
-    private function write_to_file(VogDataObject $dataOject)
+    private function writeToFile(VogDataObject $dataOject)
     {
         $sucess = file_put_contents($dataOject->getTargetFilepath(), $dataOject->getPhpCode());
 
         return $sucess;
     }
 
-    private function get_target_namespace(string $target_filepath)
+    private function getTargetNamespace(string $targetFilepath)
     {
-        if (!file_exists($this->root_path . DIRECTORY_SEPARATOR . $target_filepath)) {
-            throw new UnexpectedValueException("Directory " . $target_filepath . " does not exist");
+        if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
+            throw new UnexpectedValueException("Directory " . $targetFilepath . " does not exist");
         }
 
 
-        $filePath_as_array = explode(DIRECTORY_SEPARATOR, $target_filepath);
-        foreach ($filePath_as_array as $key => $path) {
-            $filePath_as_array[$key] = ucfirst($path);
+        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
+        foreach ($filePathAsArray as $key => $path) {
+            $filePathAsArray[$key] = ucfirst($path);
         }
-        $target_filepath = implode(DIRECTORY_SEPARATOR, $filePath_as_array);
-        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $target_filepath);
+        $targetFilepath = implode(DIRECTORY_SEPARATOR, $filePathAsArray);
+        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $targetFilepath);
 
         return $namespace;
     }
