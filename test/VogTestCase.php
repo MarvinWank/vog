@@ -4,7 +4,8 @@ require_once __DIR__."/../vendor/autoload.php";
 require_once __DIR__."/../autoload.php";
 
 use PHPUnit\Framework\TestCase;
-use Vog\Vog;
+use Vog\CommandHub;
+use Vog\Generate;
 
 class VogTestCase extends TestCase
 {
@@ -12,7 +13,12 @@ class VogTestCase extends TestCase
     {
         parent::setUp();
 
-        $vog = new Vog();
-        $vog->run(__DIR__."/testObjects");
+        $argv = [
+            "test",
+            "generate",
+            __DIR__."/testObjects/value.json"
+        ];
+        $hub = new CommandHub();
+        $hub->run($argv);
     }
 }

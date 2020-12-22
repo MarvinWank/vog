@@ -5,15 +5,15 @@ namespace Vog;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
-class Vog
+class Generate
 {
     private string $root_path;
 
     private const ALL_DATA_TYPES = ["enum", "nullableEnum", "valueObject"];
 
-    public function run(string $dir, ?string $file = null)
+    public function run(string $target)
     {
-        $data = $this->parse_file($dir, $file);
+        $data = $this->parse_file($target);
 
         if (!array_key_exists("root_path", $data)) {
             throw new UnexpectedValueException("Root Path not specified");
@@ -33,25 +33,12 @@ class Vog
         }
     }
 
-    private function parse_file(string $dir, ?string $file = null)
+    private function parse_file(string $filepath)
     {
-        $filepath = $dir . DIRECTORY_SEPARATOR . $file;
-
-        if (!file_exists($dir)) {
-            throw new InvalidArgumentException("Directory " . $dir . " does not exist");
+        if (!file_exists($filepath)) {
+            throw new InvalidArgumentException("File $filepath was not found");
         }
-        if ($file === null && !file_exists($dir . DIRECTORY_SEPARATOR . 'value.json')) {
-            throw new InvalidArgumentException("No 'value.json' was found at " . $dir . 'Please create one or provide a filename');
-        }
-        if ($file !== null && !file_exists($filepath)) {
-            throw new InvalidArgumentException($dir . '/' . $file . " was not found");
-        }
-
-        if ($file !== null) {
-            $file = file_get_contents($filepath);
-        } else {
-            $file = file_get_contents($dir . DIRECTORY_SEPARATOR . 'value.json');
-        }
+        $file = file_get_contents($filepath);
 
         $data = \json_decode($file, true);
         if ($data === null) {
