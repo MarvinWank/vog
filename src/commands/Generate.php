@@ -4,27 +4,28 @@ namespace Vog;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
+use function json_decode;
 
-class Vog
+class Generate
 {
-    private string $root_path;
+    private string $rootPath;
 
     private const ALL_DATA_TYPES = ["enum", "nullableEnum", "valueObject"];
 
-    public function run(string $dir, ?string $file = null)
+    public function run(string $target)
     {
-        $data = $this->parse_file($dir, $file);
+        $data = $this->parseFile($target);
 
         if (!array_key_exists("root_path", $data)) {
             throw new UnexpectedValueException("Root Path not specified");
         }
-        $this->root_path = $data['root_path'];
+        $this->rootPath = $data['root_path'];
         unset($data['root_path']);
 
-        foreach ($data as $target_filepath => $objects) {
+        foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
-                $object = $this->build_vog_data_object($object, $target_filepath);
-                $success = $this->write_to_file($object);
+                $object = $this->buildVogDataObject($object, $targetFilepath);
+                $success = $this->writeToFile($object);
 
                 if ($success) {
                     echo "Object " . $object->getName() . " sucessfully written to " . $object->getTargetFilepath() . " \n";
@@ -33,41 +34,28 @@ class Vog
         }
     }
 
-    private function parse_file(string $dir, ?string $file = null)
+    private function parseFile(string $filepath)
     {
-        $filepath = $dir . DIRECTORY_SEPARATOR . $file;
+        if (!file_exists($filepath)) {
+            throw new InvalidArgumentException("File $filepath was not found");
+        }
+        $file = file_get_contents($filepath);
 
-        if (!file_exists($dir)) {
-            throw new InvalidArgumentException("Directory " . $dir . " does not exist");
-        }
-        if ($file === null && !file_exists($dir . DIRECTORY_SEPARATOR . 'value.json')) {
-            throw new InvalidArgumentException("No 'value.json' was found at " . $dir . 'Please create one or provide a filename');
-        }
-        if ($file !== null && !file_exists($filepath)) {
-            throw new InvalidArgumentException($dir . '/' . $file . " was not found");
-        }
-
-        if ($file !== null) {
-            $file = file_get_contents($filepath);
-        } else {
-            $file = file_get_contents($dir . DIRECTORY_SEPARATOR . 'value.json');
-        }
-
-        $data = \json_decode($file, true);
+        $data = json_decode($file, true);
         if ($data === null) {
             throw new UnexpectedValueException("Could not parse " . $filepath . "\n json_last_error_msg(): " . json_last_error_msg());
         }
         return $data;
     }
 
-    private function build_vog_data_object(array $data, string $target_filepath): VogDataObject
+    private function buildVogDataObject(array $data, string $targetFilepath): VogDataObject
     {
         if (!array_key_exists("name", $data)) {
             throw new UnexpectedValueException(
                 "No name was given for an object"
             );
         }
-        if (!$target_filepath || $target_filepath === "") {
+        if (!$targetFilepath || $targetFilepath === "") {
             throw new UnexpectedValueException(
                 "No namespace was given" . " for object " . $data['name']
             );
@@ -113,9 +101,9 @@ class Vog
                 implemented. Please open an issue on GitHub");
         }
 
-        $target_namespacee = $this->get_target_namespace($target_filepath);
+        $target_namespacee = $this->getTargetNamespace($targetFilepath);
         $vog_obj->setNamespace($target_namespacee);
-        $vog_obj->setTargetFilepath($this->root_path . DIRECTORY_SEPARATOR . $target_filepath);
+        $vog_obj->setTargetFilepath($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath);
 
         if (array_key_exists("extends", $data)) {
             $vog_obj->setExtends($data['extends']);
@@ -130,26 +118,25 @@ class Vog
         return $vog_obj;
     }
 
-    private function write_to_file(VogDataObject $dataOject)
+    private function writeToFile(VogDataObject $dataOject)
     {
         $sucess = file_put_contents($dataOject->getTargetFilepath(), $dataOject->getPhpCode());
 
         return $sucess;
     }
 
-    private function get_target_namespace(string $target_filepath)
+    private function getTargetNamespace(string $targetFilepath)
     {
-        if (!file_exists($this->root_path . DIRECTORY_SEPARATOR . $target_filepath)) {
-            throw new UnexpectedValueException("Directory " . $target_filepath . " does not exist");
+        if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
+            throw new UnexpectedValueException("Directory " . $targetFilepath . " does not exist");
         }
 
-
-        $filePath_as_array = explode(DIRECTORY_SEPARATOR, $target_filepath);
-        foreach ($filePath_as_array as $key => $path) {
-            $filePath_as_array[$key] = ucfirst($path);
+        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
+        foreach ($filePathAsArray as $key => $path) {
+            $filePathAsArray[$key] = ucfirst($path);
         }
-        $target_filepath = implode(DIRECTORY_SEPARATOR, $filePath_as_array);
-        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $target_filepath);
+        $targetFilepath = implode(DIRECTORY_SEPARATOR, $filePathAsArray);
+        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $targetFilepath);
 
         return $namespace;
     }

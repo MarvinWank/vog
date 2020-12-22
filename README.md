@@ -29,19 +29,15 @@ but readable code, full test coverage and proper documentation.
 vog can be most easily installed with composer:
 `composer require marvinwank/vog`
 
-## Usage
+## Usage and subcommands
 
-After installing with composer, there is a plain php file in `vendor/marvinwank/vog`
-It can be called from the CLI and accepts two arguments:
+After installing with composer, there is a plain php file in `vendor/marvinwank/vog`, which can be called from the CLI. It has multiple subcommands.  
 
-1. [**required**] The path to the directory, in which the value file is located
-2. [**optional**] The name of the value file. Default: `value.json`
+#### generate
 
-Example call: `./vendor/marvinwank/vog/vog.php ./app/value`
+The `generate` subcommand is the core of vog. It allows you to generate immutable PHP objects from a JSON definition as prescribed below. It takes one additional argument: the path to the json file with the definitions.
 
-Example call with custom value file name: `./vendor/marvinwank/vog/vog.php ./app/value  customNameValueFile.json`
-
-Notice the space between between the first an the second argument. 
+Example call: `./vendor/marvinwank/vog/vog.php generate ./app/value/value.json`
 
 ## valueFile
 
