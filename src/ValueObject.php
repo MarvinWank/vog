@@ -32,7 +32,7 @@ class ValueObject extends VogDataObject
             $phpcode .= "\n\tprivate $data_type $$name;";
         }
 
-        $phpcode = $this->generate_construtctor($phpcode);
+        $phpcode = $this->generate_constructor($phpcode);
         $phpcode = $this->generate_getters($phpcode);
         $phpcode = $this->generate_with_methods($phpcode);
         $phpcode = $this->generate_to_array($phpcode);
@@ -59,7 +59,7 @@ class ValueObject extends VogDataObject
         return $subject;
     }
 
-    private function generate_construtctor(string $phpcode): string
+    private function generate_constructor(string $phpcode): string
     {
         $phpcode .= "\n\n\tpublic function __construct (";
         foreach ($this->values as $name => $data_type) {
