@@ -202,5 +202,28 @@ class ValueObjectTest extends VogTestCase
         $this->assertFalse(method_exists($instance, "set_foo"));
     }
 
+    /**
+     * @test
+     */
+    public function it_tests_with_functions()
+    {
+        $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
+
+        $this->assertEquals("Test Recipe", $recipe->title());
+        $this->assertEquals(30, $recipe->minutes_to_prepare());
+        $this->assertEquals(5.5, $recipe->rating());
+        $this->assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
+        $this->assertEquals("Test Recipe", strval($recipe));
+        $this->assertEquals("Test Recipe", $recipe->toString());
+
+        $recipe = $recipe->with_title("New Title");
+        $this->assertEquals("New Title", $recipe->title());
+        $recipe = $recipe->with_minutes_to_prepare(31);
+        $this->assertEquals(31, $recipe->minutes_to_prepare());
+        $recipe = $recipe->with_rating(10);
+        $this->assertEquals(10, $recipe->rating());
+        $recipe = $recipe->with_diet_style(DietStyle::VEGAN());
+        $this->assertEquals(DietStyle::VEGAN(), $recipe->diet_style());
+    }
 
 }
