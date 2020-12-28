@@ -9,6 +9,9 @@
             "email": "marvin.wank@outlook.de"
         }
     ],
+    "scripts": {
+        "test": "./vendor/bin/phpunit test/"
+    },
     "require": {
         "ext-json": "*"
     },
