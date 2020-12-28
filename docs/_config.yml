@@ -1,11 +1,12 @@
 theme: jekyll-theme-cayman
-page:
-  show_sidebar: true
+docs_list_title: ACME Documentation
+docs:
 
-sidebar:
-  - title: "Title"
-    image: http://placehold.it/350x250
-    image_alt: "image"
-    text: "Some text here."
-  - title: "Another Title"
-    text: "More text here."
+  - title: Introduction
+    url: introduction.html
+
+  - title: Configuration
+    url: configuration.html
+
+  - title: Deployment
+    url: deployment.html
