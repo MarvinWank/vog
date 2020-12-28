@@ -10,10 +10,18 @@ The syntax is not inspired by Haskell and thus readable.
 2. [Installation](#Installation)
 
 3. [Usage](#Usage)
+   
+   1. [generate](#generate)
 
 4. [valueFile](#valueFile)
+   
+   1. [generic properties](#generic properties)
 
 5. [enum](#enum)
+   
+   1. [Instantiating a generated Enum](#Instantiating a generated Enum)
+   
+   2. [other Methods](#other Methods)
 
 6. [nullableEnum](#nullableEnum)
 
@@ -29,7 +37,7 @@ but readable code, full test coverage and proper documentation.
 vog can be most easily installed with composer:
 `composer require marvinwank/vog`
 
-## Usage and subcommands
+## Usage
 
 After installing with composer, there is a plain php file in `vendor/marvinwank/vog`, which can be called from the CLI. It has multiple subcommands.  
 
