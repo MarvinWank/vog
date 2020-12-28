@@ -19,6 +19,7 @@ class VogTestCase extends TestCase
             __DIR__."/testObjects/value.json"
         ];
         $hub = new CommandHub();
+
         $hub->run($argv);
     }
 }

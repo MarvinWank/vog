@@ -25,6 +25,11 @@ abstract class VogDataObject
 
     abstract public function getPhpCode(): string;
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function getName(): string
     {
         return $this->name;

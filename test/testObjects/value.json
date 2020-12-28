@@ -147,16 +147,6 @@
         "foo": "string"
       },
       "mutable": false
-    },
-    {
-      "type": "enum",
-      "name": "MutableEnum",
-      "values": {
-        "OMNIVORE": "Omnivore",
-        "VEGETARIAN": "Vegetarian",
-        "VEGAN": "Vegan"
-      },
-      "mutable": true
     }
   ]
 }

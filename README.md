@@ -1,6 +1,6 @@
 # vog - value object generator
 
-vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates immutable data types based on vog definitions. 
+vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates value objects based on vog definitions. 
 The syntax is not inspired by Haskell and thus readable. 
 
 ## Table of contents
@@ -35,7 +35,7 @@ After installing with composer, there is a plain php file in `vendor/marvinwank/
 
 #### generate
 
-The `generate` subcommand is the core of vog. It allows you to generate immutable PHP objects from a JSON definition as prescribed below. It takes one additional argument: the path to the json file with the definitions.
+The `generate` subcommand is the core of vog. It allows you to generate both immutable and mutable PHP objects from a JSON definition as prescribed below. It takes one additional argument: the path to the json file with the definitions.
 
 Example call: `./vendor/marvinwank/vog/vog.php generate ./app/value/value.json`
 
@@ -84,13 +84,14 @@ file and multiple value files require multiple calls.
 
 These properties of the json-Object are either avaiable or required for alle data types
 
-| name       | data type | default | optionality      | description                                                                                               |
-| ---------- | --------- | ------- | ---------------- | --------------------------------------------------------------------------------------------------------- |
-| type       | string    | -       | required for all | defines the type of value object to be generated                                                          |
-| name       | string    | -       | required for all | defines both the php class name and file name of the value object to be generated                         |
-| values     | object    | -       | required for all | defines the values to be represented by the value object to be generated. Syntax and effect vary by type. |
-| extends    | ?string   | ""      | optional         | Optionally states the name of the class this object should extend                                         |
-| implements | array     | []      | optional         | Optionally states the name(s) of the interface(s) this object should implement                            |
+| name       | data type | default | optionality                | description                                                                                               |
+| ---------- | --------- | ------- | -------------------------- | --------------------------------------------------------------------------------------------------------- |
+| type       | string    | -       | required for all           | defines the type of value object to be generated                                                          |
+| name       | string    | -       | required for all           | defines both the php class name and file name of the value object to be generated                         |
+| values     | object    | -       | required for all           | defines the values to be represented by the value object to be generated. Syntax and effect vary by type. |
+| extends    | ?string   | ""      | optional                   | Optionally states the name of the class this object should extend                                         |
+| implements | array     | []      | optional                   | Optionally states the name(s) of the interface(s) this object should implement                            |
+| mutable    | bool      | false   | optional for value objects | Optionally states the mutability of the object. If so, the object will have setters.                      |
 
 ## enum
 
@@ -220,7 +221,7 @@ The class must be regularily instantiated by a constructor and the members are a
     }
 ```
 
-As it is an immutable value object, there are no setters. Instead, you'll have to create entirely new objects if you want to alter a value. This is made easy by the `with_` methods: 
+As it is an immutable value object per default, there are no setters. Instead, you'll have to create entirely new objects if you want to alter a value. This is made easy by the `with_` methods: 
 
 ```php
     public function with_title (string $title):self
@@ -230,6 +231,8 @@ As it is an immutable value object, there are no setters. Instead, you'll have t
 ```
 
 `with_` methods will be generated for each member defined in the value file. 
+
+If you declare your object mutable, it will also have `with_` methods in addition to setters to ensure compatibility.
 
 #### fromArray
 

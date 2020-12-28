@@ -115,6 +115,12 @@ class Generate
             $vog_obj->setIsFinal($data['final']);
         }
         if (array_key_exists("mutable", $data)) {
+            if ( !($vog_obj instanceof ValueObject)){
+                $name = $vog_obj->getName();
+                $type = $vog_obj->getType();
+                throw new UnexpectedValueException("Mutability is only avaiable on value objects, yet object 
+                $name is of type $type");
+            }
             $vog_obj->setIsMutable($data['mutable']);
         }
 
