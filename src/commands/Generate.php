@@ -114,6 +114,9 @@ class Generate
         if (array_key_exists("final", $data)) {
             $vog_obj->setIsFinal($data['final']);
         }
+        if (array_key_exists("mutable", $data)) {
+            $vog_obj->setIsMutable($data['mutable']);
+        }
 
         return $vog_obj;
     }

@@ -5,10 +5,13 @@ use Test\TestObjects\BaseClass;
 use Test\TestObjects\ChildOfNotFinal;
 use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
+use Test\TestObjects\ExplicitlyImmutableObject;
 use Test\TestObjects\implementsMany;
 use Test\TestObjects\implementsOne;
+use Test\TestObjects\ImplicitlyImmutableObject;
 use Test\TestObjects\Interface1;
 use Test\TestObjects\Interface2;
+use Test\TestObjects\MutableObject;
 use Test\TestObjects\notFinal;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
@@ -165,5 +168,39 @@ class ValueObjectTest extends VogTestCase
         $instance = new ChildOfNotFinal("blaze it");
         $this->assertInstanceOf(NotFinal::class, $instance);
     }
+
+    /**
+     * @test
+     */
+    public function it_tests_mutability()
+    {
+        $instance = new MutableObject("bar");
+        $this->assertEquals("bar", $instance->foo());
+        $instance->set_foo("foobar");
+        $this->assertEquals("foobar", $instance->foo());
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_explicit_immutability()
+    {
+        $instance = new ExplicitlyImmutableObject("bar");
+        $this->assertEquals("bar", $instance->foo());
+
+        $this->assertFalse(method_exists($instance, "set_foo"));
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_implicit_immutability()
+    {
+        $instance = new ImplicitlyImmutableObject("bar");
+        $this->assertEquals("bar", $instance->foo());
+
+        $this->assertFalse(method_exists($instance, "set_foo"));
+    }
+
 
 }

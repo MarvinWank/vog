@@ -13,12 +13,14 @@ abstract class VogDataObject
     protected ?string $extends;
     protected array $implements;
     protected bool $is_final;
+    protected bool $is_mutable;
 
     public function __construct(string $name)
     {
         $this->name = $name;
         $this->extends = null;
         $this->is_final = true;
+        $this->is_mutable = false;
     }
 
     abstract public function getPhpCode(): string;
@@ -86,6 +88,16 @@ abstract class VogDataObject
     public function setIsFinal(bool $is_final): void
     {
         $this->is_final = $is_final;
+    }
+
+    public function isMutable(): bool
+    {
+        return $this->is_mutable;
+    }
+
+    public function setIsMutable(bool $is_mutable): void
+    {
+        $this->is_mutable = $is_mutable;
     }
 
     protected function generateGenericPhpHeader(): string

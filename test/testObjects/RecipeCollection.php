@@ -18,11 +18,13 @@ final class RecipeCollection
 		$this->recipe2 = $recipe2;
 	}
 
-	public function recipe1(): RecipeIntStringValue {
+	public function recipe1(): RecipeIntStringValue 
+	{
 		return $this->recipe1;
 	}
 
-	public function recipe2(): RecipeEnumStringValue {
+	public function recipe2(): RecipeEnumStringValue 
+	{
 		return $this->recipe2;
 	}
 
@@ -36,6 +38,7 @@ final class RecipeCollection
 	{
 		return new self($this->recipe1,$recipe2,);
 	}
+
 	public function toArray(): array
 	{
 		 return [

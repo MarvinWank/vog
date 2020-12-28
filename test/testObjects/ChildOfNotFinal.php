@@ -15,7 +15,8 @@ final class ChildOfNotFinal extends NotFinal
 		$this->foo = $foo;
 	}
 
-	public function foo(): string {
+	public function foo(): string 
+	{
 		return $this->foo;
 	}
 
@@ -24,6 +25,7 @@ final class ChildOfNotFinal extends NotFinal
 	{
 		return new self($foo,);
 	}
+
 	public function toArray(): array
 	{
 		 return [

@@ -24,19 +24,23 @@ final class Recipe
 		$this->diet_style = $diet_style;
 	}
 
-	public function title(): string {
+	public function title(): string 
+	{
 		return $this->title;
 	}
 
-	public function minutes_to_prepare(): ?int {
+	public function minutes_to_prepare(): ?int 
+	{
 		return $this->minutes_to_prepare;
 	}
 
-	public function rating(): float {
+	public function rating(): float 
+	{
 		return $this->rating;
 	}
 
-	public function diet_style(): DietStyle {
+	public function diet_style(): DietStyle 
+	{
 		return $this->diet_style;
 	}
 
@@ -60,6 +64,7 @@ final class Recipe
 	{
 		return new self($this->title,$this->minutes_to_prepare,$this->rating,$diet_style,);
 	}
+
 	public function toArray(): array
 	{
 		 return [
