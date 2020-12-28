@@ -15,7 +15,8 @@ final class ValueObjectNoDataType
 		$this->property = $property;
 	}
 
-	public function property() {
+	public function property() 
+	{
 		return $this->property;
 	}
 
@@ -24,6 +25,7 @@ final class ValueObjectNoDataType
 	{
 		return new self($property,);
 	}
+
 	public function toArray(): array
 	{
 		 return [

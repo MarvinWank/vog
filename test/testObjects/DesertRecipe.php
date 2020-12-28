@@ -18,11 +18,13 @@ final class DesertRecipe extends BaseClass
 		$this->light = $light;
 	}
 
-	public function lactosefree(): bool {
+	public function lactosefree(): bool 
+	{
 		return $this->lactosefree;
 	}
 
-	public function light(): bool {
+	public function light(): bool 
+	{
 		return $this->light;
 	}
 
@@ -36,6 +38,7 @@ final class DesertRecipe extends BaseClass
 	{
 		return new self($this->lactosefree,$light,);
 	}
+
 	public function toArray(): array
 	{
 		 return [

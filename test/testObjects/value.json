@@ -123,6 +123,30 @@
         "foo": "string"
       },
       "extends": "NotFinal"
+    },
+    {
+      "type": "valueObject",
+      "name": "MutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "ExplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ImplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
     }
   ]
 }

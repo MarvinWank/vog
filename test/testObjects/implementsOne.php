@@ -18,11 +18,13 @@ final class implementsOne implements Interface1
 		$this->bar = $bar;
 	}
 
-	public function foo(): string {
+	public function foo(): string 
+	{
 		return $this->foo;
 	}
 
-	public function bar(): int {
+	public function bar(): int 
+	{
 		return $this->bar;
 	}
 
@@ -36,6 +38,7 @@ final class implementsOne implements Interface1
 	{
 		return new self($this->foo,$bar,);
 	}
+
 	public function toArray(): array
 	{
 		 return [

@@ -34,6 +34,9 @@ class ValueObject extends VogDataObject
 
         $phpcode = $this->generate_constructor($phpcode);
         $phpcode = $this->generate_getters($phpcode);
+        if ($this->is_mutable){
+            $phpcode = $this->generate_setters($phpcode);
+        }
         $phpcode = $this->generate_with_methods($phpcode);
         $phpcode = $this->generate_to_array($phpcode);
         $phpcode = $this->generate_from_array($phpcode);
@@ -79,11 +82,25 @@ class ValueObject extends VogDataObject
     {
         foreach ($this->values as $name => $data_type) {
             if ($data_type) {
-                $phpcode .= "\n\tpublic function $name(): $data_type {";
+                $phpcode .= "\n\tpublic function $name(): $data_type \n\t{";
             } else {
-                $phpcode .= "\n\tpublic function $name() {";
+                $phpcode .= "\n\tpublic function $name() \n\t{";
             }
             $phpcode .= "\n\t\treturn \$this->$name;";
+            $phpcode .= "\n\t}\n";
+        }
+        return $phpcode;
+    }
+
+    private function generate_setters(string $phpcode): string
+    {
+        foreach ($this->values as $name => $data_type) {
+            if ($data_type) {
+                $phpcode .= "\n\tpublic function set_$name($data_type $$name) \n\t{";
+            } else {
+                $phpcode .= "\n\tpublic function set_$name($$name) \n\t{";
+            }
+            $phpcode .= "\n\t\t\$this->$name = $$name;";
             $phpcode .= "\n\t}\n";
         }
         return $phpcode;
@@ -109,6 +126,7 @@ class ValueObject extends VogDataObject
             $phpcode .= ");";
             $phpcode .= "\n\t}";
         }
+        $phpcode .= "\n";
 
         return $phpcode;
     }
