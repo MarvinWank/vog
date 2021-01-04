@@ -47,7 +47,7 @@ abstract class AbstractBuilder
 
     public function getTargetFilepath(): string
     {
-        return $this->target_filepath . DIRECTORY_SEPARATOR . $this->name . ".php";
+        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
     public function getNamespace(): string
@@ -64,6 +64,7 @@ abstract class AbstractBuilder
     {
         // do not camlize values of enums
         if ($this instanceof EnumBuilder) {
+            //TODO modifiy keys with strtoupper for enums
             $this->values = $values;
             return;
         }
@@ -131,7 +132,7 @@ EOT;
 
     protected function generateGenericPhpHeader(): string
     {
-        $class_statement = "class $this->name";
+        $class_statement = "class " . ucfirst($this->name);
         if ($this->is_final){
             $class_statement = "final " . $class_statement;
         }

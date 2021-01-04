@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class implementsMany implements Interface1, Interface2
+final class ImplementsOne implements Interface1
 {
     private string $foo;
     private int $bar;

@@ -5,8 +5,8 @@ use Test\TestObjects\ChildOfNotFinal;
 use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\ExplicitlyImmutableObject;
-use Test\TestObjects\implementsMany;
-use Test\TestObjects\implementsOne;
+use Test\TestObjects\ImplementsMany;
+use Test\TestObjects\ImplementsOne;
 use Test\TestObjects\ImplicitlyImmutableObject;
 use Test\TestObjects\Interface1;
 use Test\TestObjects\Interface2;
@@ -147,7 +147,7 @@ class ValueObjectTest extends VogTestCase
      */
     public function it_tests_implementation_generation_with_one_interface()
     {
-        $instance = new implementsOne("bar", 42);
+        $instance = new ImplementsOne("bar", 42);
         self::assertInstanceOf(Interface1::class, $instance);
     }
 
@@ -156,7 +156,7 @@ class ValueObjectTest extends VogTestCase
      */
     public function it_tests_implementation_generation_with_multiple_interfaces()
     {
-        $instance = new implementsMany("bar", 42);
+        $instance = new ImplementsMany("bar", 42);
         self::assertInstanceOf(Interface1::class, $instance);
         self::assertInstanceOf(Interface2::class, $instance);
     }
@@ -239,7 +239,7 @@ class ValueObjectTest extends VogTestCase
         $array = $object->toArray();
         self::assertEquals(['camelCased' => $value], $array);
 
-        $new = $object->fromArray($array);
+        $new = $object::fromArray($array);
         self::assertEquals($object, $new);
     }
 
