@@ -30,14 +30,16 @@ final class DesertRecipe extends BaseClass
     public function with_lactosefree (bool $lactosefree): self 
     {
         return new self(
-            $lactosefree,    $this->light
+            $lactosefree,
+            $this->light
         );
     }
     
     public function with_light (bool $light): self 
     {
         return new self(
-            $this->lactosefree,    $light
+            $this->lactosefree,
+            $light
         );
     }
     
@@ -59,7 +61,9 @@ final class DesertRecipe extends BaseClass
             throw new \UnexpectedValueException('Array key light does not exist');
         }
         
-        return new self(    $array['lactosefree'],    $array['light']
+        return new self(
+            $array['lactosefree'],
+            $array['light']
         );
     }
         

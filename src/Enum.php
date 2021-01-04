@@ -78,6 +78,7 @@ EOT;
     {
         return new self('$name');
     }
+    
 EOT;
         }
         return $phpcode;

@@ -160,24 +160,25 @@ class ValueObject extends VogDataObject
                 public function with_$name ($data_type $$name): self 
                 {
                     return new self(
-                    
             EOT;
 
             foreach ($this->values as $name_assigner => $data_type_assginer) {
                 if ($name_assigner === $name) {
                     $phpcode .= <<<EOT
-                        $$name_assigner,
+                    
+                                $$name_assigner,
                     EOT;
 
                     continue;
                 }
                 $phpcode .= <<<EOT
-                    \$this->$name_assigner,
+                
+                            \$this->$name_assigner,
                 EOT;
             }
             $phpcode = rtrim($phpcode, ',');
             $phpcode .= <<<EOT
-            
+
                     );
                 }
                 
@@ -243,7 +244,8 @@ class ValueObject extends VogDataObject
 
         foreach ($this->values as $name => $datatype) {
             $phpcode .= <<<EOT
-                \$array['$name'],
+            
+                        \$array['$name'],
             EOT;
         }
 

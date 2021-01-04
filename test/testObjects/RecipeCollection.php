@@ -30,14 +30,16 @@ final class RecipeCollection
     public function with_recipe1 (RecipeIntStringValue $recipe1): self 
     {
         return new self(
-            $recipe1,    $this->recipe2
+            $recipe1,
+            $this->recipe2
         );
     }
     
     public function with_recipe2 (RecipeEnumStringValue $recipe2): self 
     {
         return new self(
-            $this->recipe1,    $recipe2
+            $this->recipe1,
+            $recipe2
         );
     }
     
@@ -59,7 +61,9 @@ final class RecipeCollection
             throw new \UnexpectedValueException('Array key recipe2 does not exist');
         }
         
-        return new self(    $array['recipe1'],    $array['recipe2']
+        return new self(
+            $array['recipe1'],
+            $array['recipe2']
         );
     }
         

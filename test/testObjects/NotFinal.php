@@ -30,14 +30,16 @@ class NotFinal
     public function with_foo (string $foo): self 
     {
         return new self(
-            $foo,    $this->bar
+            $foo,
+            $this->bar
         );
     }
     
     public function with_bar (int $bar): self 
     {
         return new self(
-            $this->foo,    $bar
+            $this->foo,
+            $bar
         );
     }
     
@@ -59,7 +61,9 @@ class NotFinal
             throw new \UnexpectedValueException('Array key bar does not exist');
         }
         
-        return new self(    $array['foo'],    $array['bar']
+        return new self(
+            $array['foo'],
+            $array['bar']
         );
     }
         

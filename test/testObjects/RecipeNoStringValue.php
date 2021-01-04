@@ -46,28 +46,40 @@ final class RecipeNoStringValue
     public function with_title (string $title): self 
     {
         return new self(
-            $title,    $this->minutes_to_prepare,    $this->rating,    $this->diet_style
+            $title,
+            $this->minutes_to_prepare,
+            $this->rating,
+            $this->diet_style
         );
     }
     
     public function with_minutes_to_prepare (?int $minutes_to_prepare): self 
     {
         return new self(
-            $this->title,    $minutes_to_prepare,    $this->rating,    $this->diet_style
+            $this->title,
+            $minutes_to_prepare,
+            $this->rating,
+            $this->diet_style
         );
     }
     
     public function with_rating (float $rating): self 
     {
         return new self(
-            $this->title,    $this->minutes_to_prepare,    $rating,    $this->diet_style
+            $this->title,
+            $this->minutes_to_prepare,
+            $rating,
+            $this->diet_style
         );
     }
     
     public function with_diet_style (DietStyle $diet_style): self 
     {
         return new self(
-            $this->title,    $this->minutes_to_prepare,    $this->rating,    $diet_style
+            $this->title,
+            $this->minutes_to_prepare,
+            $this->rating,
+            $diet_style
         );
     }
     
@@ -99,7 +111,11 @@ final class RecipeNoStringValue
             throw new \UnexpectedValueException('Array key diet_style does not exist');
         }
         
-        return new self(    $array['title'],    $array['minutes_to_prepare'],    $array['rating'],    $array['diet_style']
+        return new self(
+            $array['title'],
+            $array['minutes_to_prepare'],
+            $array['rating'],
+            $array['diet_style']
         );
     }
         

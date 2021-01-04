@@ -38,22 +38,27 @@ final class Cuisine
     {
         return new self('DEUTSCH');
     }
+    
     public static function MEDITERAN(): self
     {
         return new self('MEDITERAN');
     }
+    
     public static function ASIATISCH(): self
     {
         return new self('ASIATISCH');
     }
+    
     public static function AMERIKANISCH(): self
     {
         return new self('AMERIKANISCH');
     }
+    
     public static function INDISCH(): self
     {
         return new self('INDISCH');
     }
+    
     public static function fromValue(?string $input_value): self
     {
         if(is_null($input_value)){

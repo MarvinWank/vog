@@ -39,7 +39,8 @@ final class ValueObjectNoDataType
             throw new \UnexpectedValueException('Array key property does not exist');
         }
         
-        return new self(    $array['property']
+        return new self(
+            $array['property']
         );
     }
         

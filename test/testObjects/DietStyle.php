@@ -28,14 +28,17 @@ final class DietStyle
     {
         return new self('OMNIVORE');
     }
+    
     public static function VEGETARIAN(): self
     {
         return new self('VEGETARIAN');
     }
+    
     public static function VEGAN(): self
     {
         return new self('VEGAN');
     }
+    
     public static function fromValue(string $input_value): self
     {
         foreach (self::OPTIONS as $key => $value) {

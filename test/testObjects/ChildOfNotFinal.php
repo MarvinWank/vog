@@ -39,7 +39,8 @@ final class ChildOfNotFinal extends NotFinal
             throw new \UnexpectedValueException('Array key foo does not exist');
         }
         
-        return new self(    $array['foo']
+        return new self(
+            $array['foo']
         );
     }
         
