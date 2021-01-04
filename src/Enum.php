@@ -14,36 +14,40 @@ class Enum extends VogDataObject
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader();
-
-        $phpcode .= PHP_EOL . PHP_EOL;
-
         $phpcode = $this->generate_const_options($phpcode);
         $phpcode = $this->generate_constructor($phpcode);
         $phpcode = $this->generate_methods($phpcode);
         $phpcode = $this->generate_from_name_from_value($phpcode);
         $phpcode = $this->generate_generic_functions($phpcode);
+        $phpcode = $this->closeClass($phpcode);
 
-        $phpcode .= PHP_EOL . PHP_EOL . "}";
         return $phpcode;
     }
 
     protected function generate_const_options(string $phpcode): string
     {
-        $values_as_array_string = "[";
-        foreach ($this->values as $name => $value) {
-            $values_as_array_string .= ' "' . $name . '" => ' . '"' . $value . '",';
-        }
-        $values_as_array_string .= "];";
-
         $phpcode .= <<<EOT
-    public const OPTIONS = $values_as_array_string
-EOT;
+        
+            public const OPTIONS = [ 
+        EOT;
+
+        foreach ($this->values as $name => $value) {
+            $phpcode .= <<<EOT
+            
+                    '$name' => '$value',
+            EOT;
+        }
+        $phpcode .= <<<EOT
+        
+            ];
+        EOT;
 
         $phpcode .= PHP_EOL;
         foreach ($this->values as $name => $value) {
             $phpcode .= <<<EOT
-    public const $name = '$value';
-EOT;
+
+                public const $name = '$value';               
+            EOT;
         }
         return $phpcode;
     }
@@ -74,7 +78,6 @@ EOT;
     {
         return new self('$name');
     }
-       
 EOT;
         }
         return $phpcode;
@@ -103,6 +106,7 @@ EOT;
         
         return new self($name);
     }
+    
 EOT;
         return $phpcode;
     }

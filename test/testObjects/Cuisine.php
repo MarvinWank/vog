@@ -6,9 +6,20 @@ namespace Test\TestObjects;
 
 final class Cuisine
 {
+    public const OPTIONS = [ 
+        'DEUTSCH' => 'deutsch',
+        'MEDITERAN' => 'mediteran',
+        'ASIATISCH' => 'asiatisch',
+        'AMERIKANISCH' => 'amerikanisch',
+        'INDISCH' => 'indisch',
+    ];
 
-    public const OPTIONS = [ "DEUTSCH" => "deutsch", "MEDITERAN" => "mediteran", "ASIATISCH" => "asiatisch", "AMERIKANISCH" => "amerikanisch", "INDISCH" => "indisch",];
-    public const DEUTSCH = 'deutsch';    public const MEDITERAN = 'mediteran';    public const ASIATISCH = 'asiatisch';    public const AMERIKANISCH = 'amerikanisch';    public const INDISCH = 'indisch';        
+    public const DEUTSCH = 'deutsch';               
+    public const MEDITERAN = 'mediteran';               
+    public const ASIATISCH = 'asiatisch';               
+    public const AMERIKANISCH = 'amerikanisch';               
+    public const INDISCH = 'indisch';               
+        
     private ?string $name;
     private ?string $value;
         
@@ -17,9 +28,7 @@ final class Cuisine
         if(is_null($name)){
             $this->name = null;
             $this->value = null;
-        }
-        
-        else{
+        } else {
             $this->name = $name;
             $this->value = self::OPTIONS[$name];
         }
@@ -29,27 +38,22 @@ final class Cuisine
     {
         return new self('DEUTSCH');
     }
-       
     public static function MEDITERAN(): self
     {
         return new self('MEDITERAN');
     }
-       
     public static function ASIATISCH(): self
     {
         return new self('ASIATISCH');
     }
-       
     public static function AMERIKANISCH(): self
     {
         return new self('AMERIKANISCH');
     }
-       
     public static function INDISCH(): self
     {
         return new self('INDISCH');
     }
-       
     public static function fromValue(?string $input_value): self
     {
         if(is_null($input_value)){
@@ -105,5 +109,4 @@ final class Cuisine
     {
         return $this->name;
     }
-
 }

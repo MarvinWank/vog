@@ -29,7 +29,10 @@ class ValueObject extends VogDataObject
         $phpcode = $this->generateGenericPhpHeader();
 
         foreach ($this->values as $name => $data_type) {
-            $phpcode .= "\n\tprivate $data_type $$name;";
+            $phpcode .= <<<EOT
+            
+                private $data_type $$name;
+            EOT;
         }
 
         $phpcode = $this->generate_constructor($phpcode);
@@ -47,7 +50,7 @@ class ValueObject extends VogDataObject
         }
 
 
-        $phpcode .= "\n}";
+        $phpcode = $this->closeClass($phpcode);
         return $phpcode;
     }
 
@@ -64,17 +67,36 @@ class ValueObject extends VogDataObject
 
     private function generate_constructor(string $phpcode): string
     {
-        $phpcode .= "\n\n\tpublic function __construct (";
-        foreach ($this->values as $name => $data_type) {
-            $phpcode .= "\n\t\t$data_type $$name,";
-        }
-        $phpcode = $this->str_lreplace(',', '', $phpcode);
-        $phpcode .= "\n\t)\n\t{";
+        $phpcode .= <<<EOT
+        
+        
+            public function __construct (
+        EOT;
 
         foreach ($this->values as $name => $data_type) {
-            $phpcode .= "\n\t\t\$this->$name = $$name;";
+            $phpcode .= <<<EOT
+            
+                    $data_type $$name,
+            EOT;
         }
-        $phpcode .= "\n\t}\n";
+
+        $phpcode = rtrim($phpcode, ',');
+        $phpcode .= <<<ETO
+        
+            ) {
+        ETO;
+        foreach ($this->values as $name => $data_type) {
+            $phpcode .= <<<ETO
+            
+                    \$this->$name = $$name;
+            ETO;
+        }
+        $phpcode .= <<<ETO
+        
+            }
+            
+        ETO;
+
         return $phpcode;
     }
 
@@ -82,12 +104,24 @@ class ValueObject extends VogDataObject
     {
         foreach ($this->values as $name => $data_type) {
             if ($data_type) {
-                $phpcode .= "\n\tpublic function $name(): $data_type \n\t{";
+                $phpcode .= <<<ETO
+                
+                    public function $name(): $data_type 
+                    {
+                ETO;
             } else {
-                $phpcode .= "\n\tpublic function $name() \n\t{";
+                $phpcode .= <<<ETO
+                
+                    public function $name() 
+                    {
+                ETO;
             }
-            $phpcode .= "\n\t\treturn \$this->$name;";
-            $phpcode .= "\n\t}\n";
+            $phpcode .= <<<EOT
+            
+                    return \$this->$name;
+                }
+                
+            EOT;
         }
         return $phpcode;
     }
@@ -96,12 +130,24 @@ class ValueObject extends VogDataObject
     {
         foreach ($this->values as $name => $data_type) {
             if ($data_type) {
-                $phpcode .= "\n\tpublic function set_$name($data_type $$name) \n\t{";
+                $phpcode .= <<<EOT
+                
+                    public function set_$name($data_type $$name) 
+                    {
+                EOT;
             } else {
-                $phpcode .= "\n\tpublic function set_$name($$name) \n\t{";
+                $phpcode .= <<<EOT
+                
+                    public function set_$name($$name) 
+                    {
+                EOT;
             }
-            $phpcode .= "\n\t\t\$this->$name = $$name;";
-            $phpcode .= "\n\t}\n";
+            $phpcode .= <<<EOT
+            
+                    \$this->$name = $$name;
+                }
+                
+            EOT;
         }
         return $phpcode;
     }
@@ -109,99 +155,143 @@ class ValueObject extends VogDataObject
     private function generate_with_methods(string $phpcode)
     {
         foreach ($this->values as $name => $data_type) {
-            $phpcode .= "\n\n\tpublic function with_$name (";
+            $phpcode .= <<<EOT
+            
+                public function with_$name ($data_type $$name): self 
+                {
+                    return new self(
+                    
+            EOT;
 
-            $phpcode .= "$data_type $$name";
-            $phpcode .= "):self\n\t{";
-
-            $phpcode .= "\n\t\treturn new self(";
             foreach ($this->values as $name_assigner => $data_type_assginer) {
                 if ($name_assigner === $name) {
-                    $phpcode .= "$$name_assigner,";
+                    $phpcode .= <<<EOT
+                        $$name_assigner,
+                    EOT;
+
                     continue;
                 }
-                $phpcode .= "\$this->$name_assigner,";
-
+                $phpcode .= <<<EOT
+                    \$this->$name_assigner,
+                EOT;
             }
-            $phpcode .= ");";
-            $phpcode .= "\n\t}";
+            $phpcode = rtrim($phpcode, ',');
+            $phpcode .= <<<EOT
+            
+                    );
+                }
+                
+            EOT;
         }
-        $phpcode .= "\n";
 
         return $phpcode;
     }
 
     private function generate_to_array(string $phpcode): string
     {
-        $phpcode .= "\n\tpublic function toArray(): array";
-        $phpcode .= "\n\t{";
+        $phpcode .= <<<EOT
+        
+            public function toArray(): array
+            {
+                return [
+        EOT;
 
-        $phpcode .= "\n\t\t return [";
         foreach ($this->values as $name => $datatype) {
             if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
-                $phpcode .= "\n\t\t\t '$name' =>  \$this->value_to_array(\$this->$name), ";
+                $phpcode .= <<<EOT
+                
+                            '$name' =>  \$this->value_to_array(\$this->$name),
+                EOT;
             } else {
-                $phpcode .= "\n\t\t\t '$name' => \$this->$name, ";
+                $phpcode .= <<<EOT
+                
+                            '$name' => \$this->$name,
+                EOT;
             }
         }
-        $phpcode .= "\n\t\t];";
-
-        $phpcode .= "\n\t}";
+        $phpcode .= <<<EOT
+        
+                ];
+            }
+            
+        EOT;
         return $phpcode;
     }
 
     private function generate_from_array(string $phpcode): string
     {
-        $phpcode .= "\n\n\tpublic static function fromArray(array \$array): self";
-        $phpcode .= "\n\t{";
+        $phpcode .= <<<'EOT'
+        
+            public static function fromArray(array $array): self
+            {
+        EOT;
 
         foreach ($this->values as $name => $datatype) {
-            $phpcode .= "\n\t\tif(!array_key_exists('$name', \$array)){";
-            $phpcode .= "\n\t\t\t throw new \\UnexpectedValueException('Array key $name does not exist');";
-            $phpcode .= "\n\t\t}";
+            $phpcode .= <<<EOT
+            
+                    if (!array_key_exists('$name', \$array)) {
+                        throw new \\UnexpectedValueException('Array key $name does not exist');
+                    }
+                    
+            EOT;
         }
 
-        $phpcode .= "\n";
+        $phpcode .= <<<EOT
+        
+                return new self(
+        EOT;
 
-        $phpcode .= "\n\t\treturn new self(";
         foreach ($this->values as $name => $datatype) {
-            $phpcode .= "\$array['$name'],";
+            $phpcode .= <<<EOT
+                \$array['$name'],
+            EOT;
         }
-        $phpcode .= ");";
 
-        $phpcode .= "\n\t}";
+        $phpcode = rtrim($phpcode, ',');
+        $phpcode .= <<<EOT
+        
+                );
+            }
+            
+        EOT;
 
         return $phpcode;
     }
 
     private function generate_toString(string $phpcode)
     {
-        $phpcode .= "\n\n\tpublic function __toString(): string";
-        $phpcode .= "\n\t{";
-        $phpcode .= "\n\t\treturn strval(\$this->$this->string_value);";
-        $phpcode .= "\n\t}";
-
-        $phpcode .= "\n\n\tpublic function toString(): string";
-        $phpcode .= "\n\t{";
-        $phpcode .= "\n\t\treturn strval(\$this->$this->string_value);";
-        $phpcode .= "\n\t}";
+        $phpcode .= <<<EOT
+        
+            public function __toString(): string
+            {
+                return \$this->toString();
+            }
+            
+            public function toString(): string
+            {
+                return strval(\$this->$this->string_value);
+            }
+            
+        EOT;
 
         return $phpcode;
     }
 
     private function generate_value_to_array(string $phpcode)
     {
-        $phpcode .= "\n\n\tprivate function value_to_array(\$value)\n\t{";
-
-        $phpcode .= "\n\t\tif(method_exists(\$value, 'toArray')) {";
-        $phpcode .= "\n\t\t\treturn \$value->toArray();";
-        $phpcode .= "\n\t\t}";
-
-        $phpcode .= "\n\t\treturn strval(\$value);";
-
-        $phpcode .= "\n\t}";
+        //TODO replace strval to (string) typecast as suggested by phpstorm
+        $phpcode .= <<<EOT
+            
+            private function value_to_array(\$value)
+            {
+                if (method_exists(\$value, 'toArray')) {
+                    return \$value->toArray();
+                }
+                
+                return strval(\$value);
+            }
+        EOT;
 
         return $phpcode;
     }
-
 }

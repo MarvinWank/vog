@@ -7,22 +7,19 @@ class NullableEnum extends Enum
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader();
-
-        $phpcode .= PHP_EOL . PHP_EOL;
-
         $phpcode = $this->generate_const_options($phpcode);
         $phpcode = $this->generate_constructor($phpcode);
         $phpcode = $this->generate_methods($phpcode);
         $phpcode = $this->generate_from_name_from_value($phpcode);
         $phpcode = $this->generate_generic_functions($phpcode);
-
-        $phpcode .= PHP_EOL . PHP_EOL . "}";
+        $phpcode = $this->closeClass($phpcode);
         return $phpcode;
     }
 
     protected function generate_constructor(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
+
         
     private ?string $name;
     private ?string $value;
@@ -32,9 +29,7 @@ class NullableEnum extends Enum
         if(is_null($name)){
             $this->name = null;
             $this->value = null;
-        }
-        
-        else{
+        } else {
             $this->name = $name;
             $this->value = self::OPTIONS[$name];
         }

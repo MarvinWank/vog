@@ -105,6 +105,14 @@ abstract class VogDataObject
         $this->is_mutable = $is_mutable;
     }
 
+    protected function closeClass($phpcode) {
+        $phpcode .= <<<EOT
+
+}
+EOT;
+        return $phpcode;
+    }
+
     protected function generateGenericPhpHeader(): string
     {
         $class_statement = "class $this->name";

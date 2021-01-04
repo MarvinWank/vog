@@ -6,9 +6,15 @@ namespace Test\TestObjects;
 
 final class DietStyle
 {
+    public const OPTIONS = [ 
+        'OMNIVORE' => 'Omnivore',
+        'VEGETARIAN' => 'Vegetarian',
+        'VEGAN' => 'Vegan',
+    ];
 
-    public const OPTIONS = [ "OMNIVORE" => "Omnivore", "VEGETARIAN" => "Vegetarian", "VEGAN" => "Vegan",];
-    public const OMNIVORE = 'Omnivore';    public const VEGETARIAN = 'Vegetarian';    public const VEGAN = 'Vegan';        
+    public const OMNIVORE = 'Omnivore';               
+    public const VEGETARIAN = 'Vegetarian';               
+    public const VEGAN = 'Vegan';                       
     private string $name;
     private string $value;
         
@@ -22,17 +28,14 @@ final class DietStyle
     {
         return new self('OMNIVORE');
     }
-       
     public static function VEGETARIAN(): self
     {
         return new self('VEGETARIAN');
     }
-       
     public static function VEGAN(): self
     {
         return new self('VEGAN');
     }
-       
     public static function fromValue(string $input_value): self
     {
         foreach (self::OPTIONS as $key => $value) {
@@ -52,6 +55,7 @@ final class DietStyle
         
         return new self($name);
     }
+    
     public function equals(?self $other): bool
     {
         return (null !== $other) && ($this->name() === $other->name());
@@ -76,5 +80,4 @@ final class DietStyle
     {
         return $this->name;
     }
-
 }
