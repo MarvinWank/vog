@@ -15,9 +15,9 @@ class CommandHub
     {
         switch ($argv[1]){
             case self::COMMAND_GENERATE: $this->runGenerateCommand($argv[2]);
-            break;
+                break;
             case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv[3], $argv[4]);
-            break;
+                break;
             default:
                 throw new \UnexpectedValueException("Command $argv is not defined. Defined commands are: "
                 . implode(", ", self::COMMANDS));

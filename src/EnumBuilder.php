@@ -2,7 +2,7 @@
 
 namespace Vog;
 
-class Enum extends VogDataObject
+class EnumBuilder extends AbstractBuilder
 {
 
     public function __construct(string $name)
@@ -14,17 +14,17 @@ class Enum extends VogDataObject
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader();
-        $phpcode = $this->generate_const_options($phpcode);
-        $phpcode = $this->generate_constructor($phpcode);
-        $phpcode = $this->generate_methods($phpcode);
-        $phpcode = $this->generate_from_name_from_value($phpcode);
-        $phpcode = $this->generate_generic_functions($phpcode);
+        $phpcode = $this->generateConstOptions($phpcode);
+        $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateMethods($phpcode);
+        $phpcode = $this->generateFromNameFromValue($phpcode);
+        $phpcode = $this->generateGenericFunctions($phpcode);
         $phpcode = $this->closeClass($phpcode);
 
         return $phpcode;
     }
 
-    protected function generate_const_options(string $phpcode): string
+    protected function generateConstOptions(string $phpcode): string
     {
         $phpcode .= <<<EOT
         
@@ -52,7 +52,7 @@ class Enum extends VogDataObject
         return $phpcode;
     }
 
-    protected function generate_constructor(string $phpcode): string
+    protected function generateConstructor(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         
@@ -68,7 +68,7 @@ EOT;
         return $phpcode;
     }
 
-    protected function generate_methods(string $phpcode): string
+    protected function generateMethods(string $phpcode): string
     {
         $phpcode .= PHP_EOL;
         foreach ($this->values as $name => $value) {
@@ -84,7 +84,7 @@ EOT;
         return $phpcode;
     }
 
-    protected function generate_from_name_from_value(string $phpcode): string
+    protected function generateFromNameFromValue(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
 
@@ -112,7 +112,7 @@ EOT;
         return $phpcode;
     }
 
-    protected function generate_generic_functions(string $phpcode): string
+    protected function generateGenericFunctions(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
 

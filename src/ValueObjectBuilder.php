@@ -4,7 +4,7 @@
 namespace Vog;
 
 
-class ValueObject extends VogDataObject
+class ValueObjectBuilder extends AbstractBuilder
 {
     private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
     private string $string_value;
@@ -15,7 +15,7 @@ class ValueObject extends VogDataObject
         $this->type = "valueObject";
     }
 
-    public function set_string_value(string $string_value)
+    public function setStringValue(string $string_value)
     {
         if(!array_key_exists($string_value, $this->values)){
             throw new \UnexpectedValueException("Designated string value $string_value does not exist in values");
@@ -35,18 +35,18 @@ class ValueObject extends VogDataObject
             EOT;
         }
 
-        $phpcode = $this->generate_constructor($phpcode);
-        $phpcode = $this->generate_getters($phpcode);
+        $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateGetters($phpcode);
         if ($this->is_mutable){
-            $phpcode = $this->generate_setters($phpcode);
+            $phpcode = $this->generateSetters($phpcode);
         }
-        $phpcode = $this->generate_with_methods($phpcode);
-        $phpcode = $this->generate_to_array($phpcode);
-        $phpcode = $this->generate_from_array($phpcode);
-        $phpcode = $this->generate_value_to_array($phpcode);
+        $phpcode = $this->generateWithMethods($phpcode);
+        $phpcode = $this->generateToArray($phpcode);
+        $phpcode = $this->generateFromArray($phpcode);
+        $phpcode = $this->generateValueToArray($phpcode);
 
         if(isset($this->string_value)){
-            $phpcode = $this->generate_toString($phpcode);
+            $phpcode = $this->generateToString($phpcode);
         }
 
 
@@ -54,18 +54,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function str_lreplace($search, $replace, $subject)
-    {
-        $pos = strrpos($subject, $search);
-
-        if ($pos !== false) {
-            $subject = substr_replace($subject, $replace, $pos, strlen($search));
-        }
-
-        return $subject;
-    }
-
-    private function generate_constructor(string $phpcode): string
+    private function generateConstructor(string $phpcode): string
     {
         $phpcode .= <<<EOT
         
@@ -100,7 +89,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_getters(string $phpcode): string
+    private function generateGetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
             if ($data_type) {
@@ -126,7 +115,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_setters(string $phpcode): string
+    private function generateSetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
             if ($data_type) {
@@ -152,7 +141,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_with_methods(string $phpcode)
+    private function generateWithMethods(string $phpcode)
     {
         foreach ($this->values as $name => $data_type) {
             $phpcode .= <<<EOT
@@ -188,7 +177,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_to_array(string $phpcode): string
+    private function generateToArray(string $phpcode): string
     {
         $phpcode .= <<<EOT
         
@@ -219,7 +208,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_from_array(string $phpcode): string
+    private function generateFromArray(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         
@@ -260,7 +249,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_toString(string $phpcode)
+    private function generateToString(string $phpcode)
     {
         $phpcode .= <<<EOT
         
@@ -279,7 +268,7 @@ class ValueObject extends VogDataObject
         return $phpcode;
     }
 
-    private function generate_value_to_array(string $phpcode)
+    private function generateValueToArray(string $phpcode)
     {
         //TODO replace strval to (string) typecast as suggested by phpstorm
         $phpcode .= <<<EOT
