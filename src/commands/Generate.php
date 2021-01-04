@@ -19,7 +19,7 @@ class Generate
         if (!array_key_exists("root_path", $data)) {
             throw new UnexpectedValueException("Root Path not specified");
         }
-        $this->rootPath = $data['root_path'];
+        $this->rootPath = rtrim($data['root_path'], '/');
         unset($data['root_path']);
 
         foreach ($data as $targetFilepath => $objects) {
