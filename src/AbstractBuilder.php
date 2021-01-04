@@ -25,6 +25,11 @@ abstract class AbstractBuilder
 
     abstract public function getPhpCode(): string;
 
+    public static function camelize(string $string): string
+    {
+        return lcfirst(str_replace('_', '', ucwords($string, '_')));
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -57,7 +62,18 @@ abstract class AbstractBuilder
 
     public function setValues(array $values)
     {
-        $this->values = $values;
+        // do not camlize values of enums
+        if ($this instanceof EnumBuilder) {
+            $this->values = $values;
+            return;
+        }
+
+        $camlized=[];
+        foreach ($values as $key => $value) {
+            $camlized[self::camelize($key)] = $value;
+        }
+
+        $this->values = $camlized;
     }
 
     public function getValues(): array
@@ -145,6 +161,9 @@ EOT;
 declare(strict_types=1);
 
 namespace $this->namespace;
+
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 $class_statement
 {

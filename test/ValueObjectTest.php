@@ -1,6 +1,5 @@
 <?php
 
-
 use Test\TestObjects\BaseClass;
 use Test\TestObjects\ChildOfNotFinal;
 use Test\TestObjects\DesertRecipe;
@@ -19,6 +18,7 @@ use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
 use Test\TestObjects\ValueObjectNoDataType;
 use Test\TestObjects\WithCamelCase;
+use Test\TestObjects\WithUnderscore;
 
 class ValueObjectTest extends VogTestCase
 {
@@ -29,10 +29,10 @@ class ValueObjectTest extends VogTestCase
     {
         $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
 
-        self::assertEquals("Test Recipe", $recipe->title());
-        self::assertEquals(30, $recipe->minutes_to_prepare());
-        self::assertEquals(5.5, $recipe->rating());
-        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->getDietStyle()));
         self::assertEquals("Test Recipe", strval($recipe));
         self::assertEquals("Test Recipe", $recipe->toString());
     }
@@ -44,15 +44,15 @@ class ValueObjectTest extends VogTestCase
     {
         $recipe = Recipe::fromArray([
             "title" => "Test Recipe",
-            "minutes_to_prepare" => 30,
+            "minutesToPrepare" => 30,
             "rating" => 5.5,
-            "diet_style" => DietStyle::VEGETARIAN()
+            "dietStyle" => DietStyle::VEGETARIAN()
         ]);
 
-        self::assertEquals("Test Recipe", $recipe->title());
-        self::assertEquals(30, $recipe->minutes_to_prepare());
-        self::assertEquals(5.5, $recipe->rating());
-        self::assertTrue(DietStyle::VEGETARIAN()->equals($recipe->diet_style()));
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::VEGETARIAN()->equals($recipe->getDietStyle()));
     }
 
     /**
@@ -64,9 +64,9 @@ class ValueObjectTest extends VogTestCase
         $recipe = $recipe->toArray();
 
         self::assertEquals("Test Recipe", $recipe['title']);
-        self::assertEquals(30, $recipe['minutes_to_prepare']);
+        self::assertEquals(30, $recipe['minutesToPrepare']);
         self::assertEquals(5.5, $recipe['rating']);
-        self::assertEquals("VEGAN", $recipe['diet_style']);
+        self::assertEquals("VEGAN", $recipe['dietStyle']);
     }
 
     /**
@@ -106,10 +106,10 @@ class ValueObjectTest extends VogTestCase
         self::assertIsArray($recipe_as_array['recipe2']);
 
         self::assertEquals("Test Recipe 1", $recipe_as_array['recipe1']['title']);
-        self::assertEquals("VEGAN", $recipe_as_array['recipe1']['diet_style']);
+        self::assertEquals("VEGAN", $recipe_as_array['recipe1']['dietStyle']);
 
         self::assertEquals("Test Recipe 2", $recipe_as_array['recipe2']['title']);
-        self::assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['diet_style']);
+        self::assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['dietStyle']);
     }
 
     /**
@@ -120,7 +120,7 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_value_object_with_undefined_datatype($value)
     {
         $object = new ValueObjectNoDataType($value);
-        self::assertEquals($object->property(), $value);
+        self::assertEquals($object->getProperty(), $value);
     }
 
     public function undefined_datatype_data_provider()
@@ -176,9 +176,9 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_mutability()
     {
         $instance = new MutableObject("bar");
-        self::assertEquals("bar", $instance->foo());
-        $instance->set_foo("foobar");
-        self::assertEquals("foobar", $instance->foo());
+        self::assertEquals("bar", $instance->getFoo());
+        $instance->setFoo("foobar");
+        self::assertEquals("foobar", $instance->getFoo());
     }
 
     /**
@@ -187,9 +187,9 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_explicit_immutability()
     {
         $instance = new ExplicitlyImmutableObject("bar");
-        self::assertEquals("bar", $instance->foo());
+        self::assertEquals("bar", $instance->getFoo());
 
-        self::assertFalse(method_exists($instance, "set_foo"));
+        self::assertFalse(method_exists($instance, "setFoo"));
     }
 
     /**
@@ -198,9 +198,9 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_implicit_immutability()
     {
         $instance = new ImplicitlyImmutableObject("bar");
-        self::assertEquals("bar", $instance->foo());
+        self::assertEquals("bar", $instance->getFoo());
 
-        self::assertFalse(method_exists($instance, "set_foo"));
+        self::assertFalse(method_exists($instance, "setFoo"));
     }
 
     /**
@@ -210,32 +210,52 @@ class ValueObjectTest extends VogTestCase
     {
         $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
 
-        self::assertEquals("Test Recipe", $recipe->title());
-        self::assertEquals(30, $recipe->minutes_to_prepare());
-        self::assertEquals(5.5, $recipe->rating());
-        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->getDietStyle()));
         self::assertEquals("Test Recipe", strval($recipe));
         self::assertEquals("Test Recipe", $recipe->toString());
 
-        $recipe = $recipe->with_title("New Title");
-        self::assertEquals("New Title", $recipe->title());
-        $recipe = $recipe->with_minutes_to_prepare(31);
-        self::assertEquals(31, $recipe->minutes_to_prepare());
-        $recipe = $recipe->with_rating(10);
-        self::assertEquals(10, $recipe->rating());
-        $recipe = $recipe->with_diet_style(DietStyle::VEGAN());
-        self::assertEquals(DietStyle::VEGAN(), $recipe->diet_style());
+        $recipe = $recipe->withTitle("New Title");
+        self::assertEquals("New Title", $recipe->getTitle());
+        $recipe = $recipe->withMinutesToPrepare(31);
+        self::assertEquals(31, $recipe->getMinutesToPrepare());
+        $recipe = $recipe->withRating(10);
+        self::assertEquals(10, $recipe->getRating());
+        $recipe = $recipe->withDietStyle(DietStyle::VEGAN());
+        self::assertEquals(DietStyle::VEGAN(), $recipe->getDietStyle());
     }
 
+    /**
+     * @test
+     */
     public function it_tests_camelcase()
     {
         $value = "lorem ipsum";
         $object = new WithCamelCase($value);
 
-        self::assertEquals($value, $object->camelCased());
-        self::assertEquals(['camelCased' => $value], $object->toArray());
+        self::assertEquals($value, $object->getCamelCased());
+        $array = $object->toArray();
+        self::assertEquals(['camelCased' => $value], $array);
 
-        $new = $object->fromArray($object);
-        self::assertTrue($object->equals($new));
+        $new = $object->fromArray($array);
+        self::assertEquals($object, $new);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_with_underscore()
+    {
+        $value = "lorem ipsum";
+        $object = new WithUnderscore($value);
+        self::assertTrue(method_exists($object, "getNoCamelCase"));
+        self::assertTrue(method_exists($object, "withNoCamelCase"));
+
+        self::assertFalse(method_exists($object, "getNo_camel_case"));
+
+        $array = $object->toArray();
+        self::assertEquals(['noCamelCase' => $value], $array);
     }
 }

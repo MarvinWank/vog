@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class RecipeCollection
 {
     private RecipeIntStringValue $recipe1;
@@ -20,17 +23,17 @@ final class RecipeCollection
         $this->recipe2 = $recipe2;
     }
     
-    public function recipe1(): RecipeIntStringValue 
+    public function getRecipe1(): RecipeIntStringValue 
     {
         return $this->recipe1;
     }
     
-    public function recipe2(): RecipeEnumStringValue 
+    public function getRecipe2(): RecipeEnumStringValue 
     {
         return $this->recipe2;
     }
     
-    public function with_recipe1 (RecipeIntStringValue $recipe1): self 
+    public function withRecipe1(RecipeIntStringValue $recipe1): self 
     {
         return new self(
             $recipe1,
@@ -38,7 +41,7 @@ final class RecipeCollection
         );
     }
     
-    public function with_recipe2 (RecipeEnumStringValue $recipe2): self 
+    public function withRecipe2(RecipeEnumStringValue $recipe2): self 
     {
         return new self(
             $this->recipe1,
@@ -49,19 +52,19 @@ final class RecipeCollection
     public function toArray(): array
     {
         return [
-            'recipe1' =>  $this->value_to_array($this->recipe1),
-            'recipe2' =>  $this->value_to_array($this->recipe2),
+            'recipe1' =>  $this->valueToArray($this->recipe1),
+            'recipe2' =>  $this->valueToArray($this->recipe2),
         ];
     }
     
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('recipe1', $array)) {
-            throw new \UnexpectedValueException('Array key recipe1 does not exist');
+            throw new UnexpectedValueException('Array key recipe1 does not exist');
         }
         
         if (!array_key_exists('recipe2', $array)) {
-            throw new \UnexpectedValueException('Array key recipe2 does not exist');
+            throw new UnexpectedValueException('Array key recipe2 does not exist');
         }
         
         return new self(
@@ -70,7 +73,7 @@ final class RecipeCollection
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

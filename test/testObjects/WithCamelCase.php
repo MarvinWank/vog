@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class WithCamelCase
 {
     private string $camelCased;
@@ -17,12 +20,12 @@ final class WithCamelCase
         $this->camelCased = $camelCased;
     }
     
-    public function camelCased(): string 
+    public function getCamelCased(): string 
     {
         return $this->camelCased;
     }
     
-    public function with_camelCased (string $camelCased): self 
+    public function withCamelCased(string $camelCased): self 
     {
         return new self(
             $camelCased
@@ -39,7 +42,7 @@ final class WithCamelCase
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('camelCased', $array)) {
-            throw new \UnexpectedValueException('Array key camelCased does not exist');
+            throw new UnexpectedValueException('Array key camelCased does not exist');
         }
         
         return new self(
@@ -47,7 +50,7 @@ final class WithCamelCase
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class DesertRecipe extends BaseClass
 {
     private bool $lactosefree;
@@ -20,17 +23,17 @@ final class DesertRecipe extends BaseClass
         $this->light = $light;
     }
     
-    public function lactosefree(): bool 
+    public function getLactosefree(): bool 
     {
         return $this->lactosefree;
     }
     
-    public function light(): bool 
+    public function getLight(): bool 
     {
         return $this->light;
     }
     
-    public function with_lactosefree (bool $lactosefree): self 
+    public function withLactosefree(bool $lactosefree): self 
     {
         return new self(
             $lactosefree,
@@ -38,7 +41,7 @@ final class DesertRecipe extends BaseClass
         );
     }
     
-    public function with_light (bool $light): self 
+    public function withLight(bool $light): self 
     {
         return new self(
             $this->lactosefree,
@@ -57,11 +60,11 @@ final class DesertRecipe extends BaseClass
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('lactosefree', $array)) {
-            throw new \UnexpectedValueException('Array key lactosefree does not exist');
+            throw new UnexpectedValueException('Array key lactosefree does not exist');
         }
         
         if (!array_key_exists('light', $array)) {
-            throw new \UnexpectedValueException('Array key light does not exist');
+            throw new UnexpectedValueException('Array key light does not exist');
         }
         
         return new self(
@@ -70,7 +73,7 @@ final class DesertRecipe extends BaseClass
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

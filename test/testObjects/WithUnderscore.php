@@ -10,43 +10,43 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class ImplicitlyImmutableObject
+final class WithUnderscore
 {
-    private string $foo;
+    private string $noCamelCase;
 
     public function __construct (
-        string $foo
+        string $noCamelCase
     ) {
-        $this->foo = $foo;
+        $this->noCamelCase = $noCamelCase;
     }
     
-    public function getFoo(): string 
+    public function getNoCamelCase(): string 
     {
-        return $this->foo;
+        return $this->noCamelCase;
     }
     
-    public function withFoo(string $foo): self 
+    public function withNoCamelCase(string $noCamelCase): self 
     {
         return new self(
-            $foo
+            $noCamelCase
         );
     }
     
     public function toArray(): array
     {
         return [
-            'foo' => $this->foo,
+            'noCamelCase' => $this->noCamelCase,
         ];
     }
     
     public static function fromArray(array $array): self
     {
-        if (!array_key_exists('foo', $array)) {
-            throw new UnexpectedValueException('Array key foo does not exist');
+        if (!array_key_exists('noCamelCase', $array)) {
+            throw new UnexpectedValueException('Array key noCamelCase does not exist');
         }
         
         return new self(
-            $array['foo']
+            $array['noCamelCase']
         );
     }
         

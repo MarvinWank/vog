@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class ValueObjectNoDataType
 {
     private  $property;
@@ -17,12 +20,12 @@ final class ValueObjectNoDataType
         $this->property = $property;
     }
     
-    public function property() 
+    public function getProperty() 
     {
         return $this->property;
     }
     
-    public function with_property ( $property): self 
+    public function withProperty( $property): self 
     {
         return new self(
             $property
@@ -32,14 +35,14 @@ final class ValueObjectNoDataType
     public function toArray(): array
     {
         return [
-            'property' =>  $this->value_to_array($this->property),
+            'property' =>  $this->valueToArray($this->property),
         ];
     }
     
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('property', $array)) {
-            throw new \UnexpectedValueException('Array key property does not exist');
+            throw new UnexpectedValueException('Array key property does not exist');
         }
         
         return new self(
@@ -47,7 +50,7 @@ final class ValueObjectNoDataType
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

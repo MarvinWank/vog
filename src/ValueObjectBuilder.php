@@ -94,16 +94,18 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateGetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
+            $functionName = 'get'.ucfirst($name);
+
             if ($data_type) {
                 $phpcode .= <<<ETO
                 
-                    public function $name(): $data_type 
+                    public function $functionName(): $data_type 
                     {
                 ETO;
             } else {
                 $phpcode .= <<<ETO
                 
-                    public function $name() 
+                    public function $functionName() 
                     {
                 ETO;
             }
@@ -120,16 +122,17 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateSetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
+            $functionName = 'set'.ucfirst($name);
             if ($data_type) {
                 $phpcode .= <<<EOT
                 
-                    public function set_$name($data_type $$name) 
+                    public function $functionName($data_type $$name) 
                     {
                 EOT;
             } else {
                 $phpcode .= <<<EOT
                 
-                    public function set_$name($$name) 
+                    public function $functionName($$name) 
                     {
                 EOT;
             }
@@ -146,9 +149,10 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateWithMethods(string $phpcode)
     {
         foreach ($this->values as $name => $data_type) {
+            $functionName = 'with'.ucfirst($name);
             $phpcode .= <<<EOT
             
-                public function with_$name ($data_type $$name): self 
+                public function $functionName($data_type $$name): self 
                 {
                     return new self(
             EOT;
@@ -192,7 +196,7 @@ class ValueObjectBuilder extends AbstractBuilder
             if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
                 $phpcode .= <<<EOT
                 
-                            '$name' =>  \$this->value_to_array(\$this->$name),
+                            '$name' =>  \$this->valueToArray(\$this->$name),
                 EOT;
             } else {
                 $phpcode .= <<<EOT
@@ -222,7 +226,7 @@ class ValueObjectBuilder extends AbstractBuilder
             $phpcode .= <<<EOT
             
                     if (!array_key_exists('$name', \$array)) {
-                        throw new \\UnexpectedValueException('Array key $name does not exist');
+                        throw new UnexpectedValueException('Array key $name does not exist');
                     }
                     
             EOT;
@@ -272,10 +276,9 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function generateValueToArray(string $phpcode)
     {
-        //TODO replace strval to (string) typecast as suggested by phpstorm
         $phpcode .= <<<EOT
             
-            private function value_to_array(\$value)
+            private function valueToArray(\$value)
             {
                 if (method_exists(\$value, 'toArray')) {
                     return \$value->toArray();
