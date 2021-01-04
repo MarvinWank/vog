@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvinw/Projekte/vog",
+  "root_path": "./",
   "test/testObjects": [
     {
       "type": "enum",
