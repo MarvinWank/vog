@@ -1,5 +1,5 @@
 {
-  "root_path": "./",
+  "root_path": ".",
   "test/testObjects": [
     {
       "type": "enum",

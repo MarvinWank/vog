@@ -15,7 +15,7 @@ class Enum extends VogDataObject
     {
         $phpcode = $this->generateGenericPhpHeader();
 
-        $phpcode .= "\n\n";
+        $phpcode .= PHP_EOL . PHP_EOL;
 
         $phpcode = $this->generate_const_options($phpcode);
         $phpcode = $this->generate_constructor($phpcode);
@@ -23,7 +23,7 @@ class Enum extends VogDataObject
         $phpcode = $this->generate_from_name_from_value($phpcode);
         $phpcode = $this->generate_generic_functions($phpcode);
 
-        $phpcode .= "\n\n}";
+        $phpcode .= PHP_EOL . PHP_EOL . "}";
         return $phpcode;
     }
 
@@ -35,14 +35,16 @@ class Enum extends VogDataObject
         }
         $values_as_array_string .= "];";
 
-        $phpcode .= "\tpublic const OPTIONS = $values_as_array_string";
+        $phpcode .= <<<EOT
+    public const OPTIONS = $values_as_array_string
+EOT;
 
-        $phpcode .= "\n";
+        $phpcode .= PHP_EOL;
         foreach ($this->values as $name => $value) {
-            $phpcode .= "\n";
-            $phpcode .= "\tpublic const $name = '$value';";
+            $phpcode .= <<<EOT
+    public const $name = '$value';
+EOT;
         }
-        $phpcode .= "\n";
         return $phpcode;
     }
 
@@ -64,15 +66,17 @@ EOT;
 
     protected function generate_methods(string $phpcode): string
     {
-        $phpcode .= "\n";
+        $phpcode .= PHP_EOL;
         foreach ($this->values as $name => $value) {
-            $phpcode .= "\n\n";
-            $phpcode .= "\tpublic static function $name(): self";
-            $phpcode .= "\n\t{";
-            $phpcode .= "\n\t\treturn new self('$name');";
-            $phpcode .= "\n\t}";
+            $phpcode .= <<<EOT
+
+    public static function $name(): self
+    {
+        return new self('$name');
+    }
+       
+EOT;
         }
-        $phpcode .= "\n\n";
         return $phpcode;
     }
 
@@ -105,8 +109,8 @@ EOT;
 
     protected function generate_generic_functions(string $phpcode): string
     {
-        $phpcode .= "\n\n";
         $phpcode .= <<<'EOT'
+
     public function equals(?self $other): bool
     {
         return (null !== $other) && ($this->name() === $other->name());

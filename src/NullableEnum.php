@@ -8,7 +8,7 @@ class NullableEnum extends Enum
     {
         $phpcode = $this->generateGenericPhpHeader();
 
-        $phpcode .= "\n\n";
+        $phpcode .= PHP_EOL . PHP_EOL;
 
         $phpcode = $this->generate_const_options($phpcode);
         $phpcode = $this->generate_constructor($phpcode);
@@ -16,7 +16,7 @@ class NullableEnum extends Enum
         $phpcode = $this->generate_from_name_from_value($phpcode);
         $phpcode = $this->generate_generic_functions($phpcode);
 
-        $phpcode .= "\n\n}";
+        $phpcode .= PHP_EOL . PHP_EOL . "}";
         return $phpcode;
     }
 
