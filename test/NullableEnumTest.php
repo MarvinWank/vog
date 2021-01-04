@@ -12,11 +12,11 @@ class NullableEnumTest extends VogTestCase
     {
         $nullableEnum = Cuisine::fromName(null);
 
-        $this->assertNull($nullableEnum->name());
-        $this->assertNull($nullableEnum->value());
-        $this->assertTrue($nullableEnum->equals(null));
-        $this->assertNull($nullableEnum->toString());
-        $this->assertFalse($nullableEnum->equals(Cuisine::ASIATISCH()));
+        self::assertNull($nullableEnum->name());
+        self::assertNull($nullableEnum->value());
+        self::assertTrue($nullableEnum->equals(null));
+        self::assertNull($nullableEnum->toString());
+        self::assertFalse($nullableEnum->equals(Cuisine::ASIATISCH()));
     }
 
     /**
@@ -26,10 +26,10 @@ class NullableEnumTest extends VogTestCase
     {
         $nullableEnum = Cuisine::fromValue(null);
 
-        $this->assertNull($nullableEnum->name());
-        $this->assertNull($nullableEnum->value());
-        $this->assertTrue($nullableEnum->equals(null));
-        $this->assertNull($nullableEnum->toString());
-        $this->assertFalse($nullableEnum->equals(Cuisine::ASIATISCH()));
+        self::assertNull($nullableEnum->name());
+        self::assertNull($nullableEnum->value());
+        self::assertTrue($nullableEnum->equals(null));
+        self::assertNull($nullableEnum->toString());
+        self::assertFalse($nullableEnum->equals(Cuisine::ASIATISCH()));
     }
 }

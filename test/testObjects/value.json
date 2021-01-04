@@ -147,6 +147,13 @@
         "foo": "string"
       },
       "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "WithCamelCase",
+      "values": {
+        "camelCased": "string"
+      }
     }
   ]
 }
