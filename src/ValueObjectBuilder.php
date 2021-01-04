@@ -4,6 +4,8 @@
 namespace Vog;
 
 
+use UnexpectedValueException;
+
 class ValueObjectBuilder extends AbstractBuilder
 {
     private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
@@ -18,7 +20,7 @@ class ValueObjectBuilder extends AbstractBuilder
     public function setStringValue(string $string_value)
     {
         if(!array_key_exists($string_value, $this->values)){
-            throw new \UnexpectedValueException("Designated string value $string_value does not exist in values");
+            throw new UnexpectedValueException("Designated string value $string_value does not exist in values");
         }
 
         $this->string_value = $string_value;
@@ -260,7 +262,7 @@ class ValueObjectBuilder extends AbstractBuilder
             
             public function toString(): string
             {
-                return strval(\$this->$this->string_value);
+                return (string) \$this->$this->string_value;
             }
             
         EOT;
@@ -279,7 +281,7 @@ class ValueObjectBuilder extends AbstractBuilder
                     return \$value->toArray();
                 }
                 
-                return strval(\$value);
+                return (string) \$value;
             }
         EOT;
 
