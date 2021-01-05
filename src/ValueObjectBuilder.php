@@ -184,7 +184,7 @@ class ValueObjectBuilder extends AbstractBuilder
         return $phpcode;
     }
 
-    private function generateToArray(string $phpcode): string
+    protected function generateToArray(string $phpcode): string
     {
         $phpcode .= <<<EOT
         
@@ -215,7 +215,7 @@ class ValueObjectBuilder extends AbstractBuilder
         return $phpcode;
     }
 
-    private function generateFromArray(string $phpcode): string
+    protected function generateFromArray(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         

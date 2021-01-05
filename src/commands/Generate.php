@@ -10,7 +10,7 @@ class Generate
 {
     private string $rootPath;
 
-    private const ALL_DATA_TYPES = ["enum", "nullableEnum", "valueObject"];
+    private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
     public function run(string $target)
     {
@@ -81,8 +81,9 @@ class Generate
         $vog_obj = null;
 
         switch ($data['type']) {
-            //TODO add type set
-            // case "set"
+            case "set":
+                $vog_obj = new SetBuilder($data['name']);
+                break;
             case "enum":
                 $vog_obj = new EnumBuilder($data['name']);
                 break;
@@ -106,16 +107,23 @@ class Generate
         $vog_obj->setNamespace($target_namespace);
         $vog_obj->setTargetFilepath($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath);
 
-        if (array_key_exists("extends", $data)) {
+        if (array_key_exists('itemType', $data)) {
+            $vog_obj->setItemType($data['itemType']);
+        }
+
+        if (array_key_exists('extends', $data)) {
             $vog_obj->setExtends($data['extends']);
         }
-        if (array_key_exists("implements", $data)) {
+
+        if (array_key_exists('implements', $data)) {
             $vog_obj->setImplements($data['implements']);
         }
-        if (array_key_exists("final", $data)) {
+
+        if (array_key_exists('final', $data)) {
             $vog_obj->setIsFinal($data['final']);
         }
-        if (array_key_exists("mutable", $data)) {
+
+        if (array_key_exists('mutable', $data)) {
             if ( !($vog_obj instanceof ValueObjectBuilder)){
                 $name = $vog_obj->getName();
                 $type = $vog_obj->getType();
