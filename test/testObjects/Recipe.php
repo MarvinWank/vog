@@ -132,6 +132,13 @@ final class Recipe
         }
         
         return (string) $value;
+    }    
+    public function equals($value)
+    {
+        $ref = $this->toArray();
+        $val = $value->toArray();
+        
+        return ($ref === $val);
     }
     public function __toString(): string
     {
