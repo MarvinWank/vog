@@ -80,5 +80,12 @@ class NotFinal
         }
         
         return (string) $value;
+    }    
+    public function equals($value)
+    {
+        $ref = $this->toArray();
+        $val = $value->toArray();
+        
+        return ($ref === $val);
     }
 }

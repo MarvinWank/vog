@@ -80,5 +80,12 @@ final class ImplementsMany implements Interface1, Interface2
         }
         
         return (string) $value;
+    }    
+    public function equals($value)
+    {
+        $ref = $this->toArray();
+        $val = $value->toArray();
+        
+        return ($ref === $val);
     }
 }
