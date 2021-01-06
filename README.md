@@ -76,6 +76,7 @@ Example:
 ```json
 {
   "root_path": "/home/example_user/example_project/src",
+  "namespace": "",  
   "models/values": [
       {
         "type": "enum",
@@ -96,13 +97,10 @@ In this array, an Enum with the name of "DietStyle" is given. When generated, it
 
 `/home/example_user/example_project/src/models/values/DietStyle.php`
 
-Its namespace will be automatically generated from the path specification according to PSR-4, so in this case it would be 
-`Models\Values` 
+Its namespace will be automatically generated from the path specification according to PSR-4, so if no or an empty namespace is provided for the root_path, as in this case, it would be
+`Models\Values`. If you set for example `"namespace": "Vog\Lib"` for your root_path the result would be `Vog\Lib\Models\Values`.
 
-Any number of objects may be defined in each path array and any number of path arrays may be given in the value file
-
-*Note:* There can be multiple value files although this is not recommended, because you can define paths in the value
-file and multiple value files require multiple calls.
+Any number of objects may be defined in each path array and any number of path arrays may be given in the value file. 
 
 #### generic properties
 
@@ -130,10 +128,31 @@ If you want to create value objects for multiple namespaces in multiple director
     │   └── Lib          # Namespace Lib\Models\Values
     │       └── src    
     ├── vog_config.php   # vog config is used for all value generation
-    ├── api_values.json  # root_path is ./modules/Api/src
-    ├── cart_values.json # root_path is ./modules/Cart/src
-    └── lib_values.json  # root_path is ./modules/Lib/src
+    ├── api_values.json  # root_path is ./modules/Api/src, namespace is Api, key for value objects is "models/values"
+    ├── cart_values.json # root_path is ./modules/Cart/src, namespace is Cart, key for value objects is
+    └── lib_values.json  # root_path is ./modules/Lib/src, namespace is Lib, key for value objects is
 
+If your directory layout would result with not key to define your value objects you can use the following json structure.
+
+```json
+{
+  "root_path": "/home/example_user/example_project/src",
+  "namespace": "Lib\\Models\\Values",  
+  ".": [
+      {
+        "type": "enum",
+        "name": "DietStyle",
+        "values": {
+          "EVERYTHING": "everything",
+          "VEGETARIAN": "vegetarian",
+          "VEGAN": "vegan"
+        }
+      }
+  ]
+}
+
+```
+This puts the files in "/home/example_user/example_project/src/." and uses Lib\Models\Values as namespace for this directory.
 
 ## Enum
 

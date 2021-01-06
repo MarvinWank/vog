@@ -10,6 +10,7 @@ class Generate
 {
     private array $config;
     private string $rootPath;
+    private string $rootNamespace;
 
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
@@ -21,11 +22,17 @@ class Generate
     {
         $data = $this->parseFile($target);
 
-        if (!array_key_exists("root_path", $data)) {
+        if (!array_key_exists('root_path', $data)) {
             throw new UnexpectedValueException("Root Path not specified");
         }
         $this->rootPath = rtrim($data['root_path'], '/');
         unset($data['root_path']);
+
+        $this->rootNamespace = '';
+        if (array_key_exists('namespace', $data)) {
+            $this->rootNamespace = rtrim($data['namespace'], '\\');
+            unset($data['namespace']);
+        }
 
         foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
@@ -33,7 +40,7 @@ class Generate
                 $success = $this->writeToFile($object);
 
                 if ($success) {
-                    echo "Object " . $object->getName() . " successfully written to " . $object->getTargetFilepath() . " \n";
+                    echo 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath() . PHP_EOL;
                 }
             }
         }
@@ -158,6 +165,12 @@ class Generate
         }
         $targetFilepath = implode(DIRECTORY_SEPARATOR, $filePathAsArray);
 
-        return str_replace(DIRECTORY_SEPARATOR, '\\', $targetFilepath);
+        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $targetFilepath);
+
+        if (strlen($this->rootNamespace) === 0) {
+            return $namespace;
+        }
+
+        return $this->rootNamespace . '\\' . $namespace;
     }
 }
