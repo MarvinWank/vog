@@ -1,6 +1,7 @@
 {
-  "root_path": ".",
-  "test/testObjects": [
+  "root_path": "./test",
+  "namespace": "Test",
+  "testObjects": [
     {
       "type": "enum",
       "name": "DietStyle",
