@@ -70,13 +70,18 @@ EOT;
     }
 
     public function add($this->itemType \$item) {
-        \$this->items[] = \$item;
+        \$values = \$this->toArray();
+        array_push(\$values, \$item);
+        return new self(\$values);
     }
     
     public function remove($this->itemType \$item) {
-        if((\$key = array_search(\$item, \$this->items)) !== false) {
-            unset(\$this->items[\$key]);
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item, \$values)) !== false) {
+            unset(\$values[\$key]);
         }
+        
+        return new self(\$values);
     }
     
     public function contains($this->itemType \$item) {

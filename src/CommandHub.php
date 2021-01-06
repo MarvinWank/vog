@@ -13,6 +13,11 @@ class CommandHub
 
     public function run(array $argv)
     {
+        if (!isset($argv[1])) {
+            $this->printUsage();
+            exit;
+        }
+
         switch ($argv[1]){
             case self::COMMAND_GENERATE: $this->runGenerateCommand($argv[2]);
                 break;
@@ -34,5 +39,16 @@ class CommandHub
     {
         $fppConvert = new FppConvert();
         $fppConvert->run($fileToConvert, $outputPath);
+    }
+
+    private function printUsage() {
+        print("Value Object Generator".PHP_EOL);
+        print("generates PHP value objects from a json file.".PHP_EOL);
+        print(PHP_EOL);
+        print("Usage: ".PHP_EOL);
+        print("vendor/bin/vog [command] [path/to/definitionfile.json]".PHP_EOL);
+        print(PHP_EOL);
+        print("Commandas:".PHP_EOL);
+        print("\tgenerate".PHP_EOL);
     }
 }
