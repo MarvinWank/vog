@@ -80,5 +80,12 @@ final class ImplementsOne implements Interface1
         }
         
         return (string) $value;
+    }    
+    public function equals($value)
+    {
+        $ref = $this->toArray();
+        $val = $value->toArray();
+        
+        return ($ref === $val);
     }
 }

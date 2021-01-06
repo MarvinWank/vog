@@ -46,6 +46,7 @@ class ValueObjectBuilder extends AbstractBuilder
         $phpcode = $this->generateToArray($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateValueToArray($phpcode);
+        $phpcode = $this->generateEquals($phpcode);
 
         if(isset($this->string_value)){
             $phpcode = $this->generateToString($phpcode);
@@ -183,7 +184,7 @@ class ValueObjectBuilder extends AbstractBuilder
         return $phpcode;
     }
 
-    private function generateToArray(string $phpcode): string
+    protected function generateToArray(string $phpcode): string
     {
         $phpcode .= <<<EOT
         
@@ -214,7 +215,7 @@ class ValueObjectBuilder extends AbstractBuilder
         return $phpcode;
     }
 
-    private function generateFromArray(string $phpcode): string
+    protected function generateFromArray(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         
@@ -285,6 +286,22 @@ class ValueObjectBuilder extends AbstractBuilder
                 }
                 
                 return (string) \$value;
+            }
+        EOT;
+
+        return $phpcode;
+    }
+
+    private function generateEquals(string $phpcode)
+    {
+        $phpcode .= <<<'EOT'
+            
+            public function equals($value)
+            {
+                $ref = $this->toArray();
+                $val = $value->toArray();
+                
+                return ($ref === $val);
             }
         EOT;
 

@@ -161,6 +161,12 @@
       "values": {
         "no_camel_case": "string"
       }
+    },
+    {
+      "type": "set",
+      "name": "RecipeSet",
+      "itemType": "Recipe",
+      "values": []
     }
   ]
 }
