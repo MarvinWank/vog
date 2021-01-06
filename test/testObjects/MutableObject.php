@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class MutableObject
 {
     private string $foo;
@@ -17,17 +20,17 @@ final class MutableObject
         $this->foo = $foo;
     }
     
-    public function foo(): string 
+    public function getFoo(): string 
     {
         return $this->foo;
     }
     
-    public function set_foo(string $foo) 
+    public function setFoo(string $foo) 
     {
         $this->foo = $foo;
     }
     
-    public function with_foo (string $foo): self 
+    public function withFoo(string $foo): self 
     {
         return new self(
             $foo
@@ -44,7 +47,7 @@ final class MutableObject
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('foo', $array)) {
-            throw new \UnexpectedValueException('Array key foo does not exist');
+            throw new UnexpectedValueException('Array key foo does not exist');
         }
         
         return new self(
@@ -52,7 +55,7 @@ final class MutableObject
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

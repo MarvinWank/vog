@@ -25,6 +25,11 @@ abstract class AbstractBuilder
 
     abstract public function getPhpCode(): string;
 
+    public static function camelize(string $string): string
+    {
+        return lcfirst(str_replace('_', '', ucwords($string, '_')));
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -42,7 +47,7 @@ abstract class AbstractBuilder
 
     public function getTargetFilepath(): string
     {
-        return $this->target_filepath . DIRECTORY_SEPARATOR . $this->name . ".php";
+        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
     public function getNamespace(): string
@@ -57,7 +62,19 @@ abstract class AbstractBuilder
 
     public function setValues(array $values)
     {
-        $this->values = $values;
+        // do not camlize values of enums
+        if ($this instanceof EnumBuilder) {
+            //TODO modifiy keys with strtoupper for enums
+            $this->values = $values;
+            return;
+        }
+
+        $camlized=[];
+        foreach ($values as $key => $value) {
+            $camlized[self::camelize($key)] = $value;
+        }
+
+        $this->values = $camlized;
     }
 
     public function getValues(): array
@@ -115,7 +132,7 @@ EOT;
 
     protected function generateGenericPhpHeader(): string
     {
-        $class_statement = "class $this->name";
+        $class_statement = "class " . ucfirst($this->name);
         if ($this->is_final){
             $class_statement = "final " . $class_statement;
         }
@@ -145,6 +162,9 @@ EOT;
 declare(strict_types=1);
 
 namespace $this->namespace;
+
+use UnexpectedValueException;
+use InvalidArgumentException;
 
 $class_statement
 {

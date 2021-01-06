@@ -7,82 +7,85 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class RecipeEnumStringValue
 {
     private string $title;
-    private ?int $minutes_to_prepare;
+    private ?int $minutesToPrepare;
     private float $rating;
-    private DietStyle $diet_style;
+    private DietStyle $dietStyle;
 
     public function __construct (
         string $title,
-        ?int $minutes_to_prepare,
+        ?int $minutesToPrepare,
         float $rating,
-        DietStyle $diet_style
+        DietStyle $dietStyle
     ) {
         $this->title = $title;
-        $this->minutes_to_prepare = $minutes_to_prepare;
+        $this->minutesToPrepare = $minutesToPrepare;
         $this->rating = $rating;
-        $this->diet_style = $diet_style;
+        $this->dietStyle = $dietStyle;
     }
     
-    public function title(): string 
+    public function getTitle(): string 
     {
         return $this->title;
     }
     
-    public function minutes_to_prepare(): ?int 
+    public function getMinutesToPrepare(): ?int 
     {
-        return $this->minutes_to_prepare;
+        return $this->minutesToPrepare;
     }
     
-    public function rating(): float 
+    public function getRating(): float 
     {
         return $this->rating;
     }
     
-    public function diet_style(): DietStyle 
+    public function getDietStyle(): DietStyle 
     {
-        return $this->diet_style;
+        return $this->dietStyle;
     }
     
-    public function with_title (string $title): self 
+    public function withTitle(string $title): self 
     {
         return new self(
             $title,
-            $this->minutes_to_prepare,
+            $this->minutesToPrepare,
             $this->rating,
-            $this->diet_style
+            $this->dietStyle
         );
     }
     
-    public function with_minutes_to_prepare (?int $minutes_to_prepare): self 
+    public function withMinutesToPrepare(?int $minutesToPrepare): self 
     {
         return new self(
             $this->title,
-            $minutes_to_prepare,
+            $minutesToPrepare,
             $this->rating,
-            $this->diet_style
+            $this->dietStyle
         );
     }
     
-    public function with_rating (float $rating): self 
+    public function withRating(float $rating): self 
     {
         return new self(
             $this->title,
-            $this->minutes_to_prepare,
+            $this->minutesToPrepare,
             $rating,
-            $this->diet_style
+            $this->dietStyle
         );
     }
     
-    public function with_diet_style (DietStyle $diet_style): self 
+    public function withDietStyle(DietStyle $dietStyle): self 
     {
         return new self(
             $this->title,
-            $this->minutes_to_prepare,
+            $this->minutesToPrepare,
             $this->rating,
-            $diet_style
+            $dietStyle
         );
     }
     
@@ -90,39 +93,39 @@ final class RecipeEnumStringValue
     {
         return [
             'title' => $this->title,
-            'minutes_to_prepare' =>  $this->value_to_array($this->minutes_to_prepare),
+            'minutesToPrepare' =>  $this->valueToArray($this->minutesToPrepare),
             'rating' => $this->rating,
-            'diet_style' =>  $this->value_to_array($this->diet_style),
+            'dietStyle' =>  $this->valueToArray($this->dietStyle),
         ];
     }
     
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('title', $array)) {
-            throw new \UnexpectedValueException('Array key title does not exist');
+            throw new UnexpectedValueException('Array key title does not exist');
         }
         
-        if (!array_key_exists('minutes_to_prepare', $array)) {
-            throw new \UnexpectedValueException('Array key minutes_to_prepare does not exist');
+        if (!array_key_exists('minutesToPrepare', $array)) {
+            throw new UnexpectedValueException('Array key minutesToPrepare does not exist');
         }
         
         if (!array_key_exists('rating', $array)) {
-            throw new \UnexpectedValueException('Array key rating does not exist');
+            throw new UnexpectedValueException('Array key rating does not exist');
         }
         
-        if (!array_key_exists('diet_style', $array)) {
-            throw new \UnexpectedValueException('Array key diet_style does not exist');
+        if (!array_key_exists('dietStyle', $array)) {
+            throw new UnexpectedValueException('Array key dietStyle does not exist');
         }
         
         return new self(
             $array['title'],
-            $array['minutes_to_prepare'],
+            $array['minutesToPrepare'],
             $array['rating'],
-            $array['diet_style']
+            $array['dietStyle']
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();
@@ -137,7 +140,7 @@ final class RecipeEnumStringValue
     
     public function toString(): string
     {
-        return (string) $this->diet_style;
+        return (string) $this->dietStyle;
     }
     
 }

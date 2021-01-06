@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-final class implementsMany implements Interface1, Interface2
+use UnexpectedValueException;
+use InvalidArgumentException;
+
+final class ImplementsOne implements Interface1
 {
     private string $foo;
     private int $bar;
@@ -20,17 +23,17 @@ final class implementsMany implements Interface1, Interface2
         $this->bar = $bar;
     }
     
-    public function foo(): string 
+    public function getFoo(): string 
     {
         return $this->foo;
     }
     
-    public function bar(): int 
+    public function getBar(): int 
     {
         return $this->bar;
     }
     
-    public function with_foo (string $foo): self 
+    public function withFoo(string $foo): self 
     {
         return new self(
             $foo,
@@ -38,7 +41,7 @@ final class implementsMany implements Interface1, Interface2
         );
     }
     
-    public function with_bar (int $bar): self 
+    public function withBar(int $bar): self 
     {
         return new self(
             $this->foo,
@@ -57,11 +60,11 @@ final class implementsMany implements Interface1, Interface2
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('foo', $array)) {
-            throw new \UnexpectedValueException('Array key foo does not exist');
+            throw new UnexpectedValueException('Array key foo does not exist');
         }
         
         if (!array_key_exists('bar', $array)) {
-            throw new \UnexpectedValueException('Array key bar does not exist');
+            throw new UnexpectedValueException('Array key bar does not exist');
         }
         
         return new self(
@@ -70,7 +73,7 @@ final class implementsMany implements Interface1, Interface2
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

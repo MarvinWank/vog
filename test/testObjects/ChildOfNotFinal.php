@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 final class ChildOfNotFinal extends NotFinal
 {
     private string $foo;
@@ -17,12 +20,12 @@ final class ChildOfNotFinal extends NotFinal
         $this->foo = $foo;
     }
     
-    public function foo(): string 
+    public function getFoo(): string 
     {
         return $this->foo;
     }
     
-    public function with_foo (string $foo): self 
+    public function withFoo(string $foo): self 
     {
         return new self(
             $foo
@@ -39,7 +42,7 @@ final class ChildOfNotFinal extends NotFinal
     public static function fromArray(array $array): self
     {
         if (!array_key_exists('foo', $array)) {
-            throw new \UnexpectedValueException('Array key foo does not exist');
+            throw new UnexpectedValueException('Array key foo does not exist');
         }
         
         return new self(
@@ -47,7 +50,7 @@ final class ChildOfNotFinal extends NotFinal
         );
     }
         
-    private function value_to_array($value)
+    private function valueToArray($value)
     {
         if (method_exists($value, 'toArray')) {
             return $value->toArray();

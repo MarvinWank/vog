@@ -96,13 +96,13 @@ EOT;
             }
         }
 
-        throw new \InvalidArgumentException("Unknown enum value '$input_value' given");
+        throw new InvalidArgumentException("Unknown enum value '$input_value' given");
     }
     
     public static function fromName(string $name): self
     {
         if(!array_key_exists($name, self::OPTIONS)){
-             throw new \InvalidArgumentException("Unknown enum name $name given");
+             throw new InvalidArgumentException("Unknown enum name $name given");
         }
         
         return new self($name);
