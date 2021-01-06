@@ -6,6 +6,7 @@ abstract class AbstractBuilder
 {
     protected string $type;
     protected string $name;
+    protected array $config;
     protected string $namespace;
     protected string $target_filepath;
     protected array $values;
@@ -15,9 +16,10 @@ abstract class AbstractBuilder
     protected bool $is_final;
     protected bool $is_mutable;
 
-    public function __construct(string $name)
+    public function __construct(string $name, array $config)
     {
         $this->name = $name;
+        $this->config = $config;
         $this->extends = null;
         $this->is_final = true;
         $this->is_mutable = false;
@@ -62,19 +64,26 @@ abstract class AbstractBuilder
 
     public function setValues(array $values)
     {
-        // do not camlize values of enums
-        if ($this instanceof EnumBuilder) {
-            //TODO modifiy keys with strtoupper for enums
-            $this->values = $values;
+        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+            if ($this instanceof EnumBuilder) {
+                $upper=[];
+                foreach ($values as $key => $value) {
+                    $upper[strtoupper($key)] = $value;
+                }
+                $this->values = $upper;
+                return;
+            }
+
+            $camlized=[];
+            foreach ($values as $key => $value) {
+                $camlized[self::camelize($key)] = $value;
+            }
+
+            $this->values = $camlized;
             return;
         }
 
-        $camlized=[];
-        foreach ($values as $key => $value) {
-            $camlized[self::camelize($key)] = $value;
-        }
-
-        $this->values = $camlized;
+        $this->values = $values;
     }
 
     public function getValues(): array

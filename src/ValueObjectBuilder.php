@@ -11,9 +11,9 @@ class ValueObjectBuilder extends AbstractBuilder
     private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
     private string $string_value;
 
-    public function __construct(string $name)
+    public function __construct(string $name, array $config)
     {
-        parent::__construct($name);
+        parent::__construct($name, $config);
         $this->type = "valueObject";
     }
 
@@ -31,6 +31,7 @@ class ValueObjectBuilder extends AbstractBuilder
         $phpcode = $this->generateGenericPhpHeader();
 
         foreach ($this->values as $name => $data_type) {
+            //TODO remove type hint on declaration with featuretoggle for php 7.4/7.3
             $phpcode .= <<<EOT
             
                 private $data_type $$name;
@@ -95,7 +96,7 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateGetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
-            $functionName = 'get'.ucfirst($name);
+            $functionName = $this->getGetterName($name);
 
             if ($data_type) {
                 $phpcode .= <<<ETO
@@ -123,7 +124,7 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateSetters(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
-            $functionName = 'set'.ucfirst($name);
+            $functionName = $this->getSetter($name);
             if ($data_type) {
                 $phpcode .= <<<EOT
                 
@@ -150,7 +151,7 @@ class ValueObjectBuilder extends AbstractBuilder
     private function generateWithMethods(string $phpcode)
     {
         foreach ($this->values as $name => $data_type) {
-            $functionName = 'with'.ucfirst($name);
+            $functionName = $this->getWithFunctionName($name);
             $phpcode .= <<<EOT
             
                 public function $functionName($data_type $$name): self 
@@ -306,5 +307,30 @@ class ValueObjectBuilder extends AbstractBuilder
         EOT;
 
         return $phpcode;
+    }
+
+    private function getGetterName(string $name): string {
+        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+            return 'get'.ucfirst($name);
+        }
+
+        return $name;
+    }
+
+    private function getWithFunctionName(string $name): string {
+        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+            return 'with' . ucfirst($name);
+        }
+
+        return 'with_'.$name;
+    }
+
+    private function getSetter(string $name): string {
+
+        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+            return 'set'.ucfirst($name);
+        }
+
+        return 'set_'.$name;
     }
 }

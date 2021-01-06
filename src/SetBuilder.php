@@ -6,9 +6,9 @@ class SetBuilder extends ValueObjectBuilder
 {
     private string $itemType = '';
 
-    public function __construct(string $name)
+    public function __construct(string $name, array $config)
     {
-        parent::__construct($name);
+        parent::__construct($name, $config);
         $this->type = 'set';
     }
 
@@ -69,13 +69,13 @@ EOT;
         return count(\$this->items);
     }
 
-    public function add($this->itemType \$item) {
+    public function add($this->itemType \$item): self {
         \$values = \$this->toArray();
         array_push(\$values, \$item);
         return new self(\$values);
     }
     
-    public function remove($this->itemType \$item) {
+    public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
         if((\$key = array_search(\$item, \$values)) !== false) {
             unset(\$values[\$key]);
@@ -84,7 +84,7 @@ EOT;
         return new self(\$values);
     }
     
-    public function contains($this->itemType \$item) {
+    public function contains($this->itemType \$item): bool {
         if((\$key = array_search(\$item, \$this->items)) !== false) {
             return true;
         }
