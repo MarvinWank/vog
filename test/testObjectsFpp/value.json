@@ -1,0 +1,158 @@
+{
+  "root_path": ".",
+  "test/testObjectsFpp": [
+    {
+      "type": "enum",
+      "name": "DietStyle",
+      "values": {
+        "OMNIVORE": "Omnivore",
+        "VEGETARIAN": "Vegetarian",
+        "VEGAN": "Vegan"
+      }
+    },
+    {
+      "type": "nullableEnum",
+      "name": "Cuisine",
+      "values": {
+        "DEUTSCH": "deutsch",
+        "MEDITERAN": "mediteran",
+        "ASIATISCH": "asiatisch",
+        "AMERIKANISCH": "amerikanisch",
+        "INDISCH": "indisch"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "title"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeNoStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeIntStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "rating"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeEnumStringValue",
+      "values": {
+        "title": "string",
+        "minutes_to_prepare": "?int",
+        "rating": "float",
+        "diet_style": "DietStyle"
+      },
+      "string_value": "diet_style"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeCollection",
+      "values": {
+        "recipe1": "RecipeIntStringValue",
+        "recipe2": "RecipeEnumStringValue"
+      },
+      "string_value": "recipe1"
+    },
+    {
+      "type": "valueObject",
+      "name": "ValueObjectNoDataType",
+      "values": {
+        "property": ""
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "DesertRecipe",
+      "values": {
+        "lactosefree": "bool",
+        "light": "bool"
+      },
+      "extends": "BaseClass"
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsOne",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["Interface1"]
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsMany",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["Interface1", "Interface2"]
+    },
+    {
+      "type": "valueObject",
+      "name": "NotFinal",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "final": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ChildOfNotFinal",
+      "values": {
+        "foo": "string"
+      },
+      "extends": "NotFinal"
+    },
+    {
+      "type": "valueObject",
+      "name": "MutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "ExplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ImplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "set",
+      "name": "RecipeSet",
+      "itemType": "Recipe",
+      "values": []
+    }
+  ]
+}

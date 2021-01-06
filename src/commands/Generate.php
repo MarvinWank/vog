@@ -8,9 +8,14 @@ use function json_decode;
 
 class Generate
 {
+    private array $config;
     private string $rootPath;
 
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
+
+    public function __construct(array $config) {
+        $this->config = $config;
+    }
 
     public function run(string $target)
     {
@@ -82,16 +87,16 @@ class Generate
 
         switch ($data['type']) {
             case "set":
-                $vog_obj = new SetBuilder($data['name']);
+                $vog_obj = new SetBuilder($data['name'], $this->config);
                 break;
             case "enum":
-                $vog_obj = new EnumBuilder($data['name']);
+                $vog_obj = new EnumBuilder($data['name'], $this->config);
                 break;
             case "nullableEnum":
-                $vog_obj = new NullableEnumBuilder($data['name']);
+                $vog_obj = new NullableEnumBuilder($data['name'], $this->config);
                 break;
             case "valueObject":
-                $vog_obj = new ValueObjectBuilder($data['name']);
+                $vog_obj = new ValueObjectBuilder($data['name'], $this->config);
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not

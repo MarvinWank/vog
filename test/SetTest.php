@@ -5,7 +5,7 @@ use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
 
-class SetTest extends VogTestCase
+class SetTest extends Psr2TestCase
 {
     public function setUp(): void
     {

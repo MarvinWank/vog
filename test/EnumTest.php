@@ -3,7 +3,7 @@
 
 use Test\TestObjects\DietStyle;
 
-class EnumTest extends VogTestCase
+class EnumTest extends Psr2TestCase
 {
     public function setUp(): void
     {

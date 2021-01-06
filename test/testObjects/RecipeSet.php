@@ -39,13 +39,13 @@ final class RecipeSet
         return count($this->items);
     }
 
-    public function add(Recipe $item) {
+    public function add(Recipe $item): self {
         $values = $this->toArray();
         array_push($values, $item);
         return new self($values);
     }
     
-    public function remove(Recipe $item) {
+    public function remove(Recipe $item): self {
         $values = $this->toArray();
         if(($key = array_search($item, $values)) !== false) {
             unset($values[$key]);
@@ -54,7 +54,7 @@ final class RecipeSet
         return new self($values);
     }
     
-    public function contains(Recipe $item) {
+    public function contains(Recipe $item): bool {
         if(($key = array_search($item, $this->items)) !== false) {
             return true;
         }

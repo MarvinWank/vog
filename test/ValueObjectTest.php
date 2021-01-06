@@ -20,7 +20,7 @@ use Test\TestObjects\ValueObjectNoDataType;
 use Test\TestObjects\WithCamelCase;
 use Test\TestObjects\WithUnderscore;
 
-class ValueObjectTest extends VogTestCase
+class ValueObjectTest extends Psr2TestCase
 {
     /**
      * @test

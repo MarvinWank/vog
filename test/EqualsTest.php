@@ -7,7 +7,7 @@ use Test\TestObjects\DietStyle;
 use Test\TestObjects\RecipeIntStringValue;
 use Test\TestObjects\RecipeNoStringValue;
 
-class EqualsTest extends VogTestCase
+class EqualsTest extends Psr2TestCase
 {
     public function setUp(): void
     {

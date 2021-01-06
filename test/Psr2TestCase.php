@@ -5,9 +5,10 @@ require_once __DIR__."/../autoload.php";
 
 use PHPUnit\Framework\TestCase;
 use Vog\CommandHub;
+use Vog\ConfigOptions;
 use Vog\Generate;
 
-class VogTestCase extends TestCase
+class Psr2TestCase extends TestCase
 {
     public function setUp(): void
     {
@@ -20,6 +21,12 @@ class VogTestCase extends TestCase
         ];
         $hub = new CommandHub();
 
-        $hub->run($argv);
+        $config = [
+            'generatorOptions' => [
+                'target' => ConfigOptions::MODE_PSR2,
+                'phpVersion' => ConfigOptions::PHP_74,
+            ],
+        ];
+        $hub->run($argv, $config);
     }
 }

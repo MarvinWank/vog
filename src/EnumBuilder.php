@@ -5,9 +5,9 @@ namespace Vog;
 class EnumBuilder extends AbstractBuilder
 {
 
-    public function __construct(string $name)
+    public function __construct(string $name, array $config)
     {
-        parent::__construct($name);
+        parent::__construct($name, $config);
         $this->type = "enum";
     }
 
