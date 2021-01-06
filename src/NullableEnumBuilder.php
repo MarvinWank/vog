@@ -2,7 +2,7 @@
 
 namespace Vog;
 
-class NullableEnumBuilderBuilder extends EnumBuilder
+class NullableEnumBuilder extends EnumBuilder
 {
     public function getPhpCode(): string
     {

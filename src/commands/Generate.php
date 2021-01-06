@@ -87,7 +87,7 @@ class Generate
                 $vog_obj = new EnumBuilder($data['name']);
                 break;
             case "nullableEnum":
-                $vog_obj = new NullableEnumBuilderBuilder($data['name']);
+                $vog_obj = new NullableEnumBuilder($data['name']);
                 break;
             case "valueObject":
                 $vog_obj = new ValueObjectBuilder($data['name']);
