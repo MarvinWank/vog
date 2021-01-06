@@ -128,10 +128,31 @@ If you want to create value objects for multiple namespaces in multiple director
     │   └── Lib          # Namespace Lib\Models\Values
     │       └── src    
     ├── vog_config.php   # vog config is used for all value generation
-    ├── api_values.json  # root_path is ./modules/Api/src, 
-    ├── cart_values.json # root_path is ./modules/Cart/src
-    └── lib_values.json  # root_path is ./modules/Lib/src
+    ├── api_values.json  # root_path is ./modules/Api/src, namespace is Api, key for value objects is "models/values"
+    ├── cart_values.json # root_path is ./modules/Cart/src, namespace is Cart, key for value objects is
+    └── lib_values.json  # root_path is ./modules/Lib/src, namespace is Lib, key for value objects is
 
+If your directory layout would result with not key to define your value objects you can use the following json structure.
+
+```json
+{
+  "root_path": "/home/example_user/example_project/src",
+  "namespace": "Lib\\Models\\Values",  
+  ".": [
+      {
+        "type": "enum",
+        "name": "DietStyle",
+        "values": {
+          "EVERYTHING": "everything",
+          "VEGETARIAN": "vegetarian",
+          "VEGAN": "vegan"
+        }
+      }
+  ]
+}
+
+```
+This puts the files in "/home/example_user/example_project/src/." and uses Lib\Models\Values as namespace for this directory.
 
 ## Enum
 
