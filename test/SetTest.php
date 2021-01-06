@@ -42,23 +42,23 @@ class SetTest extends VogTestCase
         $this->assertEquals(3, $set->count());
 
         $new = Recipe::fromArray([
-            'title' => 'Omni',
+            'title' => 'Omni2',
             'minutesToPrepare' => 20,
             'rating' => 5,
             'dietStyle' => DietStyle::OMNIVORE()
         ]);
 
-        $set->add($new);
-        $this->assertEquals(4, $set->count());
-        $this->assertTrue($set->contains($new));
-
-        $set->remove($new);
+        $newSet = $set->add($new);
+        $this->assertEquals(4, $newSet->count());
+        $this->assertTrue($newSet->contains($new));
         $this->assertEquals(3, $set->count());
-        $this->assertTrue($set->contains($new));
-
-        $set->remove($new);
-        $this->assertEquals(2, $set->count());
         $this->assertFalse($set->contains($new));
+
+        $removedSet = $newSet->remove($new);
+        $this->assertEquals(3, $removedSet->count());
+        $this->assertFalse($removedSet->contains($new));
+        $this->assertEquals(4, $newSet->count());
+        $this->assertTrue($newSet->contains($new));
     }
 
     /**
@@ -93,14 +93,14 @@ class SetTest extends VogTestCase
         $this->assertTrue(is_bool($result));
         $this->assertTrue($result);
 
-        $set2->remove(Recipe::fromArray([
+        $newSet = $set2->remove(Recipe::fromArray([
             'title' => 'Vegetarian',
             'minutesToPrepare' => 20,
             'rating' => 5,
             'dietStyle' => DietStyle::VEGETARIAN()
         ]));
 
-        $result = $set1->equals($set2);
+        $result = $set1->equals($newSet);
         $this->assertFalse($result);
     }
 }
