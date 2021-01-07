@@ -1,5 +1,5 @@
 <?php
-require('src/ConfigOptions.php');
+require_once(__DIR__.DIRECTORY_SEPARATOR.'src/ConfigOptions.php');
 use Vog\ConfigOptions;
 
 return [

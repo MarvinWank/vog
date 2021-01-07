@@ -27,7 +27,7 @@ class CommandHub
             case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv, $config);
                 break;
             default:
-                throw new UnexpectedValueException("Command $argv is not defined. Defined commands are: "
+                throw new UnexpectedValueException("Command $argv[0] is not defined. Defined commands are: "
                 . implode(", ", self::COMMANDS));
         }
     }
@@ -49,7 +49,7 @@ class CommandHub
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand(array $argv, array $config)
+    private function runConvertToFppCommand(array $argv, ?array $config)
     {
         if (!isset($argv[2])){
             throw new UnexpectedValueException("No path to the fpp file was provided");
