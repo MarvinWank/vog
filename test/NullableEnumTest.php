@@ -3,7 +3,7 @@
 
 use Test\TestObjects\Cuisine;
 
-class NullableEnumTest extends VogTestCase
+class NullableEnumTest extends GenerateTestCase
 {
     /**
      * @test

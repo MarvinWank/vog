@@ -16,7 +16,7 @@ use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
 use Test\TestObjects\ValueObjectNoDataType;
 
-class ValueObjectTest extends VogTestCase
+class ValueObjectTest extends GenerateTestCase
 {
     /**
      * @test

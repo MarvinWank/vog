@@ -4,6 +4,8 @@
 namespace Vog;
 
 
+use UnexpectedValueException;
+
 class CommandHub
 {
     private const COMMAND_GENERATE = "generate";
@@ -14,12 +16,23 @@ class CommandHub
     public function run(array $argv)
     {
         switch ($argv[1]){
-            case self::COMMAND_GENERATE: $this->runGenerateCommand($argv[2]);
+            case self::COMMAND_GENERATE:
+                if (!isset($argv[2])){
+                    throw new UnexpectedValueException("No path to the value file was provided");
+                }
+                $this->runGenerateCommand($argv[2]);
             break;
-            case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv[3], $argv[4]);
+            case self::COMMAND_FPP_CONVERT:
+                if (!isset($argv[2])){
+                    throw new UnexpectedValueException("No path to the fpp file was provided");
+                }
+                if (!isset($argv[3])){
+                    $argv[3] = null;
+                }
+                $this->runConvertToFppCommand($argv[2], $argv[3]);
             break;
             default:
-                throw new \UnexpectedValueException("Command $argv is not defined. Defined commands are: "
+                throw new UnexpectedValueException("Command $argv[1] is not defined. Defined commands are: "
                 . implode(", ", self::COMMANDS));
         }
     }

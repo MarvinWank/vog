@@ -4,7 +4,7 @@
 use PHPUnit\Framework\TestCase;
 use Test\TestObjects\DietStyle;
 
-class EnumTest extends VogTestCase
+class EnumTest extends GenerateTestCase
 {
     public function setUp(): void
     {

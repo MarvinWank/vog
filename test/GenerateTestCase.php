@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Vog\CommandHub;
 use Vog\Generate;
 
-class VogTestCase extends TestCase
+class GenerateTestCase extends TestCase
 {
     public function setUp(): void
     {
