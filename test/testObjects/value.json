@@ -1,6 +1,7 @@
 {
-  "root_path": "/home/marvinw/Projekte/vog",
-  "test/testObjects": [
+  "root_path": "./test",
+  "namespace": "Test\\TestObjects",
+  ".": [
     {
       "type": "enum",
       "name": "DietStyle",
@@ -26,9 +27,9 @@
       "name": "Recipe",
       "values": {
         "title": "string",
-        "minutes_to_prepare": "?int",
+        "minutesToPrepare": "?int",
         "rating": "float",
-        "diet_style": "DietStyle"
+        "dietStyle": "DietStyle"
       },
       "string_value": "title"
     },
@@ -37,9 +38,9 @@
       "name": "RecipeNoStringValue",
       "values": {
         "title": "string",
-        "minutes_to_prepare": "?int",
+        "minutesToPrepare": "?int",
         "rating": "float",
-        "diet_style": "DietStyle"
+        "dietStyle": "DietStyle"
       }
     },
     {
@@ -47,9 +48,9 @@
       "name": "RecipeIntStringValue",
       "values": {
         "title": "string",
-        "minutes_to_prepare": "?int",
+        "minutesToPrepare": "?int",
         "rating": "float",
-        "diet_style": "DietStyle"
+        "dietStyle": "DietStyle"
       },
       "string_value": "rating"
     },
@@ -58,11 +59,11 @@
       "name": "RecipeEnumStringValue",
       "values": {
         "title": "string",
-        "minutes_to_prepare": "?int",
+        "minutesToPrepare": "?int",
         "rating": "float",
-        "diet_style": "DietStyle"
+        "dietStyle": "DietStyle"
       },
-      "string_value": "diet_style"
+      "string_value": "dietStyle"
     },
     {
       "type": "valueObject",
@@ -123,6 +124,50 @@
         "foo": "string"
       },
       "extends": "NotFinal"
+    },
+    {
+      "type": "valueObject",
+      "name": "MutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "ExplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ImplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "WithCamelCase",
+      "values": {
+        "camelCased": "string"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "WithUnderscore",
+      "values": {
+        "no_camel_case": "string"
+      }
+    },
+    {
+      "type": "set",
+      "name": "RecipeSet",
+      "itemType": "Recipe",
+      "values": []
     }
   ]
 }

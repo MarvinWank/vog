@@ -2,51 +2,57 @@
 
 namespace Vog;
 
-class Enum extends VogDataObject
+class EnumBuilder extends AbstractBuilder
 {
 
-    public function __construct(string $name)
+    public function __construct(string $name, array $config)
     {
-        parent::__construct($name);
+        parent::__construct($name, $config);
         $this->type = "enum";
     }
 
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader();
+        $phpcode = $this->generateConstOptions($phpcode);
+        $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateMethods($phpcode);
+        $phpcode = $this->generateFromNameFromValue($phpcode);
+        $phpcode = $this->generateGenericFunctions($phpcode);
+        $phpcode = $this->closeClass($phpcode);
 
-        $phpcode .= "\n\n";
-
-        $phpcode = $this->generate_const_options($phpcode);
-        $phpcode = $this->generate_constructor($phpcode);
-        $phpcode = $this->generate_methods($phpcode);
-        $phpcode = $this->generate_from_name_from_value($phpcode);
-        $phpcode = $this->generate_generic_functions($phpcode);
-
-        $phpcode .= "\n\n}";
         return $phpcode;
     }
 
-    protected function generate_const_options(string $phpcode): string
+    protected function generateConstOptions(string $phpcode): string
     {
-        $values_as_array_string = "[";
-        foreach ($this->values as $name => $value) {
-            $values_as_array_string .= ' "' . $name . '" => ' . '"' . $value . '",';
-        }
-        $values_as_array_string .= "];";
+        $phpcode .= <<<EOT
+        
+            public const OPTIONS = [ 
+        EOT;
 
-        $phpcode .= "\tpublic const OPTIONS = $values_as_array_string";
-
-        $phpcode .= "\n";
         foreach ($this->values as $name => $value) {
-            $phpcode .= "\n";
-            $phpcode .= "\tpublic const $name = '$value';";
+            $phpcode .= <<<EOT
+            
+                    '$name' => '$value',
+            EOT;
         }
-        $phpcode .= "\n";
+        $phpcode .= <<<EOT
+        
+            ];
+        EOT;
+
+        $phpcode .= PHP_EOL;
+        foreach ($this->values as $name => $value) {
+            $phpcode .= <<<EOT
+
+                public const $name = '$value';               
+            EOT;
+        }
         return $phpcode;
     }
 
-    protected function generate_constructor(string $phpcode): string
+    protected function generateConstructor(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         
@@ -62,21 +68,23 @@ EOT;
         return $phpcode;
     }
 
-    protected function generate_methods(string $phpcode): string
+    protected function generateMethods(string $phpcode): string
     {
-        $phpcode .= "\n";
+        $phpcode .= PHP_EOL;
         foreach ($this->values as $name => $value) {
-            $phpcode .= "\n\n";
-            $phpcode .= "\tpublic static function $name(): self";
-            $phpcode .= "\n\t{";
-            $phpcode .= "\n\t\treturn new self('$name');";
-            $phpcode .= "\n\t}";
+            $phpcode .= <<<EOT
+
+    public static function $name(): self
+    {
+        return new self('$name');
+    }
+    
+EOT;
         }
-        $phpcode .= "\n\n";
         return $phpcode;
     }
 
-    protected function generate_from_name_from_value(string $phpcode): string
+    protected function generateFromNameFromValue(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
 
@@ -88,25 +96,26 @@ EOT;
             }
         }
 
-        throw new \InvalidArgumentException("Unknown enum value '$input_value' given");
+        throw new InvalidArgumentException("Unknown enum value '$input_value' given");
     }
     
     public static function fromName(string $name): self
     {
         if(!array_key_exists($name, self::OPTIONS)){
-             throw new \InvalidArgumentException("Unknown enum name $name given");
+             throw new InvalidArgumentException("Unknown enum name $name given");
         }
         
         return new self($name);
     }
+    
 EOT;
         return $phpcode;
     }
 
-    protected function generate_generic_functions(string $phpcode): string
+    protected function generateGenericFunctions(string $phpcode): string
     {
-        $phpcode .= "\n\n";
         $phpcode .= <<<'EOT'
+
     public function equals(?self $other): bool
     {
         return (null !== $other) && ($this->name() === $other->name());
