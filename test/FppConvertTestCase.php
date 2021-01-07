@@ -5,7 +5,7 @@ require_once __DIR__."/../autoload.php";
 
 use Vog\CommandHub;
 
-class FppConvertTest extends \PHPUnit\Framework\TestCase
+class FppConvertTestCase extends \PHPUnit\Framework\TestCase
 {
     public function setUp(): void
     {

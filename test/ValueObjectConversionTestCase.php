@@ -1,7 +1,7 @@
 <?php
 
 
-class ValueObjectConversionTest extends FppConvertTest
+class ValueObjectConversionTestCase extends FppConvertTestCase
 {
     /**
      * @test

@@ -16,22 +16,42 @@ class FppConvert
         $this->config = $config;
     }
 
-    public function run(string $fileToConvert, ?string $outputPath = null)
+    public function run(string $fppFilePath, ?string $outputPath = null)
     {
-        if (!file_exists($fileToConvert)){
-            throw  new UnexpectedValueException("No .fpp file could be found at $fileToConvert");
+        if (!file_exists($fppFilePath)){
+            throw  new UnexpectedValueException("No .fpp file could be found at $fppFilePath");
         }
 
+        $outputPath = $this->getOutputPath($outputPath, $fppFilePath);
+        $fileBuilder = new ValueFileBuilder($outputPath);
 
-        $fileContent = file_get_contents($fileToConvert);
+        $fileContent = file_get_contents($fppFilePath);
         $namespace = $this->parseNamespace($fileContent);
-        $fileBuilder = new ValueFileBuilder();
         $fileBuilder = $this->parseObjects($fileContent, $fileBuilder);
     }
 
-    private function getOutPutPath()
+    private function getOutputPath(?string $givenOutputPath, string $fppFilePath): string
     {
+        if ($givenOutputPath){
+            if(!file_exists($givenOutputPath)){
+                throw new UnexpectedValueException("Given output path $givenOutputPath could not be found");
+            }
+            return $givenOutputPath;
+        }
 
+        $matches = [];
+        preg_match('/\/(\w+\.fpp)/', $fppFilePath, $matches);
+        if (empty($matches)){
+            throw new UnexpectedValueException("File given at $fppFilePath is not a .fpp file");
+        }
+
+        $fppFileName = $matches[1];
+        $jsonFileName = str_replace(".fpp", "", $fppFileName);
+        $jsonFileName .=  ".json";
+
+        $jsonFilePath = str_replace($fppFileName, $jsonFileName, $fppFilePath);
+
+        return $jsonFilePath;
     }
 
     private function parseNamespace(string $fileContent): ?string
