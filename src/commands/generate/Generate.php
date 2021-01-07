@@ -84,11 +84,7 @@ class Generate
                 . " for object " . $data['name']
             );
         }
-        if (!array_key_exists("values", $data)) {
-            throw new UnexpectedValueException(
-                "No values were given" . " for object " . $data['name']
-            );
-        }
+
 
         $vog_obj = null;
 
@@ -97,20 +93,38 @@ class Generate
                 $vog_obj = new SetBuilder($data['name'], $this->config);
                 break;
             case "enum":
+                if (!array_key_exists("values", $data)) {
+                    throw new UnexpectedValueException(
+                        "No values were given" . " for object " . $data['name']
+                    );
+                }
                 $vog_obj = new EnumBuilder($data['name'], $this->config);
+                $vog_obj->setValues($data['values']);
                 break;
             case "nullableEnum":
+                if (!array_key_exists("values", $data)) {
+                    throw new UnexpectedValueException(
+                        "No values were given" . " for object " . $data['name']
+                    );
+                }
                 $vog_obj = new NullableEnumBuilder($data['name'], $this->config);
+                $vog_obj->setValues($data['values']);
                 break;
             case "valueObject":
+                if (!array_key_exists("values", $data)) {
+                    throw new UnexpectedValueException(
+                        "No values were given" . " for object " . $data['name']
+                    );
+                }
                 $vog_obj = new ValueObjectBuilder($data['name'], $this->config);
+                $vog_obj->setValues($data['values']);
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not
                 implemented. Please open an issue on GitHub");
         }
 
-        $vog_obj->setValues($data['values']);
+
         if (array_key_exists("string_value", $data)) {
             $vog_obj->setStringValue($data['string_value']);
         }
