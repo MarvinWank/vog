@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Vog;
+namespace Vog\FppConvert;
 
 
-abstract class AbstractJsonBuilder
+abstract class AbstractJsonObjectBuilder
 {
     protected string $type;
     protected string $name;
@@ -37,6 +37,11 @@ abstract class AbstractJsonBuilder
     public function getNamespace(): string
     {
         return $this->namespace;
+    }
+
+    public function setNamespace(string $namespace): void
+    {
+        $this->namespace = $namespace;
     }
 
     public function getTargetFilepath(): string

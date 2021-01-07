@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Vog;
+namespace Vog\FppConvert;
 
 
 use UnexpectedValueException;
@@ -23,7 +23,7 @@ class FppConvert
 
         $fileContent = file_get_contents($fileToConvert);
         $namespace = $this->parseNamespace($fileContent);
-        $objects = $this->parseObjects($fileContent, $namespace !== null);
+        $objects = $this->parseObjects($fileContent, $namespace);
     }
 
     private function parseNamespace(string $fileContent): ?string
@@ -39,26 +39,32 @@ class FppConvert
         }
     }
 
-    private function parseObjects(string $fileContent, bool $hasNamespace): array
+    private function parseObjects(string $fileContent, string $namespace): array
     {
         $contentAsArray = explode(";", $fileContent);
-        if ($hasNamespace){
+        if ($namespace){
             array_shift($contentAsArray);
         }
 
         $vogArtifacts = [];
         foreach ($contentAsArray as $fppArtifact){
+            $object = null;
             $matches = [];
             preg_match('/^\s*data\s+/', $fppArtifact, $matches);
             if (!empty($matches)){
-                $vogArtifacts[] = $this->convertToValueObject($fppArtifact);
+                $object = $this->convertToValueObject($fppArtifact);
             }
         }
 
         return $vogArtifacts;
     }
 
-    private function convertToValueObject(string $fppArtifact): array
+    private function convertToValueObject(string $fppArtifact): AbstractJsonObjectBuilder
+    {
+
+    }
+
+    private function getNamespaceForObject(): string
     {
 
     }
