@@ -6,10 +6,8 @@ namespace Vog\FppConvert;
 
 abstract class AbstractJsonObjectBuilder
 {
-    protected string $type;
+    protected ObjectType $type;
     protected string $name;
-    protected string $namespace;
-    protected string $target_filepath;
     protected array $values;
 
     protected ?string $extends;
@@ -32,21 +30,6 @@ abstract class AbstractJsonObjectBuilder
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getNamespace(): string
-    {
-        return $this->namespace;
-    }
-
-    public function setNamespace(string $namespace): void
-    {
-        $this->namespace = $namespace;
-    }
-
-    public function getTargetFilepath(): string
-    {
-        return $this->target_filepath;
     }
 
     public function getValues(): array

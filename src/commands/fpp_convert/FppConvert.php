@@ -9,9 +9,10 @@ use UnexpectedValueException;
 class FppConvert
 {
 
-    private array $config;
+    private ?array $config;
 
-    public function __construct(array $config) {
+    public function __construct(?array $config)
+    {
         $this->config = $config;
     }
 
@@ -21,9 +22,16 @@ class FppConvert
             throw  new UnexpectedValueException("No .fpp file could be found at $fileToConvert");
         }
 
+
         $fileContent = file_get_contents($fileToConvert);
         $namespace = $this->parseNamespace($fileContent);
-        $objects = $this->parseObjects($fileContent, $namespace);
+        $fileBuilder = new ValueFileBuilder();
+        $fileBuilder = $this->parseObjects($fileContent, $fileBuilder);
+    }
+
+    private function getOutPutPath()
+    {
+
     }
 
     private function parseNamespace(string $fileContent): ?string
@@ -39,7 +47,7 @@ class FppConvert
         }
     }
 
-    private function parseObjects(string $fileContent, string $namespace): array
+    private function parseObjects(string $fileContent, ValueFileBuilder $fileBuilder): array
     {
         $contentAsArray = explode(";", $fileContent);
         if ($namespace){

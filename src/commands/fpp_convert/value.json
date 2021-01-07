@@ -1,16 +1,21 @@
 {
   "root_path": "/home/marvinw/Projekte/vog/src/commands/fpp_convert",
   "namespace": "Vog\\FppConvert",
-  " ": [
+  ".": [
     {
       "type": "enum",
-      "name": "ObjectTypes",
+      "name": "ObjectType",
       "values": {
         "VOG_ENUM": "enum",
         "VOG_NULLABLE_ENUM": "nullableEnum",
         "VOG_VALUE_OBJECT": "valueObject",
         "VOG_SET": "set"
       }
+    },
+    {
+      "type": "set",
+      "name": "ObjectsToBuild",
+      "itemType": "AbstractJsonObjectBuilder"
     }
   ]
 }
