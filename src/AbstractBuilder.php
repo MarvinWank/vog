@@ -2,6 +2,8 @@
 
 namespace Vog;
 
+use Vog\ValueObjects\TargetMode;
+
 abstract class AbstractBuilder
 {
     protected string $type;
@@ -64,16 +66,8 @@ abstract class AbstractBuilder
 
     public function setValues(array $values)
     {
-        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
-            if ($this instanceof EnumBuilder) {
-                $upper=[];
-                foreach ($values as $key => $value) {
-                    $upper[strtoupper($key)] = $value;
-                }
-                $this->values = $upper;
-                return;
-            }
-
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             $camlized=[];
             foreach ($values as $key => $value) {
                 $camlized[self::camelize($key)] = $value;

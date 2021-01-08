@@ -33,16 +33,7 @@ class CommandHub
 
     private function runGenerateCommand(string $targetPath, ?array $config = null)
     {
-        if ($config === null) {
-            $configFile = getcwd() . '/vog_config.php';
-            if (file_exists($configFile)) {
-                echo "reading " . $configFile;
-                $config = require($configFile);
-            } else {
-                echo "reading default config";
-                $config = require(__DIR__.'/../vog_default_config.php');
-            }
-        }
+        $config = $this->getConfig($config);
 
         $generate = new Generate($config);
         $generate->run($targetPath);
@@ -52,6 +43,28 @@ class CommandHub
     {
         $fppConvert = new FppConvert($config);
         $fppConvert->run($fileToConvert, $outputPath);
+    }
+
+    private function getConfig($config): array {
+
+        if ($config === null) {
+            $config = [];
+
+            $configFile = getcwd() . '/vog_config.json';
+            $defaultConfig = json_decode(file_get_contents(__DIR__.'/../DefaultConfig.json'), JSON_OBJECT_AS_ARRAY);
+            if ($defaultConfig === null) {
+                throw new UnexpectedValueException('Could not parse ' . __DIR__.'/../DefaultConfig.json\n json_last_error_msg(): ' . json_last_error_msg());
+            }
+            if (file_exists($configFile)) {
+                $config = json_decode(file_get_contents($configFile), JSON_OBJECT_AS_ARRAY);
+                if ($config === null) {
+                    throw new UnexpectedValueException('Could not parse ' . $configFile . '\n json_last_error_msg(): ' . json_last_error_msg());
+                }
+            }
+            $config = array_merge($defaultConfig, $config);
+        }
+
+        return $config;
     }
 
     private function printUsage() {

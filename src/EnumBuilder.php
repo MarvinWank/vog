@@ -2,6 +2,9 @@
 
 namespace Vog;
 
+use Vog\ValueObjects\ConfigOption;
+use Vog\ValueObjects\TargetMode;
+
 class EnumBuilder extends AbstractBuilder
 {
 
@@ -22,6 +25,21 @@ class EnumBuilder extends AbstractBuilder
         $phpcode = $this->closeClass($phpcode);
 
         return $phpcode;
+    }
+
+    public function setValues(array $values)
+    {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+            $upper=[];
+            foreach ($values as $key => $value) {
+                $upper[strtoupper($key)] = $value;
+            }
+            $this->values = $upper;
+            return;
+        }
+
+        $this->values = $values;
     }
 
     protected function generateConstOptions(string $phpcode): string

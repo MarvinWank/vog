@@ -3,8 +3,9 @@
 
 namespace Vog;
 
-
+use Vog\ValueObjects\ConfigOption;
 use UnexpectedValueException;
+use Vog\ValueObjects\TargetMode;
 
 class ValueObjectBuilder extends AbstractBuilder
 {
@@ -31,7 +32,6 @@ class ValueObjectBuilder extends AbstractBuilder
         $phpcode = $this->generateGenericPhpHeader();
 
         foreach ($this->values as $name => $data_type) {
-            //TODO remove type hint on declaration with featuretoggle for php 7.4/7.3
             $phpcode .= <<<EOT
             
                 private $data_type $$name;
@@ -310,7 +310,8 @@ class ValueObjectBuilder extends AbstractBuilder
     }
 
     private function getGetterName(string $name): string {
-        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'get'.ucfirst($name);
         }
 
@@ -318,7 +319,8 @@ class ValueObjectBuilder extends AbstractBuilder
     }
 
     private function getWithFunctionName(string $name): string {
-        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'with' . ucfirst($name);
         }
 
@@ -326,8 +328,8 @@ class ValueObjectBuilder extends AbstractBuilder
     }
 
     private function getSetter(string $name): string {
-
-        if ($this->config['generatorOptions']['target'] === ConfigOptions::MODE_PSR2) {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'set'.ucfirst($name);
         }
 

@@ -4,6 +4,7 @@ namespace Vog;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
+use Vog\ValueObjects\ConfigOption;
 use function json_decode;
 
 class Generate
@@ -34,13 +35,12 @@ class Generate
             unset($data['namespace']);
         }
 
-        $notQuiet =  $this->config['quiet'] ?? false;
         foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
                 $object = $this->buildObject($object, $targetFilepath);
                 $success = $this->writeToFile($object);
 
-                if ($success && $notQuiet) {
+                if ($success) {
                     echo 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath() . PHP_EOL;
                 }
             }
