@@ -34,12 +34,13 @@ class Generate
             unset($data['namespace']);
         }
 
+        $notQuiet =  $this->config['quiet'] ?? false;
         foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
                 $object = $this->buildObject($object, $targetFilepath);
                 $success = $this->writeToFile($object);
 
-                if ($success) {
+                if ($success && $notQuiet) {
                     echo 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath() . PHP_EOL;
                 }
             }
@@ -115,9 +116,10 @@ class Generate
             $vog_obj->setStringValue($data['string_value']);
         }
 
+        $vog_obj->setTargetFilepath($this->getTargetFilePath($targetFilepath));
+
         $target_namespace = $this->getTargetNamespace($targetFilepath);
         $vog_obj->setNamespace($target_namespace);
-        $vog_obj->setTargetFilepath($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath);
 
         if (array_key_exists('itemType', $data)) {
             $vog_obj->setItemType($data['itemType']);
@@ -155,22 +157,48 @@ class Generate
 
     private function getTargetNamespace(string $targetFilepath)
     {
-        if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
-            throw new UnexpectedValueException("Directory " . $targetFilepath . " does not exist");
-        }
-
         $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
-        foreach ($filePathAsArray as $key => $path) {
-            $filePathAsArray[$key] = ucfirst($path);
+        array_unshift($filePathAsArray, $this->rootNamespace);
+
+        $filePathAsArray = array_filter($filePathAsArray, function($pathFragment) {
+            if (empty($pathFragment)) {
+                return false;
+            }
+
+            if ($pathFragment === '.') {
+                return false;
+            }
+
+            return true;
+        });
+
+        array_walk($filePathAsArray, function(&$pathFragment){
+           $pathFragment = ucfirst($pathFragment);
+        });
+        return implode('\\', array_values($filePathAsArray));
+    }
+
+    private function getTargetFilePath(string $targetFilepath)
+    {
+        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
+        $filePathAsArray = array_filter($filePathAsArray, function($pathFragment) {
+            if (empty($pathFragment)) {
+                return false;
+            }
+
+            if ($pathFragment === '.') {
+                return false;
+            }
+
+            return true;
+        });
+
+        $targetFilepath = implode(DIRECTORY_SEPARATOR, array_values($filePathAsArray));
+
+        if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
+            throw new UnexpectedValueException("Directory " . $this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath . " does not exist");
         }
-        $targetFilepath = implode(DIRECTORY_SEPARATOR, $filePathAsArray);
 
-        $namespace = str_replace(DIRECTORY_SEPARATOR, '\\', $targetFilepath);
-
-        if (strlen($this->rootNamespace) === 0) {
-            return $namespace;
-        }
-
-        return $this->rootNamespace . '\\' . $namespace;
+        return rtrim($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath, DIRECTORY_SEPARATOR);
     }
 }

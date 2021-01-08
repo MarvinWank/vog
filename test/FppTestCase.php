@@ -21,6 +21,7 @@ class FppTestCase extends TestCase
             'generatorOptions' => [
                 'target' => ConfigOptions::MODE_FPP,
                 'phpVersion' => ConfigOptions::PHP_74,
+                'quiet' => ConfigOptions::QUIET
             ],
         ];
         $hub->run($argv, $config);

@@ -25,6 +25,7 @@ class Psr2TestCase extends TestCase
             'generatorOptions' => [
                 'target' => ConfigOptions::MODE_PSR2,
                 'phpVersion' => ConfigOptions::PHP_74,
+                'quiet' => ConfigOptions::QUIET
             ],
         ];
         $hub->run($argv, $config);

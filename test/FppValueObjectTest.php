@@ -12,12 +12,14 @@ use Test\TestObjectsFpp\ImplicitlyImmutableObject;
 use Test\TestObjectsFpp\Interface1;
 use Test\TestObjectsFpp\Interface2;
 use Test\TestObjectsFpp\MutableObject;
-use Test\TestObjectsFpp\notFinal;
+use Test\TestObjectsFpp\NotFinal;
 use Test\TestObjectsFpp\Recipe;
 use Test\TestObjectsFpp\RecipeCollection;
 use Test\TestObjectsFpp\RecipeEnumStringValue;
 use Test\TestObjectsFpp\RecipeIntStringValue;
 use Test\TestObjectsFpp\ValueObjectNoDataType;
+use Test\TestObjectsFpp\WithCamelCase;
+use Test\TestObjectsFpp\WithUnderscore;
 
 class FppValueObjectTest extends FppTestCase
 {
