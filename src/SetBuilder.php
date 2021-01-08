@@ -16,6 +16,7 @@ class SetBuilder extends ValueObjectBuilder
     {
         $phpcode = $this->generateGenericPhpHeader();
         $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateGenericFunctions($phpcode);
         $phpcode = $this->closeClass($phpcode);
 
@@ -44,6 +45,43 @@ EOT;
         return $phpcode;
     }
 
+    protected function generateFromArray(string $phpcode): string
+    {
+        if (empty($this->itemType)) {
+            $phpcode .= <<<EOT
+
+                public static function fromArray(array \$items) {
+                    return new self(\$items);
+                }
+            EOT;
+        } else {
+            $phpcode .= <<<EOT
+
+                public static function fromArray(array \$items) {
+                    foreach (\$items as \$key => \$item) {
+                        \$type = gettype(\$item);
+                        switch (\$type) {
+                            case 'object':
+                                if (!\$item instanceof $this->itemType){
+                                    throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key); 
+                                }    
+                                break;
+                            default:
+                                if (\$type !== '$this->itemType') {
+                                    throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
+                                }
+                                break;
+                        }
+                        
+                    }
+                    return new self(\$items);
+                }
+            EOT;
+        }
+
+        return $phpcode;
+    }
+
     protected function generateGenericFunctions(string $phpcode): string
     {
         $phpcode .= <<<EOT
@@ -60,10 +98,6 @@ EOT;
         return \$this->items;
     }
     
-    public static function fromArray(array \$items) {
-        return new self(\$items);
-    }
-
     public function count(): int
     {
         return count(\$this->items);

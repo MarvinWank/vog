@@ -18,6 +18,25 @@ final class RecipeSet
     {
         $this->items = $items;
     }
+    public static function fromArray(array $items) {
+        foreach ($items as $key => $item) {
+            $type = gettype($item);
+            switch ($type) {
+                case 'object':
+                    if (!$item instanceof Recipe){
+                        throw new UnexpectedValueException('array expects items of Recipe but has ' . $type . ' on index ' . $key); 
+                    }    
+                    break;
+                default:
+                    if ($type !== 'Recipe') {
+                        throw new UnexpectedValueException('array expects items of Recipe but has ' . $type . ' on index ' . $key);
+                    }
+                    break;
+            }
+            
+        }
+        return new self($items);
+    }
     public function equals(?self $other): bool
     {
         $ref = $this->toArray();
@@ -30,10 +49,6 @@ final class RecipeSet
         return $this->items;
     }
     
-    public static function fromArray(array $items) {
-        return new self($items);
-    }
-
     public function count(): int
     {
         return count($this->items);
