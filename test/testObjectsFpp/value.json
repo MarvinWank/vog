@@ -1,5 +1,5 @@
 {
-  "root_path": "/Volumes/Elements/vog",
+  "root_path": ".",
   "test/testObjectsFpp": [
     {
       "type": "enum",

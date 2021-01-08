@@ -5,6 +5,8 @@ namespace Vog;
 
 class ConfigOptions
 {
+    const QUIET = true; // suppress output
+
     const MODE_PSR2 = 'PSR2'; // generate PSR-2 compliant value objects
     const MODE_FPP = 'FPP'; // generate FPP compatible value objects
 
