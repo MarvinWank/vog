@@ -1,0 +1,21 @@
+{
+    "root_path": "./src",
+    "namespace": "Vog",
+    "ValueObjects":[
+        {
+            "type": "valueObject",
+            "name": "GeneratorOptions",
+            "values": {
+                "target": "TargetMode"
+            }
+        },
+        {
+            "type": "nullableEnum",
+            "name": "TargetMode",
+            "values": {
+                "MODE_PSR2": "psr2",
+                "MODE_FPP": "fpp"
+            }
+        }
+    ]
+}

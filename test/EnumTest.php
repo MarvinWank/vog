@@ -1,10 +1,9 @@
 <?php
 
 
-use PHPUnit\Framework\TestCase;
 use Test\TestObjects\DietStyle;
 
-class EnumTest extends VogTestCase
+class EnumTest extends Psr2TestCase
 {
     public function setUp(): void
     {
@@ -14,35 +13,35 @@ class EnumTest extends VogTestCase
     /**
      * @test
      */
-    public function es_testet_from_value()
+    public function it_tests_from_value()
     {
         $diet_style = DietStyle::fromName('OMNIVORE');
 
-        $this->assertEquals("Omnivore", $diet_style->value());
-        $this->assertEquals(DietStyle::OMNIVORE, $diet_style->value());
-        $this->assertEquals("OMNIVORE", $diet_style->name());
+        self::assertEquals("Omnivore", $diet_style->value());
+        self::assertEquals(DietStyle::OMNIVORE, $diet_style->value());
+        self::assertEquals("OMNIVORE", $diet_style->name());
     }
 
     /**
      * @test
      */
-    public function es_testet_from_name()
+    public function it_tests_from_name()
     {
         $diet_style = DietStyle::fromName("VEGAN");
 
-        $this->assertEquals("Vegan", $diet_style->value());
-        $this->assertEquals("VEGAN", $diet_style->name());
+        self::assertEquals("Vegan", $diet_style->value());
+        self::assertEquals("VEGAN", $diet_style->name());
     }
 
     /**
      * @test
      */
-    public function es_testet_from_function()
+    public function it_tests_from_function()
     {
         $diet_style = DietStyle::VEGETARIAN();
 
-        $this->assertEquals("Vegetarian", $diet_style->value());
-        $this->assertEquals("VEGETARIAN", $diet_style->name());
+        self::assertEquals("Vegetarian", $diet_style->value());
+        self::assertEquals("VEGETARIAN", $diet_style->name());
     }
 
     /**
@@ -53,7 +52,7 @@ class EnumTest extends VogTestCase
         $diet_style = DietStyle::OMNIVORE();
         $diet_style2 = DietStyle::OMNIVORE();
 
-        $this->assertTrue($diet_style->equals($diet_style2));
-        $this->assertTrue($diet_style2->equals($diet_style));
+        self::assertTrue($diet_style->equals($diet_style2));
+        self::assertTrue($diet_style2->equals($diet_style));
     }
 }
