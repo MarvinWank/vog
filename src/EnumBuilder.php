@@ -30,7 +30,8 @@ class EnumBuilder extends AbstractBuilder
     public function setValues(array $values)
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        error_log(print_r($this->config, true));
+        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
             $upper=[];
             foreach ($values as $key => $value) {
                 $upper[strtoupper($key)] = $value;

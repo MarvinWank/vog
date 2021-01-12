@@ -96,12 +96,12 @@ EOT;
         return $this->value;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
         return $this->name;
     }
 
-    public function toString(): ?string
+    public function toString(): string
     {
         return $this->name;
     }

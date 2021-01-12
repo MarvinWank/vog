@@ -67,7 +67,7 @@ abstract class AbstractBuilder
     public function setValues(array $values)
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
             $camlized=[];
             foreach ($values as $key => $value) {
                 $camlized[self::camelize($key)] = $value;

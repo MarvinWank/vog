@@ -311,7 +311,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getGetterName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
             return 'get'.ucfirst($name);
         }
 
@@ -320,7 +320,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getWithFunctionName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
@@ -329,7 +329,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getSetter(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
             return 'set'.ucfirst($name);
         }
 
