@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class WithCamelCase
+final class WithCamelCase implements ValueObject
 {
     private string $camelCased;
 

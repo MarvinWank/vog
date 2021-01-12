@@ -20,7 +20,7 @@ class FppTestCase extends TestCase
 
         $config = [
             'generatorOptions' => [
-                'target' => TargetMode::MODE_FPP()->value()
+                'target' => TargetMode::MODE_FPP()->name()
             ],
         ];
         $hub->run($argv, $config);

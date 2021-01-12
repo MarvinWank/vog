@@ -13,6 +13,15 @@ class EnumTest extends Psr2TestCase
     /**
      * @test
      */
+    public function it_tests_casting_to_string() {
+        $enum = DietStyle::VEGETARIAN();
+        $this->assertTrue(is_string((string) $enum));
+        $this->assertEquals($enum->toString(), (string) $enum);
+    }
+
+    /**
+     * @test
+     */
     public function it_tests_from_value()
     {
         $diet_style = DietStyle::fromName('OMNIVORE');

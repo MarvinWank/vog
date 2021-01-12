@@ -11,9 +11,11 @@
 namespace Vog;
 
 
+use Vog\ValueObjects\Config;
+
 class InterfaceBuilder extends AbstractBuilder
 {
-    public function __construct(string $name, array $config)
+    public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = "interface";

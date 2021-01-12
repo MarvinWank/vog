@@ -2,13 +2,14 @@
 
 namespace Vog;
 
-use Vog\ValueObjects\ConfigOption;
+use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
 class EnumBuilder extends AbstractBuilder
 {
+    protected array $implements = ['Enum'];
 
-    public function __construct(string $name, array $config)
+    public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = "enum";
@@ -30,7 +31,7 @@ class EnumBuilder extends AbstractBuilder
     public function setValues(array $values)
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             $upper=[];
             foreach ($values as $key => $value) {
                 $upper[strtoupper($key)] = $value;

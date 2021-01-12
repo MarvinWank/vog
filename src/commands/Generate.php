@@ -5,17 +5,18 @@ namespace Vog;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
+use Vog\ValueObjects\Config;
 use function json_decode;
 
 class Generate
 {
-    private array $config;
+    private Config $config;
     private string $rootPath;
     private string $rootNamespace;
 
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
-    public function __construct(array $config) {
+    public function __construct(Config $config) {
         $this->config = $config;
     }
 
@@ -88,7 +89,7 @@ class Generate
                 . " for object " . $data['name']
             );
         }
-        if (!array_key_exists("values", $data)) {
+        if ($data['type'] !== 'set' && !array_key_exists("values", $data)) {
             throw new UnexpectedValueException(
                 "No values were given" . " for object " . $data['name']
             );
@@ -114,7 +115,10 @@ class Generate
                 implemented. Please open an issue on GitHub");
         }
 
-        $vog_obj->setValues($data['values']);
+        if (!$vog_obj instanceof SetBuilder) {
+            $vog_obj->setValues($data['values']);
+        }
+
         if (array_key_exists("string_value", $data)) {
             $vog_obj->setStringValue($data['string_value']);
         }

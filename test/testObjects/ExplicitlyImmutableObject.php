@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class ExplicitlyImmutableObject
+final class ExplicitlyImmutableObject implements ValueObject
 {
     private string $foo;
 

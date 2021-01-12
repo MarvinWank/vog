@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class ImplicitlyImmutableObject
+final class ImplicitlyImmutableObject implements ValueObject
 {
     private string $foo;
 

@@ -4,6 +4,13 @@
     "ValueObjects":[
         {
             "type": "valueObject",
+            "name": "Config",
+            "values": {
+                "generatorOptions": "GeneratorOptions"
+            }
+        },
+        {
+            "type": "valueObject",
             "name": "GeneratorOptions",
             "values": {
                 "target": "TargetMode"

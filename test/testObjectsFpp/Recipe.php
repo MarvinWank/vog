@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class Recipe
+final class Recipe implements ValueObject
 {
     private string $title;
     private ?int $minutes_to_prepare;
@@ -93,7 +93,7 @@ final class Recipe
     {
         return [
             'title' => $this->title,
-            'minutes_to_prepare' =>  $this->valueToArray($this->minutes_to_prepare),
+            'minutes_to_prepare' => $this->minutes_to_prepare,
             'rating' => $this->rating,
             'diet_style' =>  $this->valueToArray($this->diet_style),
         ];
@@ -117,6 +117,14 @@ final class Recipe
             throw new UnexpectedValueException('Array key diet_style does not exist');
         }
         
+        if (is_string($array['diet_style']) && is_a(DietStyle::class, Enum::class, true)) {
+            $array['diet_style'] = DietStyle::fromName($array['diet_style']);
+        }
+    
+        if (is_array($array['diet_style']) && (is_a(DietStyle::class, Set::class, true) || is_a(DietStyle::class, ValueObject::class, true))) {
+            $array['diet_style'] = DietStyle::fromArray($array['diet_style']);
+        }
+
         return new self(
             $array['title'],
             $array['minutes_to_prepare'],

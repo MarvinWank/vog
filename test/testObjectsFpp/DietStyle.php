@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class DietStyle
+final class DietStyle implements Enum
 {
     public const OPTIONS = [ 
         'OMNIVORE' => 'Omnivore',

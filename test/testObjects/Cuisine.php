@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class Cuisine
+final class Cuisine implements Enum
 {
     public const OPTIONS = [ 
         'DEUTSCH' => 'deutsch',
@@ -116,7 +116,7 @@ final class Cuisine
         return $this->name;
     }
 
-    public function toString(): string
+    public function toString(): ?string
     {
         return $this->name;
     }
