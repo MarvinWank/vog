@@ -19,6 +19,10 @@ class DeepFromArrayTest extends Psr2TestCase
      */
     public function it_tests_enum_equals()
     {
+        $ref = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
+        $arr = $ref->toArray();
+
+        error_log(print_r($arr, true));
         $this->assertTrue(true);
     }
 }

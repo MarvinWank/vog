@@ -9,7 +9,7 @@ use Vog\ValueObjects\TargetMode;
 
 class ValueObjectBuilder extends AbstractBuilder
 {
-    private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
+    private const PRIMITIVE_TYPES = ["string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $string_value;
 
     public function __construct(string $name, array $config)
@@ -232,6 +232,14 @@ class ValueObjectBuilder extends AbstractBuilder
                     }
                     
             EOT;
+
+//            if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
+//                $phpcode .= <<<EOT
+//
+//                    \$array['$name'] = new $dataType(...\$array['$name']))
+//                EOT;
+//
+//            }
         }
 
         $phpcode .= <<<EOT

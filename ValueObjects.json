@@ -16,6 +16,14 @@
                 "MODE_PSR2": "psr2",
                 "MODE_FPP": "fpp"
             }
+        },
+        {
+            "type": "enum",
+            "name": "ScalarTypes",
+            "values": {
+                "STRING": "string",
+                ""
+            }
         }
     ]
 }
