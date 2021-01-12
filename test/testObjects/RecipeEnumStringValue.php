@@ -93,7 +93,7 @@ final class RecipeEnumStringValue
     {
         return [
             'title' => $this->title,
-            'minutesToPrepare' =>  $this->valueToArray($this->minutesToPrepare),
+            'minutesToPrepare' => $this->minutesToPrepare,
             'rating' => $this->rating,
             'dietStyle' =>  $this->valueToArray($this->dietStyle),
         ];

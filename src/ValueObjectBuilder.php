@@ -3,7 +3,6 @@
 
 namespace Vog;
 
-use Vog\ValueObjects\ConfigOption;
 use UnexpectedValueException;
 use Vog\ValueObjects\TargetMode;
 
@@ -21,7 +20,7 @@ class ValueObjectBuilder extends AbstractBuilder
     public function setStringValue(string $string_value)
     {
         if(!array_key_exists($string_value, $this->values)){
-            throw new UnexpectedValueException("Designated string value $string_value does not exist in values");
+            throw new UnexpectedValueException("Designated string value $string_value does not exist in values: " . print_r(array_keys($this->values), true));
         }
 
         $this->string_value = $string_value;
@@ -319,7 +318,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getGetterName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'get'.ucfirst($name);
         }
 
@@ -328,7 +327,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getWithFunctionName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'with' . ucfirst($name);
         }
 
@@ -337,7 +336,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getSetter(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config['generatorOptions']->getTarget())) {
+        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
             return 'set'.ucfirst($name);
         }
 

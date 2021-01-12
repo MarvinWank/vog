@@ -2,7 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use Vog\CommandHub;
-use Vog\ConfigOptions;
+use Vog\ValueObjects\TargetMode;
+use Vog\ValueObjects\GeneratorOptions;
 
 class FppTestCase extends TestCase
 {
@@ -19,9 +20,7 @@ class FppTestCase extends TestCase
 
         $config = [
             'generatorOptions' => [
-                'target' => ConfigOptions::MODE_FPP,
-                'phpVersion' => ConfigOptions::PHP_74,
-                'quiet' => ConfigOptions::QUIET
+                'target' => TargetMode::MODE_FPP()->value()
             ],
         ];
         $hub->run($argv, $config);

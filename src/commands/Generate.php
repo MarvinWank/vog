@@ -4,7 +4,7 @@ namespace Vog;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
-use Vog\ValueObjects\ConfigOption;
+
 use function json_decode;
 
 class Generate
@@ -36,15 +36,18 @@ class Generate
         }
 
         foreach ($data as $targetFilepath => $objects) {
+            $this->generateMarkerInterfaces($targetFilepath);
+
             foreach ($objects as $object) {
                 $object = $this->buildObject($object, $targetFilepath);
                 $success = $this->writeToFile($object);
 
                 if ($success) {
-                    echo 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath() . PHP_EOL;
+                    echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
                 }
             }
         }
+        echo  PHP_EOL;
     }
 
     private function parseFile(string $filepath)
@@ -200,5 +203,24 @@ class Generate
         }
 
         return rtrim($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath, DIRECTORY_SEPARATOR);
+    }
+
+    private function generateMarkerInterfaces(string $targetFilepath) {
+        $interfaces = [
+            'ValueObject',
+            'Enum',
+            'Set'
+        ];
+
+        foreach ($interfaces as $interface) {
+            $object = new InterfaceBuilder($interface, $this->config);
+            $object->setTargetFilepath($this->getTargetFilePath($targetFilepath));
+            $object->setNamespace($this->getTargetNamespace($targetFilepath));
+            $success = $this->writeToFile($object);
+
+            if ($success) {
+                echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
+            }
+        }
     }
 }
