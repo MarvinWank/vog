@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class ImplementsMany implements Interface1, Interface2
+final class ImplementsMany implements ValueObject, Interface1, Interface2
 {
     private string $foo;
     private int $bar;

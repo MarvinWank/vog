@@ -10,7 +10,7 @@ namespace Vog\ValueObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class TargetMode
+final class TargetMode implements Enum
 {
     public const OPTIONS = [ 
         'MODE_PSR2' => 'psr2',
@@ -90,13 +90,15 @@ final class TargetMode
         return $this->value;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
+        error_log('here');
         return $this->name;
     }
 
     public function toString(): ?string
     {
+        error_log('no here');
         return $this->name;
     }
 }

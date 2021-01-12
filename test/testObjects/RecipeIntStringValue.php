@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class RecipeIntStringValue
+final class RecipeIntStringValue implements ValueObject
 {
     private string $title;
     private ?int $minutesToPrepare;
@@ -93,7 +93,7 @@ final class RecipeIntStringValue
     {
         return [
             'title' => $this->title,
-            'minutesToPrepare' =>  $this->valueToArray($this->minutesToPrepare),
+            'minutesToPrepare' => $this->minutesToPrepare,
             'rating' => $this->rating,
             'dietStyle' =>  $this->valueToArray($this->dietStyle),
         ];
@@ -117,6 +117,14 @@ final class RecipeIntStringValue
             throw new UnexpectedValueException('Array key dietStyle does not exist');
         }
         
+        if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
+            $array['dietStyle'] = DietStyle::fromName($array['dietStyle']);
+        }
+    
+        if (is_array($array['dietStyle']) && (is_a(DietStyle::class, Set::class, true) || is_a(DietStyle::class, ValueObject::class, true))) {
+            $array['dietStyle'] = DietStyle::fromArray($array['dietStyle']);
+        }
+
         return new self(
             $array['title'],
             $array['minutesToPrepare'],

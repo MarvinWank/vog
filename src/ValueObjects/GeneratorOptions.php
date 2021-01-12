@@ -10,7 +10,7 @@ namespace Vog\ValueObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class GeneratorOptions
+final class GeneratorOptions implements ValueObject
 {
     private TargetMode $target;
 
@@ -45,6 +45,14 @@ final class GeneratorOptions
             throw new UnexpectedValueException('Array key target does not exist');
         }
         
+        if (is_string($array['target']) && is_a(TargetMode::class, Enum::class, true)) {
+            $array['target'] = TargetMode::fromName($array['target']);
+        }
+    
+        if (is_array($array['target']) && (is_a(TargetMode::class, Set::class, true) || is_a(TargetMode::class, ValueObject::class, true))) {
+            $array['target'] = TargetMode::fromArray($array['target']);
+        }
+
         return new self(
             $array['target']
         );

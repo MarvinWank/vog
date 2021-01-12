@@ -1,6 +1,6 @@
 <?php
 
-
+use PHPUnit\Framework\TestCase;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
@@ -18,24 +18,24 @@ class SetTest extends Psr2TestCase
     public function it_tests_set()
     {
         $data = [
-            Recipe::fromArray([
+            [
                 'title' => 'Omni',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
-                'dietStyle' => DietStyle::OMNIVORE()
-            ]),
-            Recipe::fromArray([
+                'dietStyle' => DietStyle::OMNIVORE()->name()
+            ],
+            [
                 'title' => 'Vegan',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
                 'dietStyle' => DietStyle::VEGAN()
-            ]),
-            Recipe::fromArray([
+            ],
+            [
                 'title' => 'Vegetarian',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
                 'dietStyle' => DietStyle::VEGETARIAN()
-            ])
+            ]
         ];
 
         $set = RecipeSet::fromArray($data);
@@ -66,24 +66,24 @@ class SetTest extends Psr2TestCase
      */
     public function it_tests_set_equals() {
         $data = [
-            Recipe::fromArray([
+            [
                 'title' => 'Omni',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
                 'dietStyle' => DietStyle::OMNIVORE()
-            ]),
-            Recipe::fromArray([
+            ],
+            [
                 'title' => 'Vegan',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
                 'dietStyle' => DietStyle::VEGAN()
-            ]),
-            Recipe::fromArray([
+            ],
+            [
                 'title' => 'Vegetarian',
                 'minutesToPrepare' => 20,
                 'rating' => 5,
                 'dietStyle' => DietStyle::VEGETARIAN()
-            ])
+            ]
         ];
 
         $set1 = RecipeSet::fromArray($data);

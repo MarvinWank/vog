@@ -5,6 +5,7 @@ namespace Vog;
 
 
 use UnexpectedValueException;
+use Vog\ValueObjects\Config;
 
 class CommandHub
 {
@@ -45,7 +46,7 @@ class CommandHub
         $fppConvert->run($fileToConvert, $outputPath);
     }
 
-    private function getConfig($config): array {
+    private function getConfig($config): Config {
 
         if ($config === null) {
             $config = [];
@@ -64,7 +65,7 @@ class CommandHub
             $config = array_merge($defaultConfig, $config);
         }
 
-        return $config;
+        return Config::fromArray($config);
     }
 
     private function printUsage() {

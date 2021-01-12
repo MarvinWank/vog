@@ -3,16 +3,17 @@
 
 namespace Vog;
 
-use Vog\ValueObjects\ConfigOption;
 use UnexpectedValueException;
+use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
 class ValueObjectBuilder extends AbstractBuilder
 {
-    private const PRIMITIVE_TYPES = ["string", "int", "float", "bool", "array"];
+    protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $string_value;
+    protected array $implements = ['ValueObject'];
 
-    public function __construct(string $name, array $config)
+    public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = "valueObject";
@@ -21,7 +22,7 @@ class ValueObjectBuilder extends AbstractBuilder
     public function setStringValue(string $string_value)
     {
         if(!array_key_exists($string_value, $this->values)){
-            throw new UnexpectedValueException("Designated string value $string_value does not exist in values");
+            throw new UnexpectedValueException("Designated string value $string_value does not exist in values: " . print_r(array_keys($this->values), true));
         }
 
         $this->string_value = $string_value;
@@ -232,6 +233,21 @@ class ValueObjectBuilder extends AbstractBuilder
                     }
                     
             EOT;
+
+            if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
+                $phpcode .= <<<EOT
+                
+                        if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
+                            \$array['$name'] = $datatype::fromName(\$array['$name']);
+                        }
+                    
+                        if (is_array(\$array['$name']) && (is_a($datatype::class, Set::class, true) || is_a($datatype::class, ValueObject::class, true))) {
+                            \$array['$name'] = $datatype::fromArray(\$array['$name']);
+                        }
+
+                EOT;
+
+            }
         }
 
         $phpcode .= <<<EOT
@@ -311,7 +327,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getGetterName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             return 'get'.ucfirst($name);
         }
 
@@ -320,7 +336,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getWithFunctionName(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
@@ -329,7 +345,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function getSetter(string $name): string {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             return 'set'.ucfirst($name);
         }
 

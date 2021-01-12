@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class DesertRecipe extends BaseClass
+final class DesertRecipe extends BaseClass implements ValueObject
 {
     private bool $lactosefree;
     private bool $light;

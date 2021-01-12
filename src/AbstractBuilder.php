@@ -2,23 +2,24 @@
 
 namespace Vog;
 
+use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
 abstract class AbstractBuilder
 {
     protected string $type;
     protected string $name;
-    protected array $config;
+    protected Config $config;
     protected string $namespace;
     protected string $target_filepath;
     protected array $values;
 
     protected ?string $extends;
-    protected array $implements;
+    protected array $implements = [];
     protected bool $is_final;
     protected bool $is_mutable;
 
-    public function __construct(string $name, array $config)
+    public function __construct(string $name, Config $config)
     {
         $this->name = $name;
         $this->config = $config;
@@ -67,7 +68,7 @@ abstract class AbstractBuilder
     public function setValues(array $values)
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals(TargetMode::fromValue($this->config['generatorOptions']['target']))) {
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             $camlized=[];
             foreach ($values as $key => $value) {
                 $camlized[self::camelize($key)] = $value;
@@ -102,7 +103,8 @@ abstract class AbstractBuilder
 
     public function setImplements(array $implements): void
     {
-        $this->implements = $implements;
+        // extending classes define default marker interfaces
+        $this->implements = array_merge($this->implements, $implements);
     }
 
     public function isIsFinal(): bool

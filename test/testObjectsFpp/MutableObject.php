@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class MutableObject
+final class MutableObject implements ValueObject
 {
     private string $foo;
 

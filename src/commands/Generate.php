@@ -4,18 +4,19 @@ namespace Vog;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
-use Vog\ValueObjects\ConfigOption;
+
+use Vog\ValueObjects\Config;
 use function json_decode;
 
 class Generate
 {
-    private array $config;
+    private Config $config;
     private string $rootPath;
     private string $rootNamespace;
 
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
-    public function __construct(array $config) {
+    public function __construct(Config $config) {
         $this->config = $config;
     }
 
@@ -36,15 +37,18 @@ class Generate
         }
 
         foreach ($data as $targetFilepath => $objects) {
+            $this->generateMarkerInterfaces($targetFilepath);
+
             foreach ($objects as $object) {
                 $object = $this->buildObject($object, $targetFilepath);
                 $success = $this->writeToFile($object);
 
                 if ($success) {
-                    echo 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath() . PHP_EOL;
+                    echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
                 }
             }
         }
+        echo  PHP_EOL;
     }
 
     private function parseFile(string $filepath)
@@ -85,7 +89,7 @@ class Generate
                 . " for object " . $data['name']
             );
         }
-        if (!array_key_exists("values", $data)) {
+        if ($data['type'] !== 'set' && !array_key_exists("values", $data)) {
             throw new UnexpectedValueException(
                 "No values were given" . " for object " . $data['name']
             );
@@ -111,7 +115,10 @@ class Generate
                 implemented. Please open an issue on GitHub");
         }
 
-        $vog_obj->setValues($data['values']);
+        if (!$vog_obj instanceof SetBuilder) {
+            $vog_obj->setValues($data['values']);
+        }
+
         if (array_key_exists("string_value", $data)) {
             $vog_obj->setStringValue($data['string_value']);
         }
@@ -200,5 +207,24 @@ class Generate
         }
 
         return rtrim($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath, DIRECTORY_SEPARATOR);
+    }
+
+    private function generateMarkerInterfaces(string $targetFilepath) {
+        $interfaces = [
+            'ValueObject',
+            'Enum',
+            'Set'
+        ];
+
+        foreach ($interfaces as $interface) {
+            $object = new InterfaceBuilder($interface, $this->config);
+            $object->setTargetFilepath($this->getTargetFilePath($targetFilepath));
+            $object->setNamespace($this->getTargetNamespace($targetFilepath));
+            $success = $this->writeToFile($object);
+
+            if ($success) {
+                echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
+            }
+        }
     }
 }

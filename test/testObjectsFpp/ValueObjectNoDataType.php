@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class ValueObjectNoDataType
+final class ValueObjectNoDataType implements ValueObject
 {
     private  $property;
 
@@ -35,7 +35,7 @@ final class ValueObjectNoDataType
     public function toArray(): array
     {
         return [
-            'property' =>  $this->valueToArray($this->property),
+            'property' => $this->property,
         ];
     }
     

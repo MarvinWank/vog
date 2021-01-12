@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-final class WithUnderscore
+final class WithUnderscore implements ValueObject
 {
     private string $noCamelCase;
 

@@ -1,5 +1,5 @@
 {
     "generatorOptions": {
-        "target": "psr2"
+        "target": "MODE_PSR2"
     }
 }

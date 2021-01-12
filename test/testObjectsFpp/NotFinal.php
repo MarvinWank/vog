@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-class NotFinal
+class NotFinal implements ValueObject
 {
     private string $foo;
     private int $bar;
