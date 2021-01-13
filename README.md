@@ -48,15 +48,20 @@ The `generate` subcommand is the core of vog. It allows you to generate both imm
 Example call: `./vendor/bin/vog generate ./value.json`
 
 ## Configuration
-You can create a vog_config.json file in your project to modify the behaviour of vog. 
-Default settings generates PSR2 compliant value objects. 
+You can create a vog_config.php file in your project to modify the behaviour of vog. 
+Default settings generate PSR2 compliant value objects for PHP 7.4. 
 
-```json
-{
-    "generatorOptions": {
-        "target": "MODE_PSR2"
-    }
-}
+```php
+<?php
+require('vendor/marvinwank/vog/ConfigOptions.php');
+use Vog\ConfigOptions;
+
+return [
+    'generatorOptions' => [
+        'target' => ConfigOptions::MODE_PSR2,
+        'phpVersion' => ConfigOptions::PHP_74,
+    ],
+];
 ```
 
 Future releases may introduce more options. 
