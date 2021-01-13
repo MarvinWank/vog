@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class WithUnderscore
+use UnexpectedValueException;
+
+final class WithUnderscore implements ValueObject
 {
     private string $noCamelCase;
 
@@ -58,7 +58,7 @@ final class WithUnderscore
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

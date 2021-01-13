@@ -2,11 +2,14 @@
 
 namespace Vog;
 
+use Vog\ValueObjects\Config;
+
 class SetBuilder extends ValueObjectBuilder
 {
     private string $itemType = '';
+    protected array $implements = ['Set'];
 
-    public function __construct(string $name, array $config)
+    public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = 'set';
@@ -14,9 +17,10 @@ class SetBuilder extends ValueObjectBuilder
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
+        $phpcode = $this->generateToArray($phpcode);
         $phpcode = $this->generateGenericFunctions($phpcode);
         $phpcode = $this->closeClass($phpcode);
 
@@ -35,13 +39,51 @@ class SetBuilder extends ValueObjectBuilder
     {
         $phpcode .= <<<'EOT'
         
-    private array $items = [];
+    private array $items;
         
-    private function __construct(array $items)
+    private function __construct(array $items = [])
     {
         $this->items = $items;
     }
 EOT;
+        return $phpcode;
+    }
+
+    protected function generateToArray(string $phpcode): string
+    {
+        $phpcode .= <<<EOT
+        
+            public function toArray() {
+        EOT;
+
+
+        if (!in_array($this->itemType, parent::PRIMITIVE_TYPES)) {
+            $phpcode .= <<<EOT
+                
+                        \$return = [];
+                        foreach (\$this->items as \$item) {
+                            if(is_a($this->itemType::class, ValueObject::class, true) || is_a($this->itemType::class, Set::class, true)) {
+                                \$return[] = \$item->toArray();
+                            }
+                            
+                            if(is_a($this->itemType::class, Enum::class, true)) {
+                                \$return[] = \$item->toString();
+                            }
+                        }
+                        
+                        return \$return;
+                EOT;
+        } else {
+            $phpcode .= <<<EOT
+                
+                        return \$this->items;
+                EOT;
+        }
+
+        $phpcode .= <<<EOT
+        
+            }
+        EOT;
         return $phpcode;
     }
 
@@ -66,9 +108,23 @@ EOT;
                                     throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key); 
                                 }    
                                 break;
+                            case 'array':
+                                if(is_a($this->itemType::class, ValueObject::class, true) || is_a($this->itemType::class, Set::class, true)) {
+                                    \$items[\$key] = $this->itemType::fromArray(\$item);
+                                } else {
+                                    throw new UnexpectedValueException('fromArray can not create $this->itemType from array on index ' . \$key);
+                                }
+                                break;    
+                            case 'string':
+                                if(is_a($this->itemType::class, Enum::class, true)) {
+                                    \$items[\$key] = $this->itemType::fromName(\$item);
+                                } else {
+                                    throw new UnexpectedValueException('fromArray can not create $this->itemType from string on index ' . \$key);
+                                }
+                                break;    
                             default:
                                 if (\$type !== '$this->itemType') {
-                                    throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
+                                    throw new UnexpectedValueException('fromArray expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
                                 }
                                 break;
                         }
@@ -93,10 +149,6 @@ EOT;
                 
         return (\$ref === \$val);
     }
-
-    public function toArray() {
-        return \$this->items;
-    }
     
     public function count(): int
     {
@@ -105,25 +157,21 @@ EOT;
 
     public function add($this->itemType \$item): self {
         \$values = \$this->toArray();
-        array_push(\$values, \$item);
-        return new self(\$values);
+        \$values[] = \$item;
+        return self::fromArray(\$values);
     }
     
     public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
-        if((\$key = array_search(\$item, \$values)) !== false) {
+        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
             unset(\$values[\$key]);
         }
         
-        return new self(\$values);
+        return self::fromArray(\$values);
     }
     
     public function contains($this->itemType \$item): bool {
-        if((\$key = array_search(\$item, \$this->items)) !== false) {
-            return true;
-        }
-        
-        return false;
+        return array_search(\$item, \$this->items) !== false;
     }
     
 EOT;

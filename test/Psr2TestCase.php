@@ -23,9 +23,9 @@ class Psr2TestCase extends TestCase
         $hub = new CommandHub();
 
         $config = [
-            'generatorOptions' => GeneratorOptions::fromArray([
-                'target' => TargetMode::MODE_PSR2()
-            ]),
+            'generatorOptions' => [
+                'target' => TargetMode::MODE_PSR2()->name()
+            ],
         ];
         $hub->run($argv, $config);
     }

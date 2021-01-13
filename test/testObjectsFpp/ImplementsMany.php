@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class ImplementsMany implements Interface1, Interface2
+use UnexpectedValueException;
+
+final class ImplementsMany implements ValueObject,Interface1,Interface2
 {
     private string $foo;
     private int $bar;
@@ -81,7 +81,7 @@ final class ImplementsMany implements Interface1, Interface2
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

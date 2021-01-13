@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
-use UnexpectedValueException;
+
 use InvalidArgumentException;
 
-final class DietStyle
+final class DietStyle implements Enum
 {
     public const OPTIONS = [ 
         'OMNIVORE' => 'Omnivore',
@@ -45,15 +45,15 @@ final class DietStyle
         return new self('VEGAN');
     }
     
-    public static function fromValue(string $input_value): self
+    public static function fromValue(string $value): self
     {
-        foreach (self::OPTIONS as $key => $value) {
-            if ($input_value === $value) {
+        foreach (self::OPTIONS as $key => $option) {
+            if ($value === $option) {
                 return new self($key);
             }
         }
 
-        throw new InvalidArgumentException("Unknown enum value '$input_value' given");
+        throw new InvalidArgumentException("Unknown enum value '$value' given");
     }
     
     public static function fromName(string $name): self

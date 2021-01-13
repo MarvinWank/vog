@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class ChildOfNotFinal extends NotFinal
+use UnexpectedValueException;
+
+final class ChildOfNotFinal extends NotFinal implements ValueObject
 {
     private string $foo;
 
@@ -58,7 +58,7 @@ final class ChildOfNotFinal extends NotFinal
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

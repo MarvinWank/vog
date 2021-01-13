@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Vog\ValueObjects;
 
-use UnexpectedValueException;
+
 use InvalidArgumentException;
 
-final class TargetMode
+final class TargetMode implements Enum
 {
     public const OPTIONS = [ 
         'MODE_PSR2' => 'psr2',
@@ -44,19 +44,19 @@ final class TargetMode
         return new self('MODE_FPP');
     }
     
-    public static function fromValue(?string $input_value): self
+    public static function fromValue(?string $value): self
     {
-        if(is_null($input_value)){
+        if(is_null($value)){
             return new self(null);
         }
     
-        foreach (self::OPTIONS as $key => $value) {
-            if ($input_value === $value) {
+        foreach (self::OPTIONS as $key => $option) {
+            if ($value === $option) {
                 return new self($key);
             }
         }
 
-        throw new InvalidArgumentException("Unknown enum value '$input_value' given");
+        throw new InvalidArgumentException("Unknown enum value '$value' given");
     }
     
     public static function fromName(?string $name): self
@@ -90,7 +90,7 @@ final class TargetMode
         return $this->value;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
         return $this->name;
     }

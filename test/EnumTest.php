@@ -5,9 +5,13 @@ use Test\TestObjects\DietStyle;
 
 class EnumTest extends Psr2TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
+    /**
+     * @test
+     */
+    public function it_tests_casting_to_string() {
+        $enum = DietStyle::VEGETARIAN();
+        self::assertIsString((string)$enum);
+        self::assertEquals($enum->toString(), (string) $enum);
     }
 
     /**

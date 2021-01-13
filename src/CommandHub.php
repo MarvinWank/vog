@@ -5,6 +5,7 @@ namespace Vog;
 
 
 use UnexpectedValueException;
+use Vog\ValueObjects\Config;
 
 class CommandHub
 {
@@ -13,7 +14,7 @@ class CommandHub
 
     private const COMMANDS = [self::COMMAND_GENERATE, self::COMMAND_FPP_CONVERT];
 
-    public function run(array $argv, ?array $config = null)
+    public function run(array $argv, array $config = []): void
     {
         if (!isset($argv[1])) {
             $this->printUsage();
@@ -31,23 +32,23 @@ class CommandHub
         }
     }
 
-    private function runGenerateCommand(string $targetPath, ?array $config = null)
+    private function runGenerateCommand(string $targetPath, array $config = []): void
     {
-        $config = $this->getConfig($config);
+        $configObject = $this->getConfig($config);
 
-        $generate = new Generate($config);
+        $generate = new Generate($configObject);
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config)
+    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
     {
         $fppConvert = new FppConvert($config);
         $fppConvert->run($fileToConvert, $outputPath);
     }
 
-    private function getConfig($config): array {
+    private function getConfig(array $config): Config {
 
-        if ($config === null) {
+        if (empty($config)) {
             $config = [];
 
             $configFile = getcwd() . '/vog_config.json';
@@ -64,17 +65,18 @@ class CommandHub
             $config = array_merge($defaultConfig, $config);
         }
 
-        return $config;
+        return Config::fromArray($config);
     }
 
-    private function printUsage() {
+    private function printUsage(): void
+    {
         print("Value Object Generator".PHP_EOL);
         print("generates PHP value objects from a json file.".PHP_EOL);
         print(PHP_EOL);
         print("Usage: ".PHP_EOL);
         print("vendor/bin/vog [command] [path/to/definitionfile.json]".PHP_EOL);
         print(PHP_EOL);
-        print("Commandas:".PHP_EOL);
+        print("Commands:".PHP_EOL);
         print("\tgenerate".PHP_EOL);
     }
 }

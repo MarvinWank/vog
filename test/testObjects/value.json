@@ -166,8 +166,15 @@
     {
       "type": "set",
       "name": "RecipeSet",
-      "itemType": "Recipe",
-      "values": []
+      "itemType": "Recipe"
+    },
+    {
+      "type": "valueObject",
+      "name": "ValueObjectWithNestedSet",
+      "values": {
+        "title": "string",
+        "recipes": "RecipeSet"
+      }
     }
   ]
 }

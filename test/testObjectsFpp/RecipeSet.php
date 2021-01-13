@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class RecipeSet
+use UnexpectedValueException;
+
+final class RecipeSet implements Set
 {        
-    private array $items = [];
+    private array $items;
         
-    private function __construct(array $items)
+    private function __construct(array $items = [])
     {
         $this->items = $items;
     }
@@ -27,9 +27,23 @@ final class RecipeSet
                         throw new UnexpectedValueException('array expects items of Recipe but has ' . $type . ' on index ' . $key); 
                     }    
                     break;
+                case 'array':
+                    if(is_a(Recipe::class, ValueObject::class, true) || is_a(Recipe::class, Set::class, true)) {
+                        $items[$key] = Recipe::fromArray($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create Recipe from array on index ' . $key);
+                    }
+                    break;    
+                case 'string':
+                    if(is_a(Recipe::class, Enum::class, true)) {
+                        $items[$key] = Recipe::fromName($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create Recipe from string on index ' . $key);
+                    }
+                    break;    
                 default:
                     if ($type !== 'Recipe') {
-                        throw new UnexpectedValueException('array expects items of Recipe but has ' . $type . ' on index ' . $key);
+                        throw new UnexpectedValueException('fromArray expects items of Recipe but has ' . $type . ' on index ' . $key);
                     }
                     break;
             }
@@ -37,16 +51,26 @@ final class RecipeSet
         }
         return new self($items);
     }
+    public function toArray() {
+        $return = [];
+        foreach ($this->items as $item) {
+            if(is_a(Recipe::class, ValueObject::class, true) || is_a(Recipe::class, Set::class, true)) {
+                $return[] = $item->toArray();
+            }
+            
+            if(is_a(Recipe::class, Enum::class, true)) {
+                $return[] = $item->toString();
+            }
+        }
+        
+        return $return;
+    }
     public function equals(?self $other): bool
     {
         $ref = $this->toArray();
         $val = $other->toArray();
                 
         return ($ref === $val);
-    }
-
-    public function toArray() {
-        return $this->items;
     }
     
     public function count(): int
@@ -56,25 +80,21 @@ final class RecipeSet
 
     public function add(Recipe $item): self {
         $values = $this->toArray();
-        array_push($values, $item);
-        return new self($values);
+        $values[] = $item;
+        return self::fromArray($values);
     }
     
     public function remove(Recipe $item): self {
         $values = $this->toArray();
-        if(($key = array_search($item, $values)) !== false) {
+        if(($key = array_search($item->toArray(), $values)) !== false) {
             unset($values[$key]);
         }
         
-        return new self($values);
+        return self::fromArray($values);
     }
     
     public function contains(Recipe $item): bool {
-        if(($key = array_search($item, $this->items)) !== false) {
-            return true;
-        }
-        
-        return false;
+        return array_search($item, $this->items) !== false;
     }
     
 }

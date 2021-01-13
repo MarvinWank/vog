@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class DesertRecipe extends BaseClass
+use UnexpectedValueException;
+
+final class DesertRecipe extends BaseClass implements ValueObject
 {
     private bool $lactosefree;
     private bool $light;
@@ -81,7 +81,7 @@ final class DesertRecipe extends BaseClass
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

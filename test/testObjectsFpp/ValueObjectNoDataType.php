@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class ValueObjectNoDataType
+use UnexpectedValueException;
+
+final class ValueObjectNoDataType implements ValueObject
 {
     private  $property;
 
@@ -35,7 +35,7 @@ final class ValueObjectNoDataType
     public function toArray(): array
     {
         return [
-            'property' =>  $this->valueToArray($this->property),
+            'property' => $this->property,
         ];
     }
     
@@ -58,7 +58,7 @@ final class ValueObjectNoDataType
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();
