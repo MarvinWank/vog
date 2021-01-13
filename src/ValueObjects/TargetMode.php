@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Vog\ValueObjects;
 
-use UnexpectedValueException;
+
 use InvalidArgumentException;
 
 final class TargetMode implements Enum
@@ -44,19 +44,19 @@ final class TargetMode implements Enum
         return new self('MODE_FPP');
     }
     
-    public static function fromValue(?string $input_value): self
+    public static function fromValue(?string $value): self
     {
-        if(is_null($input_value)){
+        if(is_null($value)){
             return new self(null);
         }
     
-        foreach (self::OPTIONS as $key => $value) {
-            if ($input_value === $value) {
+        foreach (self::OPTIONS as $key => $option) {
+            if ($value === $option) {
                 return new self($key);
             }
         }
 
-        throw new InvalidArgumentException("Unknown enum value '$input_value' given");
+        throw new InvalidArgumentException("Unknown enum value '$value' given");
     }
     
     public static function fromName(?string $name): self
@@ -92,13 +92,11 @@ final class TargetMode implements Enum
 
     public function __toString(): string
     {
-        error_log('here');
         return $this->name;
     }
 
     public function toString(): ?string
     {
-        error_log('no here');
         return $this->name;
     }
 }

@@ -9,11 +9,6 @@ use Test\TestObjects\RecipeNoStringValue;
 
 class EqualsTest extends Psr2TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /**
      * @test
      */
@@ -24,13 +19,13 @@ class EqualsTest extends Psr2TestCase
         $val = DietStyle::OMNIVORE();
         $result = $ref->equals($val);
 
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $val = DietStyle::VEGAN();
         $result  = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -42,13 +37,13 @@ class EqualsTest extends Psr2TestCase
         $val = Cuisine::MEDITERAN();
         $result = $ref->equals($val);
 
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $val = Cuisine::ASIATISCH();
         $result  = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -66,15 +61,15 @@ class EqualsTest extends Psr2TestCase
         $val = new Recipe(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $data['dietStyle'] = DietStyle::VEGAN();
         $val = new Recipe(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -92,15 +87,15 @@ class EqualsTest extends Psr2TestCase
         $val = new RecipeIntStringValue(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $data['dietStyle'] = DietStyle::VEGAN();
         $val = new RecipeIntStringValue(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -118,15 +113,15 @@ class EqualsTest extends Psr2TestCase
         $val = new RecipeNoStringValue(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $data['dietStyle'] = DietStyle::VEGAN();
         $val = new RecipeNoStringValue(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 
     /**
@@ -145,14 +140,14 @@ class EqualsTest extends Psr2TestCase
         $val = $ref->withTitle($data['title']);
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertTrue($result);
+        self::assertIsBool($result);
+        self::assertTrue($result);
 
         $data['dietStyle'] = DietStyle::VEGAN();
         $val = new Recipe(...array_values($data));
 
         $result = $ref->equals($val);
-        $this->assertTrue(is_bool($result));
-        $this->assertFalse($result);
+        self::assertIsBool($result);
+        self::assertFalse($result);
     }
 }

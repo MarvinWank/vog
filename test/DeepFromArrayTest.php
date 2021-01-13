@@ -9,24 +9,19 @@ use Test\TestObjects\ValueObjectWithNestedSet;
 
 class DeepFromArrayTest extends Psr2TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /**
      * @test
      */
     public function it_tests_create_enum_from_array()
     {
         $result = is_a(DietStyle::class, Enum::class, true);
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $ref = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
         $arr = $ref->toArray();
 
         $val = Recipe::fromArray($arr);
-        $this->assertTrue($ref->equals($val));
+        self::assertTrue($ref->equals($val));
     }
 
     /**
@@ -50,8 +45,8 @@ class DeepFromArrayTest extends Psr2TestCase
 
         $arr = $ref->toArray();
         $val = ValueObjectWithNestedSet::fromArray($arr);
-        $this->assertTrue($ref->equals($val));
+        self::assertTrue($ref->equals($val));
 
-        $this->assertEquals($ref->toArray(), $val->toArray());
+        self::assertEquals($ref->toArray(), $val->toArray());
     }
 }

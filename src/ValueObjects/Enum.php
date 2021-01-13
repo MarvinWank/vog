@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Vog\ValueObjects;
 
+
+
 interface Enum
 {
 }

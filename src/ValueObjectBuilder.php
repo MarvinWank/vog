@@ -10,7 +10,7 @@ use Vog\ValueObjects\TargetMode;
 class ValueObjectBuilder extends AbstractBuilder
 {
     protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
-    private string $string_value;
+    private string $stringValue;
     protected array $implements = ['ValueObject'];
 
     public function __construct(string $name, Config $config)
@@ -19,18 +19,18 @@ class ValueObjectBuilder extends AbstractBuilder
         $this->type = "valueObject";
     }
 
-    public function setStringValue(string $string_value)
+    public function setStringValue(string $stringValue)
     {
-        if(!array_key_exists($string_value, $this->values)){
-            throw new UnexpectedValueException("Designated string value $string_value does not exist in values: " . print_r(array_keys($this->values), true));
+        if(!array_key_exists($stringValue, $this->values)){
+            throw new UnexpectedValueException("Designated string value $stringValue does not exist in values: " . print_r(array_keys($this->values), true));
         }
 
-        $this->string_value = $string_value;
+        $this->stringValue = $stringValue;
     }
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
 
         foreach ($this->values as $name => $data_type) {
             $phpcode .= <<<EOT
@@ -50,7 +50,7 @@ class ValueObjectBuilder extends AbstractBuilder
         $phpcode = $this->generateValueToArray($phpcode);
         $phpcode = $this->generateEquals($phpcode);
 
-        if(isset($this->string_value)){
+        if(isset($this->stringValue)){
             $phpcode = $this->generateToString($phpcode);
         }
 
@@ -284,7 +284,7 @@ class ValueObjectBuilder extends AbstractBuilder
             
             public function toString(): string
             {
-                return (string) \$this->$this->string_value;
+                return (string) \$this->$this->stringValue;
             }
             
         EOT;
@@ -313,7 +313,7 @@ class ValueObjectBuilder extends AbstractBuilder
     {
         $phpcode .= <<<'EOT'
             
-            public function equals($value)
+            public function equals($value): bool
             {
                 $ref = $this->toArray();
                 $val = $value->toArray();

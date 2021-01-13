@@ -1,6 +1,6 @@
 # vog - value object generator
 
-vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates value objects based on vog definitions. 
+vog is a zero-dependency Object-Oriented PHP Preprocessor that generates value objects based on vog definitions. 
 The syntax is not inspired by Haskell and thus readable. 
 
 ## Table of contents
@@ -23,8 +23,6 @@ The syntax is not inspired by Haskell and thus readable.
 
 9. [ValueObject](#ValueObject)
 
-10. [Using ValueObjects](#Using-value-objects)
-
 ## Credits
 
 This is basically a ripoff of https://github.com/prolic/fpp, but rewritten from scratch, with less fancy 
@@ -39,7 +37,7 @@ It is designed to be a dev dependency as you generate the value objects with it 
 
 ## Usage and subcommands
 
-After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has currently one subcommand. That generates the value objects and some marker interfaces according to your definition.  
+After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has currently one subcommand. That generates the value objects, enums, sets and some marker interfaces according to your definition.  
 
 #### generate
 
@@ -71,9 +69,9 @@ for a property defined as `"property_name": "string"` in your json file.
 
 Method Type | PSR2 | FPP | Notes
 --- | --- | --- | ---
-Getter | getPropertyName() | property_name() | 
-Fluent getter | withPropertyName() | with_property_name() | 
-Setter | setPropertyName() | set_property_name() | if defined mutable
+Getter | getPropertyName(): string | property_name(): string | 
+Fluent getter | withPropertyName(string $propertyName): self | with_property_name(string $property_Name): self | 
+Setter | setPropertyName(string $propertyName) | set_property_name(string $property_name) | if defined mutable
 
 If you use MODE_FPP and define camel cased properties, for example `"propertyName": "string"` the result would be `propertyName()`, `with_propertyName()` and `set_propertyName()`.    
 
@@ -224,7 +222,7 @@ You can also call the static `fromValue(string $value)` method, which accepts an
 
 #### 3. fromName
 
-Similarily to "fromValue", there also is static method `fromName(string $name)`, where you can construct an enum form any **name** defined 
+Similarly to "fromValue", there also is static method `fromName(string $name)`, where you can construct an enum form any **name** defined 
 in the value file 
 
 ### other methods

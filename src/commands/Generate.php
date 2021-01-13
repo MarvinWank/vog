@@ -20,7 +20,7 @@ class Generate
         $this->config = $config;
     }
 
-    public function run(string $target)
+    public function run(string $target): void
     {
         $data = $this->parseFile($target);
 
@@ -85,7 +85,7 @@ class Generate
         }
         if (!in_array($data['type'], self::ALL_DATA_TYPES)) {
             throw new UnexpectedValueException(
-                "Unknow value object type '" . $data['type'] . "' Allowed types: " . implode(", ", self::ALL_DATA_TYPES)
+                "Unknown value object type '" . $data['type'] . "' Allowed types: " . implode(", ", self::ALL_DATA_TYPES)
                 . " for object " . $data['name']
             );
         }
@@ -162,12 +162,12 @@ class Generate
         return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getPhpCode());
     }
 
-    private function getTargetNamespace(string $targetFilepath)
+    private function getTargetNamespace(string $targetFilepath): string
     {
         $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
         array_unshift($filePathAsArray, $this->rootNamespace);
 
-        $filePathAsArray = array_filter($filePathAsArray, function($pathFragment) {
+        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
             if (empty($pathFragment)) {
                 return false;
             }
@@ -179,16 +179,16 @@ class Generate
             return true;
         });
 
-        array_walk($filePathAsArray, function(&$pathFragment){
+        array_walk($filePathAsArray, static function(&$pathFragment){
            $pathFragment = ucfirst($pathFragment);
         });
         return implode('\\', array_values($filePathAsArray));
     }
 
-    private function getTargetFilePath(string $targetFilepath)
+    private function getTargetFilePath(string $targetFilepath): string
     {
         $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
-        $filePathAsArray = array_filter($filePathAsArray, function($pathFragment) {
+        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
             if (empty($pathFragment)) {
                 return false;
             }
@@ -209,7 +209,8 @@ class Generate
         return rtrim($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath, DIRECTORY_SEPARATOR);
     }
 
-    private function generateMarkerInterfaces(string $targetFilepath) {
+    private function generateMarkerInterfaces(string $targetFilepath): void
+    {
         $interfaces = [
             'ValueObject',
             'Enum',

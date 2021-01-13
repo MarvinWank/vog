@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
+
 use UnexpectedValueException;
-use InvalidArgumentException;
 
 final class ImplicitlyImmutableObject implements ValueObject
 {
@@ -58,7 +58,7 @@ final class ImplicitlyImmutableObject implements ValueObject
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

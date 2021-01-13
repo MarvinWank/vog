@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Test\TestObjectsFpp;
 
+
 use UnexpectedValueException;
-use InvalidArgumentException;
 
 final class RecipeSet implements Set
 {        
-    private array $items = [];
+    private array $items;
         
-    private function __construct(array $items)
+    private function __construct(array $items = [])
     {
         $this->items = $items;
     }
@@ -80,7 +80,7 @@ final class RecipeSet implements Set
 
     public function add(Recipe $item): self {
         $values = $this->toArray();
-        array_push($values, $item);
+        $values[] = $item;
         return self::fromArray($values);
     }
     
@@ -94,11 +94,7 @@ final class RecipeSet implements Set
     }
     
     public function contains(Recipe $item): bool {
-        if(($key = array_search($item, $this->items)) !== false) {
-            return true;
-        }
-        
-        return false;
+        return array_search($item, $this->items) !== false;
     }
     
 }

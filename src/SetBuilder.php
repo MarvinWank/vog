@@ -17,7 +17,7 @@ class SetBuilder extends ValueObjectBuilder
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader();
+        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateToArray($phpcode);
@@ -39,9 +39,9 @@ class SetBuilder extends ValueObjectBuilder
     {
         $phpcode .= <<<'EOT'
         
-    private array $items = [];
+    private array $items;
         
-    private function __construct(array $items)
+    private function __construct(array $items = [])
     {
         $this->items = $items;
     }
@@ -157,7 +157,7 @@ EOT;
 
     public function add($this->itemType \$item): self {
         \$values = \$this->toArray();
-        array_push(\$values, \$item);
+        \$values[] = \$item;
         return self::fromArray(\$values);
     }
     
@@ -171,11 +171,7 @@ EOT;
     }
     
     public function contains($this->itemType \$item): bool {
-        if((\$key = array_search(\$item, \$this->items)) !== false) {
-            return true;
-        }
-        
-        return false;
+        return array_search(\$item, \$this->items) !== false;
     }
     
 EOT;
