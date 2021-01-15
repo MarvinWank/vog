@@ -5,6 +5,7 @@ namespace Vog;
 
 
 use UnexpectedValueException;
+use Vog\ValueObjects\Config;
 use Vog\FppConvert\FppConvert;
 
 class CommandHub
@@ -14,7 +15,7 @@ class CommandHub
 
     private const COMMANDS = [self::COMMAND_GENERATE, self::COMMAND_FPP_CONVERT];
 
-    public function run(array $argv, ?array $config = null)
+    public function run(array $argv, array $config = []): void
     {
         if (!isset($argv[1])) {
             $this->printUsage();
@@ -32,24 +33,15 @@ class CommandHub
         }
     }
 
-    private function runGenerateCommand(string $targetPath, ?array $config = null)
+    private function runGenerateCommand(string $targetPath, array $config = []): void
     {
-        if ($config === null) {
-            $configFile = getcwd() . '/vog_config.php';
-            if (file_exists($configFile)) {
-                echo "reading " . $configFile;
-                $config = require($configFile);
-            } else {
-                echo "reading default config";
-                $config = require(__DIR__.'/../vog_default_config.php');
-            }
-        }
+        $configObject = $this->getConfig($config);
 
-        $generate = new Generate($config);
+        $generate = new Generate($configObject);
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand(array $argv, ?array $config)
+    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
     {
         if (!isset($argv[2])){
             throw new UnexpectedValueException("No path to the fpp file was provided");
@@ -61,14 +53,37 @@ class CommandHub
         $fppConvert->run($argv[2], $argv[3]);
     }
 
-    private function printUsage() {
+    private function getConfig(array $config): Config {
+
+        if (empty($config)) {
+            $config = [];
+
+            $configFile = getcwd() . '/vog_config.json';
+            $defaultConfig = json_decode(file_get_contents(__DIR__.'/../DefaultConfig.json'), JSON_OBJECT_AS_ARRAY);
+            if ($defaultConfig === null) {
+                throw new UnexpectedValueException('Could not parse ' . __DIR__.'/../DefaultConfig.json\n json_last_error_msg(): ' . json_last_error_msg());
+            }
+            if (file_exists($configFile)) {
+                $config = json_decode(file_get_contents($configFile), JSON_OBJECT_AS_ARRAY);
+                if ($config === null) {
+                    throw new UnexpectedValueException('Could not parse ' . $configFile . '\n json_last_error_msg(): ' . json_last_error_msg());
+                }
+            }
+            $config = array_merge($defaultConfig, $config);
+        }
+
+        return Config::fromArray($config);
+    }
+
+    private function printUsage(): void
+    {
         print("Value Object Generator".PHP_EOL);
         print("generates PHP value objects from a json file.".PHP_EOL);
         print(PHP_EOL);
         print("Usage: ".PHP_EOL);
         print("vendor/bin/vog [command] [path/to/definitionfile.json]".PHP_EOL);
         print(PHP_EOL);
-        print("Commandas:".PHP_EOL);
+        print("Commands:".PHP_EOL);
         print("\tgenerate".PHP_EOL);
     }
 }

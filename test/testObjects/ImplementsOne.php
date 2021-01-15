@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class ImplementsOne implements Interface1
+use UnexpectedValueException;
+
+final class ImplementsOne implements ValueObject,Interface1
 {
     private string $foo;
     private int $bar;
@@ -81,7 +81,7 @@ final class ImplementsOne implements Interface1
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();

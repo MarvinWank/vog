@@ -1,6 +1,6 @@
 # vog - value object generator
 
-vog is a zero-dependcy Object-Oriented PHP Preprocessor that generates value objects based on vog definitions. 
+vog is a zero-dependency Object-Oriented PHP Preprocessor that generates value objects based on vog definitions. 
 The syntax is not inspired by Haskell and thus readable. 
 
 ## Table of contents
@@ -37,7 +37,7 @@ It is designed to be a dev dependency as you generate the value objects with it 
 
 ## Usage and subcommands
 
-After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has multiple subcommands.  
+After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has currently one subcommand. That generates the value objects, enums, sets and some marker interfaces according to your definition.  
 
 #### generate
 
@@ -77,7 +77,17 @@ return [
 ```
 
 Future releases may introduce more options. 
-Currently `ConfigOptions::MODE_FPP` generates value objects that are fpp compatible. 
+Currently the other mode available is `MODE_FPP`, which generates value objects that are fpp compatible. The differences are:
+
+for a property defined as `"property_name": "string"` in your json file.
+
+Method Type | PSR2 | FPP | Notes
+--- | --- | --- | ---
+Getter | getPropertyName(): string | property_name(): string | 
+Fluent getter | withPropertyName(string $propertyName): self | with_property_name(string $property_Name): self | 
+Setter | setPropertyName(string $propertyName) | set_property_name(string $property_name) | if defined mutable
+
+If you use MODE_FPP and define camel cased properties, for example `"propertyName": "string"` the result would be `propertyName()`, `with_propertyName()` and `set_propertyName()`.    
 
 ## valueFile
 
@@ -228,7 +238,7 @@ You can also call the static `fromValue(string $value)` method, which accepts an
 
 #### 3. fromName
 
-Similarily to "fromValue", there also is static method `fromName(string $name)`, where you can construct an enum form any **name** defined 
+Similarly to "fromValue", there also is static method `fromName(string $name)`, where you can construct an enum form any **name** defined 
 in the value file 
 
 ### other methods
@@ -243,13 +253,40 @@ in the value file
     /** Returns the value of the enum */
     public function value(): string
     
-    /** Returns the value of the enum */
+    /** Returns the name of the enum */
     public function toString(): string
 
     /** Same as toString() */
     public function __toString(): string
 ```
 
+### Using an enum in your code
+Usually an Enum is used in other value objects or to check a selection.
+```php
+$dietStyle = TargetMode::VEGETARIAN();
+
+if ($dietStyle->equals(DietStyle::fromName($someValue))) {
+    // do something
+}
+
+```
+
+A even better way is, if you test against a value object. For example  
+
+```php
+// or read data from a json file and json_decode it to an array.
+$recipe = Recipe::fromArray([
+    ...
+    'dietStyle' => DietStyle::Vegetarian
+]);
+
+if ($recipe->getDietStyle()->equals(DietStyle::VEGETARIAN()) {
+    //.. do something
+}
+
+```
+
+If you want to persist an enum, use `(string)` or `toString()` which persists the name, not the value! 
 ## NullableEnum
 
 The same as the regular Enum except it also accepts `null` in the `fromName` and `fromValue` methods and returns `null`
@@ -262,18 +299,21 @@ A Set is an array of values or objects. It is defined as:
 {
   "type": "set",
   "name": "RecipeSet",
-  "itemType": "Recipe",
-  "values": []
+  "itemType": "Recipe"
 }
 ```
 
-If you specify a non-empty `itemType` this type is enforced in add(), remove() and contains(). The item type can be any valid type or another value object. Usualy a Set is initially empty, but for scalar types initial values can be defined in the json structure as well.
+If you specify a non-empty `itemType` this type is enforced in add(), remove() and contains(). The item type can be any valid type or another value object. Please note that the json structure for a set has no "values".
 
 ### Instantiating a generated Set
 ```php
+$obj = new RecipeSet([]); // create new empty set
+
 $r1 = new Recipe::fromArray([...]);
+$obj = $obj->add($r1),
+
 $r2 = new Recipe::fromArray([ ... ]);
-$obj = new RecipeSet([$r1, $r2]);
+$obj = $obj->add($r2);
 ```
 ### fromArray
 ```php 
@@ -281,10 +321,19 @@ $r1 = new Recipe::fromArray([...]);
 $r2 = new Recipe::fromArray([ ... ]);
 
 $obj = RecipeSet::fromArray([$r1, $r2]);
+
+// or
+$data = [
+    [ ... ], // assuming valid data to create a Recipe::fromArray()
+    [ ... ]
+];
+$obj = RecipeSet::fromArray($data);
 ```
 
+fromArray() uses the fromArray() method on the objects stored in the set to create objects from a nested array structure. 
+
 #### toArray
-This returns an array with the values.
+This returns an array with the values. This is a deep conversion that returns values instead of objects
 
 ### other methods
 

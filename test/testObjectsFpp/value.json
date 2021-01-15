@@ -151,8 +151,7 @@
     {
       "type": "set",
       "name": "RecipeSet",
-      "itemType": "Recipe",
-      "values": []
+      "itemType": "Recipe"
     }
   ]
 }

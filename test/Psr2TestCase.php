@@ -5,8 +5,9 @@ require_once __DIR__."/../autoload.php";
 
 use PHPUnit\Framework\TestCase;
 use Vog\CommandHub;
-use Vog\ConfigOptions;
-use Vog\Generate;
+use Vog\ValueObjects\GeneratorOptions;
+use Vog\ValueObjects\TargetMode;
+
 
 class Psr2TestCase extends TestCase
 {
@@ -23,8 +24,7 @@ class Psr2TestCase extends TestCase
 
         $config = [
             'generatorOptions' => [
-                'target' => ConfigOptions::MODE_PSR2,
-                'phpVersion' => ConfigOptions::PHP_74,
+                'target' => TargetMode::MODE_PSR2()->name()
             ],
         ];
         $hub->run($argv, $config);

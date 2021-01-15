@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Test\TestObjects;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class WithCamelCase
+use UnexpectedValueException;
+
+final class WithCamelCase implements ValueObject
 {
     private string $camelCased;
 
@@ -58,7 +58,7 @@ final class WithCamelCase
         
         return (string) $value;
     }    
-    public function equals($value)
+    public function equals($value): bool
     {
         $ref = $this->toArray();
         $val = $value->toArray();
