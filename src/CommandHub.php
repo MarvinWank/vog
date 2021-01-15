@@ -41,7 +41,7 @@ class CommandHub
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
+    private function runConvertToFppCommand(array $argv, array $config): void
     {
         if (!isset($argv[2])){
             throw new UnexpectedValueException("No path to the fpp file was provided");

@@ -27,6 +27,7 @@ class FppConvert
 
         $fileContent = file_get_contents($fppFilePath);
         $namespace = $this->parseNamespace($fileContent);
+        $fileBuilder->setNamespace($namespace);
         $fileBuilder = $this->parseObjects($fileContent, $fileBuilder);
     }
 
@@ -49,9 +50,7 @@ class FppConvert
         $jsonFileName = str_replace(".fpp", "", $fppFileName);
         $jsonFileName .=  ".json";
 
-        $jsonFilePath = str_replace($fppFileName, $jsonFileName, $fppFilePath);
-
-        return $jsonFilePath;
+        return str_replace($fppFileName, $jsonFileName, $fppFilePath);
     }
 
     private function parseNamespace(string $fileContent): ?string
@@ -70,11 +69,11 @@ class FppConvert
     private function parseObjects(string $fileContent, ValueFileBuilder $fileBuilder): array
     {
         $contentAsArray = explode(";", $fileContent);
-        if ($namespace){
+        if ($fileBuilder->getNamespace()){
             array_shift($contentAsArray);
         }
 
-        $vogArtifacts = [];
+        $vogArtifacts = null;
         foreach ($contentAsArray as $fppArtifact){
             $object = null;
             $matches = [];
