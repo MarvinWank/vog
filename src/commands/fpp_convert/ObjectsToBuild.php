@@ -7,16 +7,63 @@ declare(strict_types=1);
 
 namespace Vog\FppConvert;
 
-use UnexpectedValueException;
-use InvalidArgumentException;
 
-final class ObjectsToBuild
+use UnexpectedValueException;
+
+final class ObjectsToBuild implements Set
 {        
-    private array $items = [];
+    private array $items;
         
-    private function __construct(array $items)
+    private function __construct(array $items = [])
     {
         $this->items = $items;
+    }
+    public static function fromArray(array $items) {
+        foreach ($items as $key => $item) {
+            $type = gettype($item);
+            switch ($type) {
+                case 'object':
+                    if (!$item instanceof AbstractJsonObjectBuilder){
+                        throw new UnexpectedValueException('array expects items of AbstractJsonObjectBuilder but has ' . $type . ' on index ' . $key); 
+                    }    
+                    break;
+                case 'array':
+                    if(is_a(AbstractJsonObjectBuilder::class, ValueObject::class, true) || is_a(AbstractJsonObjectBuilder::class, Set::class, true)) {
+                        $items[$key] = AbstractJsonObjectBuilder::fromArray($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create AbstractJsonObjectBuilder from array on index ' . $key);
+                    }
+                    break;    
+                case 'string':
+                    if(is_a(AbstractJsonObjectBuilder::class, Enum::class, true)) {
+                        $items[$key] = AbstractJsonObjectBuilder::fromName($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create AbstractJsonObjectBuilder from string on index ' . $key);
+                    }
+                    break;    
+                default:
+                    if ($type !== 'AbstractJsonObjectBuilder') {
+                        throw new UnexpectedValueException('fromArray expects items of AbstractJsonObjectBuilder but has ' . $type . ' on index ' . $key);
+                    }
+                    break;
+            }
+            
+        }
+        return new self($items);
+    }
+    public function toArray() {
+        $return = [];
+        foreach ($this->items as $item) {
+            if(is_a(AbstractJsonObjectBuilder::class, ValueObject::class, true) || is_a(AbstractJsonObjectBuilder::class, Set::class, true)) {
+                $return[] = $item->toArray();
+            }
+            
+            if(is_a(AbstractJsonObjectBuilder::class, Enum::class, true)) {
+                $return[] = $item->toString();
+            }
+        }
+        
+        return $return;
     }
     public function equals(?self $other): bool
     {
@@ -25,15 +72,7 @@ final class ObjectsToBuild
                 
         return ($ref === $val);
     }
-
-    public function toArray() {
-        return $this->items;
-    }
     
-    public static function fromArray(array $items) {
-        return new self($items);
-    }
-
     public function count(): int
     {
         return count($this->items);
@@ -41,25 +80,21 @@ final class ObjectsToBuild
 
     public function add(AbstractJsonObjectBuilder $item): self {
         $values = $this->toArray();
-        array_push($values, $item);
-        return new self($values);
+        $values[] = $item;
+        return self::fromArray($values);
     }
     
     public function remove(AbstractJsonObjectBuilder $item): self {
         $values = $this->toArray();
-        if(($key = array_search($item, $values)) !== false) {
+        if(($key = array_search($item->toArray(), $values)) !== false) {
             unset($values[$key]);
         }
         
-        return new self($values);
+        return self::fromArray($values);
     }
     
     public function contains(AbstractJsonObjectBuilder $item): bool {
-        if(($key = array_search($item, $this->items)) !== false) {
-            return true;
-        }
-        
-        return false;
+        return array_search($item, $this->items) !== false;
     }
     
 }

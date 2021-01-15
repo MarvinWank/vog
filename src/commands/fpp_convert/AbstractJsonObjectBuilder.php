@@ -15,9 +15,11 @@ abstract class AbstractJsonObjectBuilder
     protected bool $is_final;
     protected bool $is_mutable;
 
-    public function __construct(string $name)
+    public function __construct(string $name, ObjectType $objectType, array $values)
     {
-
+        $this->name = $name;
+        $this->type = $objectType;
+        $this->values = $values;
     }
 
     abstract public function getJsonCode(): string;

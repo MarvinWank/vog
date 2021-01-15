@@ -4,6 +4,7 @@
 namespace Vog\FppConvert;
 
 
+use FailedToParseException;
 use UnexpectedValueException;
 
 class FppConvert
@@ -73,22 +74,40 @@ class FppConvert
             array_shift($contentAsArray);
         }
 
-        $vogArtifacts = null;
+        $vogArtifacts = new ObjectsToB;
         foreach ($contentAsArray as $fppArtifact){
             $object = null;
             $matches = [];
             preg_match('/^\s*data\s+/', $fppArtifact, $matches);
             if (!empty($matches)){
                 $object = $this->convertToValueObject($fppArtifact);
+
             }
         }
 
         return $vogArtifacts;
     }
 
-    private function convertToValueObject(string $fppArtifact): AbstractJsonObjectBuilder
+    private function convertToValueObject(string $fppArtifact): ValueObjectJsonObjectBuilder
     {
+        $matches = [];
+        preg_match('/\s*data\s+(\w+)\s*=/', $fppArtifact, $matches);
+        if (empty($matches[1])){
+            throw FailedToParseException::failedToParseValueObject($fppArtifact);
+        }
+        $name = $matches[1][0];
 
+        $matches = [];
+        preg_match_all('/{([\w\s\$,]*)}/', $fppArtifact, $matches);
+        if (empty($matches[1])){
+            throw FailedToParseException::failedToParseValueObject($fppArtifact);
+        }
+        $values = $matches[1][0];
+        $values = str_replace(' ', '', $values);
+        $values = explode(',', $values);
+
+        $builder = new ValueObjectJsonObjectBuilder($name, $values);
+        return $builder;
     }
 
     private function getNamespaceForObject(): string

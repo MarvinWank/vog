@@ -15,7 +15,8 @@
     {
       "type": "set",
       "name": "ObjectsToBuild",
-      "itemType": "AbstractJsonObjectBuilder"
+      "itemType": "AbstractJsonObjectBuilder",
+      "mutable": "true"
     }
   ]
 }
