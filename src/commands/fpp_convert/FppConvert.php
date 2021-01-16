@@ -29,7 +29,8 @@ class FppConvert
         $fileContent = file_get_contents($fppFilePath);
         $namespace = $this->parseNamespace($fileContent);
         $fileBuilder->setNamespace($namespace);
-        $fileBuilder = $this->parseObjects($fileContent, $fileBuilder);
+        $fileBuilder->setObjects($this->parseObjects($fileContent, $fileBuilder));
+        $fileContent = $fileBuilder->getJsonCode();
     }
 
     private function getOutputPath(?string $givenOutputPath, string $fppFilePath): string
@@ -67,21 +68,21 @@ class FppConvert
         }
     }
 
-    private function parseObjects(string $fileContent, ValueFileBuilder $fileBuilder): array
+    private function parseObjects(string $fileContent, ValueFileBuilder $fileBuilder): ObjectsToBuild
     {
         $contentAsArray = explode(";", $fileContent);
         if ($fileBuilder->getNamespace()){
             array_shift($contentAsArray);
         }
 
-        $vogArtifacts = new ObjectsToB;
+        $vogArtifacts = ObjectsToBuild::fromArray([]);
         foreach ($contentAsArray as $fppArtifact){
             $object = null;
             $matches = [];
             preg_match('/^\s*data\s+/', $fppArtifact, $matches);
             if (!empty($matches)){
                 $object = $this->convertToValueObject($fppArtifact);
-
+                $vogArtifacts = $vogArtifacts->add($object);
             }
         }
 
@@ -91,7 +92,7 @@ class FppConvert
     private function convertToValueObject(string $fppArtifact): ValueObjectJsonObjectBuilder
     {
         $matches = [];
-        preg_match('/\s*data\s+(\w+)\s*=/', $fppArtifact, $matches);
+        preg_match_all('/\s*data\s+(\w+)\s*=/', $fppArtifact, $matches);
         if (empty($matches[1])){
             throw FailedToParseException::failedToParseValueObject($fppArtifact);
         }
