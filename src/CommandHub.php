@@ -6,6 +6,7 @@ namespace Vog;
 
 use UnexpectedValueException;
 use Vog\ValueObjects\Config;
+use Vog\FppConvert\FppConvert;
 
 class CommandHub
 {
@@ -24,10 +25,10 @@ class CommandHub
         switch ($argv[1]){
             case self::COMMAND_GENERATE: $this->runGenerateCommand($argv[2], $config);
                 break;
-            case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv[3], $argv[4], $config);
+            case self::COMMAND_FPP_CONVERT: $this->runConvertToFppCommand($argv, $config);
                 break;
             default:
-                throw new UnexpectedValueException("Command $argv is not defined. Defined commands are: "
+                throw new UnexpectedValueException("Command $argv[0] is not defined. Defined commands are: "
                 . implode(", ", self::COMMANDS));
         }
     }
@@ -40,10 +41,16 @@ class CommandHub
         $generate->run($targetPath);
     }
 
-    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
+    private function runConvertToFppCommand(array $argv, array $config): void
     {
+        if (!isset($argv[2])){
+            throw new UnexpectedValueException("No path to the fpp file was provided");
+        }
+        if (!isset($argv[3])){
+            $argv[3] = null;
+        }
         $fppConvert = new FppConvert($config);
-        $fppConvert->run($fileToConvert, $outputPath);
+        $fppConvert->run($argv[2], $argv[3]);
     }
 
     private function getConfig(array $config): Config {
