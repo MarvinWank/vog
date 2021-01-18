@@ -51,17 +51,17 @@ final class SetWithPrimitiveType implements Set
         return self::fromArray($values);
     }
     
-    public function remove(string $item): self {
-        $values = $this->toArray();
-        if(($key = array_search($item->toArray(), $values)) !== false) {
-            unset($values[$key]);
-        }
-        
-        return self::fromArray($values);
-    }
-    
     public function contains(string $item): bool {
         return array_search($item, $this->items) !== false;
     }
     
+    public function remove(string $item): self {
+        $values = $this->toArray();
+        if(($key = array_search($item, $values)) !== false) {
+            unset($values[$key]);
+        }
+        $values = array_values($values);
+        
+        return self::fromArray($values);
+    }
 }

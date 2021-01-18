@@ -178,20 +178,40 @@ EOT;
         return self::fromArray(\$values);
     }
     
-    public function remove($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
-            unset(\$values[\$key]);
-        }
-        
-        return self::fromArray(\$values);
-    }
-    
     public function contains($this->itemType \$item): bool {
         return array_search(\$item, \$this->items) !== false;
     }
     
 EOT;
+        if (!$this->isPrimitive($this->itemType)){
+            $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
+            unset(\$values[\$key]);
+        }
+        \$values = array_values(\$values);
+        
+        return self::fromArray(\$values);
+    }
+EOT;
+        }else{
+            $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item, \$values)) !== false) {
+            unset(\$values[\$key]);
+        }
+        \$values = array_values(\$values);
+        
+        return self::fromArray(\$values);
+    }
+EOT;
+        }
+
+
         return $phpcode;
     }
 }
