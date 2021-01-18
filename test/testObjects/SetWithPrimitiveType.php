@@ -18,39 +18,17 @@ final class SetWithPrimitiveType implements Set
     {
         $this->items = $items;
     }
+
     public static function fromArray(array $items) {
         foreach ($items as $key => $item) {
             $type = gettype($item);
-            switch ($type) {
-                case 'object':
-                    if (!$item instanceof string){
-                        throw new UnexpectedValueException('array expects items of string but has ' . $type . ' on index ' . $key); 
-                    }    
-                    break;
-                case 'array':
-                    if(is_a(string::class, ValueObject::class, true) || is_a(string::class, Set::class, true)) {
-                        $items[$key] = string::fromArray($item);
-                    } else {
-                        throw new UnexpectedValueException('fromArray can not create string from array on index ' . $key);
-                    }
-                    break;    
-                case 'string':
-                    if(is_a(string::class, Enum::class, true)) {
-                        $items[$key] = string::fromName($item);
-                    } else {
-                        throw new UnexpectedValueException('fromArray can not create string from string on index ' . $key);
-                    }
-                    break;    
-                default:
-                    if ($type !== 'string') {
-                        throw new UnexpectedValueException('fromArray expects items of string but has ' . $type . ' on index ' . $key);
-                    }
-                    break;
-            }
-            
+            if($type !== 'string'){
+                throw new UnexpectedValueException('array expects items of string but has ' . $type . ' on index ' . $key);
+            }  
         }
         return new self($items);
     }
+    
     public function toArray() {
         return $this->items;
     }

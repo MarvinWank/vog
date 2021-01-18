@@ -96,7 +96,24 @@ EOT;
                     return new self(\$items);
                 }
             EOT;
-        } else {
+        } else if ($this->isPrimitive($this->itemType)) {
+            $phpcode .= <<<EOT
+
+
+    public static function fromArray(array \$items) {
+        foreach (\$items as \$key => \$item) {
+            \$type = gettype(\$item);
+            if(\$type !== '$this->itemType'){
+                throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
+            }  
+        }
+        return new self(\$items);
+    }
+    
+EOT;
+
+        }
+        else {
             $phpcode .= <<<EOT
 
                 public static function fromArray(array \$items) {

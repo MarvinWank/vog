@@ -141,6 +141,8 @@ class SetTest extends Psr2TestCase
     {
         $data = ["foo", "bar", "foobar", "", "fizz", "buzz"];
         $set = SetWithPrimitiveType::fromArray($data);
+        $result = $set->toArray();
 
+        $this->assertEquals($data, $result);
     }
 }
