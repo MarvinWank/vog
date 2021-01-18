@@ -84,17 +84,17 @@ final class RecipeSet implements Set
         return self::fromArray($values);
     }
     
+    public function contains(Recipe $item): bool {
+        return array_search($item, $this->items) !== false;
+    }
+    
     public function remove(Recipe $item): self {
         $values = $this->toArray();
         if(($key = array_search($item->toArray(), $values)) !== false) {
             unset($values[$key]);
         }
+        $values = array_values($values);
         
         return self::fromArray($values);
     }
-    
-    public function contains(Recipe $item): bool {
-        return array_search($item, $this->items) !== false;
-    }
-    
 }

@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
+use Test\TestObjects\SetWithPrimitiveType;
 
 class SetTest extends Psr2TestCase
 {
@@ -59,6 +60,40 @@ class SetTest extends Psr2TestCase
     /**
      * @test
      */
+    public function it_tests_to_array()
+    {
+        $data = [
+            [
+                'title' => 'Omni',
+                'minutesToPrepare' => 20,
+                'rating' => 5,
+                'dietStyle' => DietStyle::OMNIVORE()->name()
+            ],
+            [
+                'title' => 'Vegan',
+                'minutesToPrepare' => 20,
+                'rating' => 5,
+                'dietStyle' => DietStyle::VEGAN()
+            ],
+            [
+                'title' => 'Vegetarian',
+                'minutesToPrepare' => 20,
+                'rating' => 5,
+                'dietStyle' => DietStyle::VEGETARIAN()
+            ]
+        ];
+        $set = RecipeSet::fromArray($data);
+        $result = $set->toArray();
+
+        $this->assertEquals("Omni", $result[0]['title']);
+        $this->assertEquals(20, $result[0]['minutesToPrepare']);
+        $this->assertEquals(5.0, $result[0]['rating']);
+        $this->assertEquals("OMNIVORE", $result[0]['dietStyle']);
+    }
+
+    /**
+     * @test
+     */
     public function it_tests_set_equals() {
         $data = [
             [
@@ -97,5 +132,23 @@ class SetTest extends Psr2TestCase
 
         $result = $set1->equals($newSet);
         self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_set_with_primitive_type()
+    {
+        $data = ["foo", "bar", "foobar", "", "fizz", "buzz"];
+        $set = SetWithPrimitiveType::fromArray($data);
+        $result = $set->toArray();
+        $this->assertEquals($data, $result);
+
+        $setWithFooRemoved = $set->remove('foo');
+        $this->assertEquals(["bar", "foobar", "", "fizz", "buzz"], $setWithFooRemoved->toArray());
+
+        $setWithFooAddedAgain = $setWithFooRemoved->add("foo");
+        $this->assertEquals(["bar", "foobar", "", "fizz", "buzz", "foo"], $setWithFooAddedAgain->toArray());
+
     }
 }
