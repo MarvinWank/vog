@@ -196,7 +196,7 @@ class ValueObjectBuilder extends AbstractBuilder
         EOT;
 
         foreach ($this->values as $name => $datatype) {
-            if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
+            if (!$this->isPrimitive($datatype)) {
                 $phpcode .= <<<EOT
                 
                             '$name' =>  \$this->valueToArray(\$this->$name),
@@ -234,7 +234,7 @@ class ValueObjectBuilder extends AbstractBuilder
                     
             EOT;
 
-            if (!in_array($datatype, self::PRIMITIVE_TYPES)) {
+            if (!$this->isPrimitive($datatype)) {
                 $phpcode .= <<<EOT
                 
                         if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
@@ -271,6 +271,11 @@ class ValueObjectBuilder extends AbstractBuilder
         EOT;
 
         return $phpcode;
+    }
+
+    protected function isPrimitive(string $type): bool
+    {
+        return in_array($type, self::PRIMITIVE_TYPES);
     }
 
     private function generateToString(string $phpcode)

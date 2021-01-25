@@ -175,6 +175,11 @@
         "title": "string",
         "recipes": "RecipeSet"
       }
+    },
+    {
+      "type": "set",
+      "name": "setWithPrimitiveType",
+      "itemType": "string"
     }
   ]
 }
