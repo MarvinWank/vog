@@ -11,7 +11,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use BadMethodCallException;
 
-final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
+final class SetWithPrimitiveType implements Set,\Countable,\ArrayAccess,\Iterator
 {        
     private array $items;
     private int $position;
@@ -23,49 +23,15 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
     }    public static function fromArray(array $items) {
         foreach ($items as $key => $item) {
             $type = gettype($item);
-            switch ($type) {
-                case 'object':
-                    if (!$item instanceof Recipe){
-                        throw new UnexpectedValueException('array expects items of Recipe but has ' . $type . ' on index ' . $key); 
-                    }    
-                    break;
-                case 'array':
-                    if(is_a(Recipe::class, ValueObject::class, true) || is_a(Recipe::class, Set::class, true)) {
-                        $items[$key] = Recipe::fromArray($item);
-                    } else {
-                        throw new UnexpectedValueException('fromArray can not create Recipe from array on index ' . $key);
-                    }
-                    break;    
-                case 'string':
-                    if(is_a(Recipe::class, Enum::class, true)) {
-                        $items[$key] = Recipe::fromName($item);
-                    } else {
-                        throw new UnexpectedValueException('fromArray can not create Recipe from string on index ' . $key);
-                    }
-                    break;    
-                default:
-                    if ($type !== 'Recipe') {
-                        throw new UnexpectedValueException('fromArray expects items of Recipe but has ' . $type . ' on index ' . $key);
-                    }
-                    break;
-            }
-            
+            if($type !== 'string'){
+                throw new UnexpectedValueException('array expects items of string but has ' . $type . ' on index ' . $key);
+            }  
         }
         return new self($items);
     }
+    
     public function toArray() {
-        $return = [];
-        foreach ($this->items as $item) {
-            if(is_a(Recipe::class, ValueObject::class, true) || is_a(Recipe::class, Set::class, true)) {
-                $return[] = $item->toArray();
-            }
-            
-            if(is_a(Recipe::class, Enum::class, true)) {
-                $return[] = $item->toString();
-            }
-        }
-        
-        return $return;
+        return $this->items;
     }
     public function equals(?self $other): bool
     {
@@ -75,14 +41,14 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
         return ($ref === $val);
     }
     
-    public function add(Recipe $item): self {
+    public function add(string $item): self {
         $values = $this->toArray();
         $values[] = $item;
         return self::fromArray($values);
     }
     
     
-    public function contains(Recipe $item): bool {
+    public function contains(string $item): bool {
         return array_search($item, $this->items) !== false;
     }
     
@@ -127,9 +93,9 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
         return isset($this->items[$this->position]);
     }
     
-    public function remove(Recipe $item): self {
+    public function remove(string $item): self {
         $values = $this->toArray();
-        if(($key = array_search($item->toArray(), $values)) !== false) {
+        if(($key = array_search($item, $values)) !== false) {
             unset($values[$key]);
         }
         $values = array_values($values);

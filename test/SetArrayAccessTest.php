@@ -5,6 +5,7 @@ use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
 use BadMethodCallException;
+use Test\TestObjects\SetWithPrimitiveType;
 
 class SetArrayAccessTest extends Psr2TestCase
 {
@@ -115,5 +116,22 @@ class SetArrayAccessTest extends Psr2TestCase
 
         $set = RecipeSet::fromArray($data);
         unset($set[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_set_with_primitive_type()
+    {
+        $data = ['foo', 'bar', 'foobar', '', 'fizz', 'buzz'];
+        $set = SetWithPrimitiveType::fromArray($data);
+        $result = $set->toArray();
+        self::assertEquals($data, $result);
+
+        $setWithFooRemoved = $set->remove('foo');
+        self::assertEquals(['bar', 'foobar', '', 'fizz', 'buzz'], $setWithFooRemoved->toArray());
+
+        $this->expectException(BadMethodCallException::class);
+        $set[] = 'foo';
     }
 }
