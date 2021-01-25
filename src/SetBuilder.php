@@ -166,14 +166,7 @@ EOT;
         \$val = \$other->toArray();
                 
         return (\$ref === \$val);
-    }
-    
-    public function add($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        \$values[] = \$item;
-        return self::fromArray(\$values);
-    }
-    
+    }    
     
     public function contains($this->itemType \$item): bool {
         return array_search(\$item, \$this->items) !== false;
@@ -188,16 +181,8 @@ EOT;
         return isset(\$this->items[\$offset]);
     }
 
-    public function offsetSet(\$offset, \$value) {
-        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
-    }
-
     public function offsetGet(\$offset) {
         return \$this->items[\$offset];
-    }
-
-    public function offsetUnset(\$offset) {
-        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
     }
 
     public function current() {
@@ -221,8 +206,27 @@ EOT;
     }
     
 EOT;
-        if (!$this->isPrimitive($this->itemType)){
+        if (!$this->isMutable()) {
             $phpcode .= <<< EOT
+
+    public function add($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        \$values[] = \$item;
+        return self::fromArray(\$values);
+    }
+
+    public function offsetSet(\$offset, \$value) {
+        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+    }
+
+    public function offsetUnset(\$offset) {
+        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
+    }
+    
+EOT;
+
+            if (!$this->isPrimitive($this->itemType)){
+                $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
@@ -234,8 +238,8 @@ EOT;
         return self::fromArray(\$values);
     }
 EOT;
-        }else{
-            $phpcode .= <<< EOT
+            }else{
+                $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
@@ -247,8 +251,57 @@ EOT;
         return self::fromArray(\$values);
     }
 EOT;
-        }
+            }
+        } else {
+            $phpcode .= <<< EOT
 
+    public function add($this->itemType \$item): self {
+        array_push(\$this->items,\$item);
+        return \$this;
+    }
+
+    public function offsetSet(\$offset, \$value) {
+        if (empty(\$offset)) {
+            array_push(\$this->items, \$value);
+        } else {
+            \$this->items[\$offset] = \$value;
+        }
+    }
+
+    public function offsetUnset(\$offset) {
+        unset(\$this->items[\$offset]);
+        \$this->items = array_values(\$this->items);
+    }
+    
+EOT;
+            if (!$this->isPrimitive($this->itemType)){
+                $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
+            unset(\$this->items[\$key]);
+        }
+        
+        \$this->items = array_values(\$this->items);
+        return \$this;
+    }
+EOT;
+            }else{
+                $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item, \$values)) !== false) {
+            unset(\$this->items[\$key]);
+        }
+                
+        \$this->items = array_values(\$this->items);
+        return \$this;
+    }
+EOT;
+            }
+        }
 
         return $phpcode;
     }

@@ -180,6 +180,12 @@
       "type": "set",
       "name": "setWithPrimitiveType",
       "itemType": "string"
+    },
+    {
+      "type": "set",
+      "name": "mutableSetWithPrimitiveType",
+      "itemType": "string",
+      "mutable": true
     }
   ]
 }
