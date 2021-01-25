@@ -306,7 +306,7 @@ A Set is an array of values or objects. It is defined as:
 }
 ```
 
-A Set implements \ArrayAccess, \Countable and \Iterator. The ArrayAccess is read-only as the set is immutable. Use add() and remove() to modify the items in the set. You can use primitive datatypes in the set as well.
+A Set implements \ArrayAccess, \Countable and \Iterator. The ArrayAccess is read-only as the set is immutable by default. Use add() and remove() which return a new set. In order to create a mutable set, that can be modified, you can use `"mutable": true`. If you create a mutable set, you have regular ArrayAccess features, and when you add or remove items, the objects is modified directly. You can use primitive datatypes in the set as well.
 
 If you specify a non-empty `itemType` this type is enforced in add(), remove() and contains(). The item type can be any valid type or another value object. Please note that the json structure for a set has no "values".
 
