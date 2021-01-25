@@ -91,7 +91,7 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
         return count($this->items);
     }
     
-        public function offsetExists($offset) {
+    public function offsetExists($offset) {
         return isset($this->items[$offset]);
     }
 
