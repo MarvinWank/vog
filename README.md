@@ -60,20 +60,15 @@ If this argument is not set, the generated file will have the same name as the o
 
 ## Configuration
 
-You can create a vog_config.php file in your project to modify the behaviour of vog. 
-Default settings generate PSR2 compliant value objects for PHP 7.4. 
+You can create a vog_config.json file in your project root to modify the behaviour of vog. 
+Default settings generate PSR2 compliant value objects. 
 
-```php
-<?php
-require('vendor/marvinwank/vog/ConfigOptions.php');
-use Vog\ConfigOptions;
-
-return [
-    'generatorOptions' => [
-        'target' => ConfigOptions::MODE_PSR2,
-        'phpVersion' => ConfigOptions::PHP_74,
-    ],
-];
+```json
+{
+    "generatorOptions": {
+        "target": "MODE_PSR2"
+    }
+}
 ```
 
 Future releases may introduce more options. 
