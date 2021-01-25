@@ -7,7 +7,7 @@ use Vog\ValueObjects\Config;
 class SetBuilder extends ValueObjectBuilder
 {
     private string $itemType = '';
-    protected array $implements = ['Set'];
+    protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
 
     public function __construct(string $name, Config $config)
     {
@@ -17,7 +17,10 @@ class SetBuilder extends ValueObjectBuilder
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        $phpcode = $this->generateGenericPhpHeader([
+            AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION,
+            AbstractBuilder::BAD_METHOD_CALL_EXCEPTION
+        ]);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateToArray($phpcode);
@@ -40,9 +43,11 @@ class SetBuilder extends ValueObjectBuilder
         $phpcode .= <<<'EOT'
         
     private array $items;
+    private int $position;
         
     private function __construct(array $items = [])
     {
+        $this->position = 0;
         $this->items = $items;
     }
 EOT;
@@ -150,11 +155,6 @@ EOT;
         return (\$ref === \$val);
     }
     
-    public function count(): int
-    {
-        return count(\$this->items);
-    }
-
     public function add($this->itemType \$item): self {
         \$values = \$this->toArray();
         \$values[] = \$item;
@@ -172,6 +172,47 @@ EOT;
     
     public function contains($this->itemType \$item): bool {
         return array_search(\$item, \$this->items) !== false;
+    }
+    
+    public function count(): int
+    {
+        return count(\$this->items);
+    }
+    
+        public function offsetExists(\$offset) {
+        return isset(\$this->items[\$offset]);
+    }
+
+    public function offsetSet(\$offset, \$value) {
+        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+    }
+
+    public function offsetGet(\$offset) {
+        return \$this->items[\$offset];
+    }
+
+    public function offsetUnset(\$offset) {
+        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
+    }
+
+    public function current() {
+        return \$this->items[\$this->position];
+    }
+
+    public function rewind() {
+        \$this->position = 0;
+    }
+
+    public function key() {
+        return \$this->position;
+    }
+
+    public function next() {
+        ++\$this->position;
+    }
+
+    public function valid() {
+        return isset(\$this->items[\$this->position]);
     }
     
 EOT;
