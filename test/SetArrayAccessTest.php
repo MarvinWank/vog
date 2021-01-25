@@ -6,6 +6,7 @@ use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
 use BadMethodCallException;
 use Test\TestObjects\SetWithPrimitiveType;
+use Test\TestObjects\MutableSetWithPrimitiveType;
 
 class SetArrayAccessTest extends Psr2TestCase
 {
@@ -133,5 +134,33 @@ class SetArrayAccessTest extends Psr2TestCase
 
         $this->expectException(BadMethodCallException::class);
         $set[] = 'foo';
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_mutable_set_with_primitive_type()
+    {
+        $data = ['foo', 'bar', 'foobar', '', 'fizz', 'buzz'];
+        $set = MutableSetWithPrimitiveType::fromArray($data);
+        $result = $set->toArray();
+        self::assertEquals($data, $result);
+
+        // attach 'foo' to the end
+        $set[] = 'foo';
+        $data[] = 'foo';
+
+        $this->assertEquals($data, $set->toArray());
+
+        // remove foo, will remove the "foo" on index:0
+        $set->remove('foo');
+
+        array_shift($data);
+        $this->assertTrue($set->equals(MutableSetWithPrimitiveType::fromArray($data)));
+
+        // remove foo (the one on the end)
+        $set->remove('foo');
+        array_pop($data);
+        $this->assertEquals($data, $set->toArray());
     }
 }
