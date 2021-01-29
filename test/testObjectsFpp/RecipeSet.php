@@ -9,16 +9,18 @@ namespace Test\TestObjectsFpp;
 
 
 use UnexpectedValueException;
+use BadMethodCallException;
 
-final class RecipeSet implements Set
+final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
 {        
     private array $items;
+    private int $position;
         
     private function __construct(array $items = [])
     {
+        $this->position = 0;
         $this->items = $items;
-    }
-    public static function fromArray(array $items) {
+    }    public static function fromArray(array $items) {
         foreach ($items as $key => $item) {
             $type = gettype($item);
             switch ($type) {
@@ -73,19 +75,56 @@ final class RecipeSet implements Set
         return ($ref === $val);
     }
     
-    public function count(): int
-    {
-        return count($this->items);
-    }
-
     public function add(Recipe $item): self {
         $values = $this->toArray();
         $values[] = $item;
         return self::fromArray($values);
     }
     
+    
     public function contains(Recipe $item): bool {
         return array_search($item, $this->items) !== false;
+    }
+    
+    public function count(): int
+    {
+        return count($this->items);
+    }
+    
+        public function offsetExists($offset) {
+        return isset($this->items[$offset]);
+    }
+
+    public function offsetSet($offset, $value) {
+        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+    }
+
+    public function offsetGet($offset) {
+        return $this->items[$offset];
+    }
+
+    public function offsetUnset($offset) {
+        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
+    }
+
+    public function current() {
+        return $this->items[$this->position];
+    }
+
+    public function rewind() {
+        $this->position = 0;
+    }
+
+    public function key() {
+        return $this->position;
+    }
+
+    public function next() {
+        ++$this->position;
+    }
+
+    public function valid() {
+        return isset($this->items[$this->position]);
     }
     
     public function remove(Recipe $item): self {

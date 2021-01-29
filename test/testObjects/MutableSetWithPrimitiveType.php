@@ -11,7 +11,7 @@ namespace Test\TestObjects;
 use UnexpectedValueException;
 use BadMethodCallException;
 
-final class SetWithPrimitiveType implements Set,\Countable,\ArrayAccess,\Iterator
+final class MutableSetWithPrimitiveType implements Set,\Countable,\ArrayAccess,\Iterator
 {        
     private array $items;
     private int $position;
@@ -79,26 +79,30 @@ final class SetWithPrimitiveType implements Set,\Countable,\ArrayAccess,\Iterato
     }
     
     public function add(string $item): self {
-        $values = $this->toArray();
-        $values[] = $item;
-        return self::fromArray($values);
+        array_push($this->items,$item);
+        return $this;
     }
 
     public function offsetSet($offset, $value) {
-        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+        if (empty($offset)) {
+            array_push($this->items, $value);
+        } else {
+            $this->items[$offset] = $value;
+        }
     }
 
     public function offsetUnset($offset) {
-        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
+        unset($this->items[$offset]);
+        $this->items = array_values($this->items);
     }
     
     public function remove(string $item): self {
         $values = $this->toArray();
         if(($key = array_search($item, $values)) !== false) {
-            unset($values[$key]);
+            unset($this->items[$key]);
         }
-        $values = array_values($values);
-        
-        return self::fromArray($values);
+                
+        $this->items = array_values($this->items);
+        return $this;
     }
 }
