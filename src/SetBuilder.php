@@ -7,7 +7,7 @@ use Vog\ValueObjects\Config;
 class SetBuilder extends ValueObjectBuilder
 {
     private string $itemType = '';
-    protected array $implements = ['Set'];
+    protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
 
     public function __construct(string $name, Config $config)
     {
@@ -17,7 +17,10 @@ class SetBuilder extends ValueObjectBuilder
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        $phpcode = $this->generateGenericPhpHeader([
+            AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION,
+            AbstractBuilder::BAD_METHOD_CALL_EXCEPTION
+        ]);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateToArray($phpcode);
@@ -40,9 +43,11 @@ class SetBuilder extends ValueObjectBuilder
         $phpcode .= <<<'EOT'
         
     private array $items;
+    private int $position;
         
     private function __construct(array $items = [])
     {
+        $this->position = 0;
         $this->items = $items;
     }
 EOT;
@@ -91,15 +96,12 @@ EOT;
     {
         if (empty($this->itemType)) {
             $phpcode .= <<<EOT
-
                 public static function fromArray(array \$items) {
                     return new self(\$items);
                 }
             EOT;
         } else if ($this->isPrimitive($this->itemType)) {
             $phpcode .= <<<EOT
-
-
     public static function fromArray(array \$items) {
         foreach (\$items as \$key => \$item) {
             \$type = gettype(\$item);
@@ -115,7 +117,6 @@ EOT;
         }
         else {
             $phpcode .= <<<EOT
-
                 public static function fromArray(array \$items) {
                     foreach (\$items as \$key => \$item) {
                         \$type = gettype(\$item);
@@ -165,26 +166,67 @@ EOT;
         \$val = \$other->toArray();
                 
         return (\$ref === \$val);
+    }    
+    
+    public function contains($this->itemType \$item): bool {
+        return array_search(\$item, \$this->items) !== false;
     }
     
     public function count(): int
     {
         return count(\$this->items);
     }
+    
+        public function offsetExists(\$offset) {
+        return isset(\$this->items[\$offset]);
+    }
+
+    public function offsetGet(\$offset) {
+        return \$this->items[\$offset];
+    }
+
+    public function current() {
+        return \$this->items[\$this->position];
+    }
+
+    public function rewind() {
+        \$this->position = 0;
+    }
+
+    public function key() {
+        return \$this->position;
+    }
+
+    public function next() {
+        ++\$this->position;
+    }
+
+    public function valid() {
+        return isset(\$this->items[\$this->position]);
+    }
+    
+EOT;
+        if (!$this->isMutable()) {
+            $phpcode .= <<< EOT
 
     public function add($this->itemType \$item): self {
         \$values = \$this->toArray();
         \$values[] = \$item;
         return self::fromArray(\$values);
     }
-    
-    public function contains($this->itemType \$item): bool {
-        return array_search(\$item, \$this->items) !== false;
+
+    public function offsetSet(\$offset, \$value) {
+        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+    }
+
+    public function offsetUnset(\$offset) {
+        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
     }
     
 EOT;
-        if (!$this->isPrimitive($this->itemType)){
-            $phpcode .= <<< EOT
+
+            if (!$this->isPrimitive($this->itemType)){
+                $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
@@ -196,8 +238,8 @@ EOT;
         return self::fromArray(\$values);
     }
 EOT;
-        }else{
-            $phpcode .= <<< EOT
+            }else{
+                $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
         \$values = \$this->toArray();
@@ -209,8 +251,57 @@ EOT;
         return self::fromArray(\$values);
     }
 EOT;
-        }
+            }
+        } else {
+            $phpcode .= <<< EOT
 
+    public function add($this->itemType \$item): self {
+        array_push(\$this->items,\$item);
+        return \$this;
+    }
+
+    public function offsetSet(\$offset, \$value) {
+        if (empty(\$offset)) {
+            array_push(\$this->items, \$value);
+        } else {
+            \$this->items[\$offset] = \$value;
+        }
+    }
+
+    public function offsetUnset(\$offset) {
+        unset(\$this->items[\$offset]);
+        \$this->items = array_values(\$this->items);
+    }
+    
+EOT;
+            if (!$this->isPrimitive($this->itemType)){
+                $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
+            unset(\$this->items[\$key]);
+        }
+        
+        \$this->items = array_values(\$this->items);
+        return \$this;
+    }
+EOT;
+            }else{
+                $phpcode .= <<< EOT
+
+    public function remove($this->itemType \$item): self {
+        \$values = \$this->toArray();
+        if((\$key = array_search(\$item, \$values)) !== false) {
+            unset(\$this->items[\$key]);
+        }
+                
+        \$this->items = array_values(\$this->items);
+        return \$this;
+    }
+EOT;
+            }
+        }
 
         return $phpcode;
     }
