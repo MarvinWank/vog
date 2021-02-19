@@ -18,6 +18,7 @@ class EnumBuilder extends AbstractBuilder
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::INVALID_ARGUMENT_EXCEPTION]);
+        $phpcode = $this->generateConstNamesAndValues($phpcode);
         $phpcode = $this->generateConstOptions($phpcode);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateMethods($phpcode);
@@ -32,7 +33,7 @@ class EnumBuilder extends AbstractBuilder
     {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            $upper=[];
+            $upper = [];
             foreach ($values as $key => $value) {
                 $upper[strtoupper($key)] = $value;
             }
@@ -68,6 +69,31 @@ class EnumBuilder extends AbstractBuilder
                 public const $name = '$value';               
             EOT;
         }
+        return $phpcode;
+    }
+
+    protected function generateConstNamesAndValues($phpcode): string
+    {
+        $valuesOnly = "";
+        $namesOnly = "";
+
+        foreach ($this->values as $name => $value) {
+            $valuesOnly .= "'".$value."', ";
+            $namesOnly .= "'".$name."', ";
+        }
+
+        $valuesAsString = "[" . $valuesOnly . "]";
+        $phpcode .= <<<EOT
+
+                public const VALUES = $valuesAsString;               
+            EOT;
+
+        $namesAsString = "[" . $namesOnly . "]";
+        $phpcode .= <<<EOT
+
+                public const NAMES = $namesAsString;               
+            EOT;
+
         return $phpcode;
     }
 
