@@ -11,12 +11,14 @@ class ValueObjectBuilder extends AbstractBuilder
 {
     protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $stringValue;
+    private ?string $dateTimeFormat;
     protected array $implements = ['ValueObject'];
 
     public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = "valueObject";
+        $this->dateTimeFormat = null;
     }
 
     public function setValues(array $values): void
@@ -50,8 +52,17 @@ class ValueObjectBuilder extends AbstractBuilder
         $this->stringValue = $stringValue;
     }
 
+    public function setDateTimeFormat(string $dateTimeFormat)
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
+    }
+
     public function getPhpCode(): string
     {
+        if ($this->dateTimeFormat === null){
+            $this->dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
+        }
+
         $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateProperties($phpcode);
 
@@ -328,7 +339,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function generateValueToArray(string $phpcode)
     {
-        $dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
+        $dateTimeFormat = $this->dateTimeFormat;
         $phpcode .= <<<EOT
             
             private function valueToArray(\$value)

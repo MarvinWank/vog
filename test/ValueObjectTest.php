@@ -271,5 +271,22 @@ class ValueObjectTest extends Psr2TestCase
         ));
 
         $array = $recipe->toArray();
+
+        $this->assertEquals("2000-07-18", $array['creationDate']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTime_with_individual_format()
+    {
+        $recipe = new \Test\TestObjects\RecipeWithIndividualDateFormat("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
+            "Y-m-d",
+            "2000-07-18"
+        ));
+
+        $array = $recipe->toArray();
+
+        $this->assertEquals("18.07.2000", $array['creationDate']);
     }
 }
