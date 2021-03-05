@@ -510,7 +510,8 @@ If you define `string_value` for your value object the following methods are add
 
 ### DateTime Support
 
-Vog does support DateTimeImmutable creation from string input! Just set `\\DateTimeImmutable` (double backslash necessary for escaping) as the data type and vog takes care of the rest. 
+Vog does support DateTimeImmutables as strings in `toArray` and `fromArray`!
+Just set `\\DateTimeImmutable` (double backslash necessary for escaping) as the data type and vog takes care of the rest. 
 
 The default format is `Y-m-d`, yet that can be changed both [globally](#Configuration) and [individually](#generic-properties)
 
