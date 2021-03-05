@@ -6,15 +6,15 @@
             "type": "valueObject",
             "name": "Config",
             "values": {
-                "generatorOptions": "GeneratorOptions",
-                "dateTimeFormat": "string"
+                "generatorOptions": "GeneratorOptions"
             }
         },
         {
             "type": "valueObject",
             "name": "GeneratorOptions",
             "values": {
-                "target": "TargetMode"
+                "target": "TargetMode",
+                "dateTimeFormat": "?string"
             }
         },
         {

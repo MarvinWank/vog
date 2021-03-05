@@ -24,6 +24,8 @@ abstract class AbstractBuilder
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
+    abstract public function getPhpCode(): string;
+
     public function __construct(string $name, Config $config)
     {
         $this->name = $name;
@@ -33,9 +35,23 @@ abstract class AbstractBuilder
         $this->is_mutable = false;
     }
 
-    abstract public function getPhpCode(): string;
+    public function setValues(array $values): void
+    {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
+            $camelized=[];
+            foreach ($values as $key => $value) {
+                $camelized[self::toCamelCase($key)] = $value;
+            }
 
-    public static function camelize(string $string): string
+            $this->values = $camelized;
+            return;
+        }
+
+        $this->values = $values;
+    }
+
+    public static function toCamelCase(string $string): string
     {
         return lcfirst(str_replace('_', '', ucwords($string, '_')));
     }
@@ -68,22 +84,6 @@ abstract class AbstractBuilder
     public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
-    }
-
-    public function setValues(array $values): void
-    {
-        $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            $camelized=[];
-            foreach ($values as $key => $value) {
-                $camelized[self::camelize($key)] = $value;
-            }
-
-            $this->values = $camelized;
-            return;
-        }
-
-        $this->values = $values;
     }
 
     public function getValues(): array

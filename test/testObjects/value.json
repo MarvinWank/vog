@@ -1,5 +1,5 @@
 {
-  "root_path": "./test/testObjects",
+  "root_path": "/home/marvinw/Projekte/vog/test/testObjects/value.json",
   "namespace": "Test\\TestObjects",
   ".": [
     {
@@ -186,6 +186,17 @@
       "name": "mutableSetWithPrimitiveType",
       "itemType": "string",
       "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithDate",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "creationDate": "DateTime"
+      },
+      "string_value": "title"
     }
   ]
 }

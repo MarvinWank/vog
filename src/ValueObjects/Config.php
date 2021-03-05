@@ -13,14 +13,11 @@ use UnexpectedValueException;
 final class Config implements ValueObject
 {
     private GeneratorOptions $generatorOptions;
-    private string $dateTimeFormat;
 
     public function __construct (
-        GeneratorOptions $generatorOptions,
-        string $dateTimeFormat
+        GeneratorOptions $generatorOptions
     ) {
         $this->generatorOptions = $generatorOptions;
-        $this->dateTimeFormat = $dateTimeFormat;
     }
     
     public function getGeneratorOptions(): GeneratorOptions 
@@ -28,24 +25,10 @@ final class Config implements ValueObject
         return $this->generatorOptions;
     }
     
-    public function getDateTimeFormat(): string 
-    {
-        return $this->dateTimeFormat;
-    }
-    
     public function withGeneratorOptions(GeneratorOptions $generatorOptions): self 
     {
         return new self(
-            $generatorOptions,
-            $this->dateTimeFormat
-        );
-    }
-    
-    public function withDateTimeFormat(string $dateTimeFormat): self 
-    {
-        return new self(
-            $this->generatorOptions,
-            $dateTimeFormat
+            $generatorOptions
         );
     }
     
@@ -53,7 +36,6 @@ final class Config implements ValueObject
     {
         return [
             'generatorOptions' =>  $this->valueToArray($this->generatorOptions),
-            'dateTimeFormat' => $this->dateTimeFormat,
         ];
     }
     
@@ -71,13 +53,8 @@ final class Config implements ValueObject
             $array['generatorOptions'] = GeneratorOptions::fromArray($array['generatorOptions']);
         }
 
-        if (!array_key_exists('dateTimeFormat', $array)) {
-            throw new UnexpectedValueException('Array key dateTimeFormat does not exist');
-        }
-        
         return new self(
-            $array['generatorOptions'],
-            $array['dateTimeFormat']
+            $array['generatorOptions']
         );
     }
         

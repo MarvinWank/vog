@@ -19,9 +19,31 @@ class ValueObjectBuilder extends AbstractBuilder
         $this->type = "valueObject";
     }
 
+    public function setValues(array $values): void
+    {
+        parent::setValues($values);
+        if (!$this->isMutable()) {
+            $this->checkForDateTimeInsteadOfDateTimeImmutable($this->values);
+        }
+    }
+
+    private function checkForDateTimeInsteadOfDateTimeImmutable(array $values): void
+    {
+        $objectName = $this->name;
+        foreach ($values as $name => $dataType) {
+            if ($dataType === "DateTime") {
+                throw new UnexpectedValueException("
+                Error parsing property $name of object $objectName:
+                DateTime ist not allowed when value object is not declared mutable.
+                Use DateTimeImmutable or declare mutability.
+                ");
+            }
+        }
+    }
+
     public function setStringValue(string $stringValue)
     {
-        if(!array_key_exists($stringValue, $this->values)){
+        if (!array_key_exists($stringValue, $this->values)) {
             throw new UnexpectedValueException("Designated string value $stringValue does not exist in values: " . print_r(array_keys($this->values), true));
         }
 
@@ -31,7 +53,31 @@ class ValueObjectBuilder extends AbstractBuilder
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        $phpcode = $this->generateProperties($phpcode);
 
+        $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateGetters($phpcode);
+        if ($this->is_mutable) {
+            $phpcode = $this->generateSetters($phpcode);
+        }
+
+        $phpcode = $this->generateWithMethods($phpcode);
+        $phpcode = $this->generateToArray($phpcode);
+        $phpcode = $this->generateFromArray($phpcode);
+        $phpcode = $this->generateValueToArray($phpcode);
+        $phpcode = $this->generateEquals($phpcode);
+
+        if (isset($this->stringValue)) {
+            $phpcode = $this->generateToString($phpcode);
+        }
+
+
+        $phpcode = $this->closeClass($phpcode);
+        return $phpcode;
+    }
+
+    private function generateProperties(string $phpcode): string
+    {
         foreach ($this->values as $name => $data_type) {
             $phpcode .= <<<EOT
             
@@ -39,23 +85,6 @@ class ValueObjectBuilder extends AbstractBuilder
             EOT;
         }
 
-        $phpcode = $this->generateConstructor($phpcode);
-        $phpcode = $this->generateGetters($phpcode);
-        if ($this->is_mutable){
-            $phpcode = $this->generateSetters($phpcode);
-        }
-        $phpcode = $this->generateWithMethods($phpcode);
-        $phpcode = $this->generateToArray($phpcode);
-        $phpcode = $this->generateFromArray($phpcode);
-        $phpcode = $this->generateValueToArray($phpcode);
-        $phpcode = $this->generateEquals($phpcode);
-
-        if(isset($this->stringValue)){
-            $phpcode = $this->generateToString($phpcode);
-        }
-
-
-        $phpcode = $this->closeClass($phpcode);
         return $phpcode;
     }
 
@@ -330,30 +359,33 @@ class ValueObjectBuilder extends AbstractBuilder
         return $phpcode;
     }
 
-    private function getGetterName(string $name): string {
+    private function getGetterName(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            return 'get'.ucfirst($name);
+            return 'get' . ucfirst($name);
         }
 
         return $name;
     }
 
-    private function getWithFunctionName(string $name): string {
+    private function getWithFunctionName(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
-        return 'with_'.$name;
+        return 'with_' . $name;
     }
 
-    private function getSetter(string $name): string {
+    private function getSetter(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            return 'set'.ucfirst($name);
+            return 'set' . ucfirst($name);
         }
 
-        return 'set_'.$name;
+        return 'set_' . $name;
     }
 }
