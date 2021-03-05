@@ -1,12 +1,13 @@
 {
     "root_path": "./src",
     "namespace": "Vog",
-    "ValueObjects":[
+    "ValueObjects": [
         {
             "type": "valueObject",
             "name": "Config",
             "values": {
-                "generatorOptions": "GeneratorOptions"
+                "generatorOptions": "GeneratorOptions",
+                "dateTimeFormat": "string"
             }
         },
         {
