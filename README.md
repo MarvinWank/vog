@@ -507,3 +507,13 @@ If you define `string_value` for your value object the following methods are add
     /** Same as toString() */
     public function __toString(): string
 ```
+
+### DateTime Support
+
+Vog does support DateTimeImmutable creation from string input! Just set `\\DateTimeImmutable` (double backslash necessary for escaping) as the data type and vog takes care of the rest. 
+
+The default format is `Y-m-d`, yet that can be changed both [globally](#Configuration) and [individually](#generic-properties)
+
+for each object.
+
+`\\\DateTime` is also possible, but only when the value object is explicitly declared mutable. Otherwise vog will throw an exception.
