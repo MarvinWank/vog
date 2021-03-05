@@ -17,6 +17,7 @@ use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
 use Test\TestObjects\RecipeWithDate;
+use Test\TestObjects\RecipeWithIndividualDateFormat;
 use Test\TestObjects\ValueObjectNoDataType;
 use Test\TestObjects\WithCamelCase;
 use Test\TestObjects\WithUnderscore;
@@ -280,7 +281,7 @@ class ValueObjectTest extends Psr2TestCase
      */
     public function it_tests_dateTime_with_individual_format()
     {
-        $recipe = new \Test\TestObjects\RecipeWithIndividualDateFormat("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
+        $recipe = new RecipeWithIndividualDateFormat("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
             "Y-m-d",
             "2000-07-18"
         ));
@@ -288,5 +289,38 @@ class ValueObjectTest extends Psr2TestCase
         $array = $recipe->toArray();
 
         $this->assertEquals("18.07.2000", $array['creationDate']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTimeFromArray()
+    {
+        $recipe = RecipeWithIndividualDateFormat::fromArray([
+            "title" => "Test Recipe",
+            "minutesToPrepare" => 30,
+            "rating" => 5.5,
+            "creationDate" => DateTimeImmutable::createFromFormat(
+                "Y-m-d",
+                "2000-07-18"
+            )
+        ]);
+
+        $this->assertEquals("2000-07-18",$recipe->getCreationDate()->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTimeFromArray_with_string_value()
+    {
+        $recipe = RecipeWithIndividualDateFormat::fromArray([
+            "title" => "Test Recipe",
+            "minutesToPrepare" => 30,
+            "rating" => 5.5,
+            "creationDate" => "18.07.2000"
+        ]);
+
+        $this->assertEquals("2000-07-18",$recipe->getCreationDate()->format('Y-m-d'));
     }
 }
