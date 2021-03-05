@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvinw/Projekte/vog/test/testObjects",
+  "root_path": "./test/testObjects",
   "namespace": "Test\\TestObjects",
   ".": [
     {
