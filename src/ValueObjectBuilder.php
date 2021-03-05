@@ -328,12 +328,17 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function generateValueToArray(string $phpcode)
     {
+        $dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
         $phpcode .= <<<EOT
             
             private function valueToArray(\$value)
             {
                 if (method_exists(\$value, 'toArray')) {
                     return \$value->toArray();
+                }
+                
+                if(is_a(\$value, \DateTime::class, true) || is_a(\$value, \DateTimeImmutable::class, true)){
+                    return \$value->format('$dateTimeFormat');
                 }
                 
                 return (string) \$value;
