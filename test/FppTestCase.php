@@ -20,7 +20,8 @@ class FppTestCase extends TestCase
 
         $config = [
             'generatorOptions' => [
-                'target' => TargetMode::MODE_FPP()->name()
+                'target' => TargetMode::MODE_FPP()->name(),
+                'dateTimeFormat' => "Y-m-d"
             ],
         ];
         $hub->run($argv, $config);
