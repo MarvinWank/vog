@@ -10,23 +10,23 @@ namespace Test\TestObjects;
 
 use UnexpectedValueException;
 
-final class Recipe implements ValueObject
+final class RecipeWithDate implements ValueObject
 {
     private string $title;
     private ?int $minutesToPrepare;
     private float $rating;
-    private DietStyle $dietStyle;
+    private \DateTimeImmutable $creationDate;
 
     public function __construct (
         string $title,
         ?int $minutesToPrepare,
         float $rating,
-        DietStyle $dietStyle
+        \DateTimeImmutable $creationDate
     ) {
         $this->title = $title;
         $this->minutesToPrepare = $minutesToPrepare;
         $this->rating = $rating;
-        $this->dietStyle = $dietStyle;
+        $this->creationDate = $creationDate;
     }
     
     public function getTitle(): string 
@@ -44,9 +44,9 @@ final class Recipe implements ValueObject
         return $this->rating;
     }
     
-    public function getDietStyle(): DietStyle 
+    public function getCreationDate(): \DateTimeImmutable 
     {
-        return $this->dietStyle;
+        return $this->creationDate;
     }
     
     public function withTitle(string $title): self 
@@ -55,7 +55,7 @@ final class Recipe implements ValueObject
             $title,
             $this->minutesToPrepare,
             $this->rating,
-            $this->dietStyle
+            $this->creationDate
         );
     }
     
@@ -65,7 +65,7 @@ final class Recipe implements ValueObject
             $this->title,
             $minutesToPrepare,
             $this->rating,
-            $this->dietStyle
+            $this->creationDate
         );
     }
     
@@ -75,17 +75,17 @@ final class Recipe implements ValueObject
             $this->title,
             $this->minutesToPrepare,
             $rating,
-            $this->dietStyle
+            $this->creationDate
         );
     }
     
-    public function withDietStyle(DietStyle $dietStyle): self 
+    public function withCreationDate(\DateTimeImmutable $creationDate): self 
     {
         return new self(
             $this->title,
             $this->minutesToPrepare,
             $this->rating,
-            $dietStyle
+            $creationDate
         );
     }
     
@@ -95,7 +95,7 @@ final class Recipe implements ValueObject
             'title' => $this->title,
             'minutesToPrepare' => $this->minutesToPrepare,
             'rating' => $this->rating,
-            'dietStyle' =>  $this->valueToArray($this->dietStyle),
+            'creationDate' =>  $this->valueToArray($this->creationDate),
         ];
     }
     
@@ -113,22 +113,19 @@ final class Recipe implements ValueObject
             throw new UnexpectedValueException('Array key rating does not exist');
         }
         
-        if (!array_key_exists('dietStyle', $array)) {
-            throw new UnexpectedValueException('Array key dietStyle does not exist');
+        if (!array_key_exists('creationDate', $array)) {
+            throw new UnexpectedValueException('Array key creationDate does not exist');
         }
-                if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
-            $array['dietStyle'] = DietStyle::fromName($array['dietStyle']);
+            
+        if (is_string($array['creationDate'])){
+            $array['creationDate'] = \DateTimeImmutable::createFromFormat('Y-m-d', $array['creationDate']);
         }
-    
-        if (is_array($array['dietStyle']) && (is_a(DietStyle::class, Set::class, true) || is_a(DietStyle::class, ValueObject::class, true))) {
-            $array['dietStyle'] = DietStyle::fromArray($array['dietStyle']);
-        }
-
+        
         return new self(
             $array['title'],
             $array['minutesToPrepare'],
             $array['rating'],
-            $array['dietStyle']
+            $array['creationDate']
         );
     }
         

@@ -112,15 +112,21 @@ class Generate
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not
-                implemented. Please open an issue on GitHub");
+                implemented. This is an internal error. Please open an issue on GitHub");
         }
 
         if (!$vog_obj instanceof SetBuilder) {
             $vog_obj->setValues($data['values']);
         }
 
-        if (array_key_exists("string_value", $data)) {
-            $vog_obj->setStringValue($data['string_value']);
+        //These Options are only allowed on value objects
+        if ($vog_obj instanceof ValueObjectBuilder){
+            if (array_key_exists("string_value", $data)) {
+                $vog_obj->setStringValue($data['string_value']);
+            }
+            if (array_key_exists("dateTimeFormat", $data)){
+                $vog_obj->setDateTimeFormat($data["dateTimeFormat"]);
+            }
         }
 
         $vog_obj->setTargetFilepath($this->getTargetFilePath($targetFilepath));

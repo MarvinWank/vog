@@ -116,8 +116,7 @@ final class RecipeIntStringValue implements ValueObject
         if (!array_key_exists('dietStyle', $array)) {
             throw new UnexpectedValueException('Array key dietStyle does not exist');
         }
-        
-        if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
+                if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
             $array['dietStyle'] = DietStyle::fromName($array['dietStyle']);
         }
     
@@ -139,8 +138,13 @@ final class RecipeIntStringValue implements ValueObject
             return $value->toArray();
         }
         
+        if(is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+            return $value->format('Y-m-d');
+        }
+        
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -148,6 +152,7 @@ final class RecipeIntStringValue implements ValueObject
         
         return ($ref === $val);
     }
+    
     public function __toString(): string
     {
         return $this->toString();

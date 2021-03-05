@@ -66,12 +66,16 @@ Default settings generate PSR2 compliant value objects.
 ```json
 {
     "generatorOptions": {
-        "target": "MODE_PSR2"
+        "target": "MODE_PSR2",
+        "dateTimeFormat": "Y-m-d"
     }
 }
 ```
 
 Future releases may introduce more options. 
+
+### Option target
+
 Currently the other mode available is `MODE_FPP`, which generates value objects that are fpp compatible. The differences are:
 
 for a property defined as `"property_name": "string"` in your json file.
@@ -84,7 +88,11 @@ for a property defined as `"property_name": "string"` in your json file.
 
 If you use MODE_FPP and define camel cased properties, for example `"propertyName": "string"` the result would be `propertyName()`, `with_propertyName()` and `set_propertyName()`.    
 
-## valueFile
+### Option dateTimeFormat
+
+Defines which format vog expects when it creates a PHP-DateTime Format. For allowed values see [here](https://www.php.net/manual/de/function.date.php).
+If no value is set, it defaults to `Y-m-d`. The global value may be overwritten by an object-specific value. See the section
+on the [Definition file](#Definition-file)
 
 ## Definition file
 
@@ -127,14 +135,15 @@ Any number of objects may be defined in each path array and any number of path a
 
 These properties of the json-Object are either available or required for alle data types
 
-| name       | data type | default | optionality                 | description                                                                                                 |
-| ---------- | --------- | ------- | --------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| type       | string    | -       | required for all            | defines the type of object to be generated. valid types are 'enum', 'nullableEnum', 'valueObject' and 'set' |
-| name       | string    | -       | required for all            | defines both the php class name and file name of the value object to be generated                           |
-| values     | object    | -       | required for all except set | defines the values to be represented by the value object to be generated. Syntax and effect vary by type.   |
-| extends    | ?string   | ""      | optional                    | Optionally states the name of the class this object should extend                                           |
-| implements | array     | []      | optional                    | Optionally states the name(s) of the interface(s) this object should implement                              |
-| mutable    | bool      | false   | optional for value objects  | Optionally states the mutability of the object. If so, the object will have setters.                        |
+| name           | data type | default      | optionality                 | description                                                                                                 |
+| -------------- | --------- | ------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| type           | string    | -            | required for all            | defines the type of object to be generated. valid types are 'enum', 'nullableEnum', 'valueObject' and 'set' |
+| name           | string    | -            | required for all            | defines both the php class name and file name of the value object to be generated                           |
+| values         | object    | -            | required for all except set | defines the values to be represented by the value object to be generated. Syntax and effect vary by type.   |
+| extends        | ?string   | ""           | optional                    | Optionally states the name of the class this object should extend                                           |
+| implements     | array     | []           | optional                    | Optionally states the name(s) of the interface(s) this object should implement                              |
+| mutable        | bool      | false        | optional for value objects  | Optionally states the mutability of the object. If so, the object will have setters.                        |
+| dateTimeFormat | string    | global value | optional for value objects  | Optionally defines an object-specific DateTime-Format                                                       |
 
 ### Using multiple value files
 
@@ -356,31 +365,31 @@ This returns an array with the values. This is a deep conversion that returns va
 
     /** Adds the value to the set */
     public function contains(<itemType> $item): bool
-    
+
     /** used by isset implementing ArrayAccess */
     public function offsetExists($offset): bool
-    
+
     /** throws an exception because of immutability use add() */
     public function offsetSet($offset, $value)   
-    
+
     /** implementing ArrayAccess */
     public function offsetGet($offset)
-    
+
     /** throws an exception because of immutability use remove() */
     public function offsetUnset($offset)
-    
+
     /** implementing Iterator */
     public function current()
-    
+
     /** implementing Iterator */
     public function rewind()
-    
+
     /** implementing Iterator */
     public function key()
-    
+
     /** implementing Iterator */
     public function next()
-    
+
     /** implementing Iterator */
     public function valid()
 ```
@@ -498,3 +507,14 @@ If you define `string_value` for your value object the following methods are add
     /** Same as toString() */
     public function __toString(): string
 ```
+
+### DateTime Support
+
+Vog does support DateTimeImmutables as strings in `toArray` and `fromArray`!
+Just set `\\DateTimeImmutable` (double backslash necessary for escaping) as the data type and vog takes care of the rest. 
+
+The default format is `Y-m-d`, yet that can be changed both [globally](#Configuration) and [individually](#generic-properties)
+
+for each object.
+
+`\\\DateTime` is also possible, but only when the value object is explicitly declared mutable. Otherwise vog will throw an exception.

@@ -11,27 +11,84 @@ class ValueObjectBuilder extends AbstractBuilder
 {
     protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $stringValue;
+    private ?string $dateTimeFormat;
     protected array $implements = ['ValueObject'];
 
     public function __construct(string $name, Config $config)
     {
         parent::__construct($name, $config);
         $this->type = "valueObject";
+        $this->dateTimeFormat = null;
+    }
+
+    public function setValues(array $values): void
+    {
+        parent::setValues($values);
+        if (!$this->isMutable()) {
+            $this->checkForDateTimeInsteadOfDateTimeImmutable($this->values);
+        }
+    }
+
+    private function checkForDateTimeInsteadOfDateTimeImmutable(array $values): void
+    {
+        $objectName = $this->name;
+        foreach ($values as $name => $dataType) {
+            if ($dataType === "DateTime") {
+                throw new UnexpectedValueException("
+                Error parsing property $name of object $objectName:
+                DateTime ist not allowed when value object is not declared mutable.
+                Use DateTimeImmutable or declare mutability.
+                ");
+            }
+        }
     }
 
     public function setStringValue(string $stringValue)
     {
-        if(!array_key_exists($stringValue, $this->values)){
+        if (!array_key_exists($stringValue, $this->values)) {
             throw new UnexpectedValueException("Designated string value $stringValue does not exist in values: " . print_r(array_keys($this->values), true));
         }
 
         $this->stringValue = $stringValue;
     }
 
+    public function setDateTimeFormat(string $dateTimeFormat)
+    {
+        $this->dateTimeFormat = $dateTimeFormat;
+    }
+
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        if ($this->dateTimeFormat === null) {
+            $this->dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
+        }
 
+        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        $phpcode = $this->generateProperties($phpcode);
+
+        $phpcode = $this->generateConstructor($phpcode);
+        $phpcode = $this->generateGetters($phpcode);
+        if ($this->is_mutable) {
+            $phpcode = $this->generateSetters($phpcode);
+        }
+
+        $phpcode = $this->generateWithMethods($phpcode);
+        $phpcode = $this->generateToArray($phpcode);
+        $phpcode = $this->generateFromArray($phpcode);
+        $phpcode = $this->generateValueToArray($phpcode);
+        $phpcode = $this->generateEquals($phpcode);
+
+        if (isset($this->stringValue)) {
+            $phpcode = $this->generateToString($phpcode);
+        }
+
+
+        $phpcode = $this->closeClass($phpcode);
+        return $phpcode;
+    }
+
+    private function generateProperties(string $phpcode): string
+    {
         foreach ($this->values as $name => $data_type) {
             $phpcode .= <<<EOT
             
@@ -39,23 +96,6 @@ class ValueObjectBuilder extends AbstractBuilder
             EOT;
         }
 
-        $phpcode = $this->generateConstructor($phpcode);
-        $phpcode = $this->generateGetters($phpcode);
-        if ($this->is_mutable){
-            $phpcode = $this->generateSetters($phpcode);
-        }
-        $phpcode = $this->generateWithMethods($phpcode);
-        $phpcode = $this->generateToArray($phpcode);
-        $phpcode = $this->generateFromArray($phpcode);
-        $phpcode = $this->generateValueToArray($phpcode);
-        $phpcode = $this->generateEquals($phpcode);
-
-        if(isset($this->stringValue)){
-            $phpcode = $this->generateToString($phpcode);
-        }
-
-
-        $phpcode = $this->closeClass($phpcode);
         return $phpcode;
     }
 
@@ -234,9 +274,23 @@ class ValueObjectBuilder extends AbstractBuilder
                     
             EOT;
 
-            if (!$this->isPrimitive($datatype)) {
+            if ($datatype === "\\DateTime") {
                 $phpcode .= <<<EOT
-                
+                        
+                        if (is_string(\$array['$name']))
+                            \$array['$name'] = \\DateTime::createFromFormat('$this->dateTimeFormat', \$array['$name']);
+                        }
+                EOT;
+            } elseif ($datatype === "\\DateTimeImmutable") {
+                $phpcode .= <<<EOT
+                    
+                        if (is_string(\$array['$name'])){
+                            \$array['$name'] = \\DateTimeImmutable::createFromFormat('$this->dateTimeFormat', \$array['$name']);
+                        }
+                        
+                EOT;
+            } elseif (!$this->isPrimitive($datatype)) {
+                $phpcode .= <<<EOT
                         if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
                             \$array['$name'] = $datatype::fromName(\$array['$name']);
                         }
@@ -246,7 +300,6 @@ class ValueObjectBuilder extends AbstractBuilder
                         }
 
                 EOT;
-
             }
         }
 
@@ -299,6 +352,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     private function generateValueToArray(string $phpcode)
     {
+        $dateTimeFormat = $this->dateTimeFormat;
         $phpcode .= <<<EOT
             
             private function valueToArray(\$value)
@@ -307,8 +361,13 @@ class ValueObjectBuilder extends AbstractBuilder
                     return \$value->toArray();
                 }
                 
+                if(is_a(\$value, \DateTime::class, true) || is_a(\$value, \DateTimeImmutable::class, true)){
+                    return \$value->format('$dateTimeFormat');
+                }
+                
                 return (string) \$value;
             }
+            
         EOT;
 
         return $phpcode;
@@ -325,35 +384,39 @@ class ValueObjectBuilder extends AbstractBuilder
                 
                 return ($ref === $val);
             }
+            
         EOT;
 
         return $phpcode;
     }
 
-    private function getGetterName(string $name): string {
+    private function getGetterName(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            return 'get'.ucfirst($name);
+            return 'get' . ucfirst($name);
         }
 
         return $name;
     }
 
-    private function getWithFunctionName(string $name): string {
+    private function getWithFunctionName(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
-        return 'with_'.$name;
+        return 'with_' . $name;
     }
 
-    private function getSetter(string $name): string {
+    private function getSetter(string $name): string
+    {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
-            return 'set'.ucfirst($name);
+            return 'set' . ucfirst($name);
         }
 
-        return 'set_'.$name;
+        return 'set_' . $name;
     }
 }

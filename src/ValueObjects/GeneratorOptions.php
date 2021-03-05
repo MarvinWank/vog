@@ -13,11 +13,14 @@ use UnexpectedValueException;
 final class GeneratorOptions implements ValueObject
 {
     private TargetMode $target;
+    private ?string $dateTimeFormat;
 
     public function __construct (
-        TargetMode $target
+        TargetMode $target,
+        ?string $dateTimeFormat
     ) {
         $this->target = $target;
+        $this->dateTimeFormat = $dateTimeFormat;
     }
     
     public function getTarget(): TargetMode 
@@ -25,10 +28,24 @@ final class GeneratorOptions implements ValueObject
         return $this->target;
     }
     
+    public function getDateTimeFormat(): ?string 
+    {
+        return $this->dateTimeFormat;
+    }
+    
     public function withTarget(TargetMode $target): self 
     {
         return new self(
-            $target
+            $target,
+            $this->dateTimeFormat
+        );
+    }
+    
+    public function withDateTimeFormat(?string $dateTimeFormat): self 
+    {
+        return new self(
+            $this->target,
+            $dateTimeFormat
         );
     }
     
@@ -36,6 +53,7 @@ final class GeneratorOptions implements ValueObject
     {
         return [
             'target' =>  $this->valueToArray($this->target),
+            'dateTimeFormat' => $this->dateTimeFormat,
         ];
     }
     
@@ -53,8 +71,13 @@ final class GeneratorOptions implements ValueObject
             $array['target'] = TargetMode::fromArray($array['target']);
         }
 
+        if (!array_key_exists('dateTimeFormat', $array)) {
+            throw new UnexpectedValueException('Array key dateTimeFormat does not exist');
+        }
+        
         return new self(
-            $array['target']
+            $array['target'],
+            $array['dateTimeFormat']
         );
     }
         
@@ -64,8 +87,13 @@ final class GeneratorOptions implements ValueObject
             return $value->toArray();
         }
         
+        if(is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+            return $value->format('Y-m-d');
+        }
+        
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -73,4 +101,5 @@ final class GeneratorOptions implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

@@ -12,6 +12,8 @@ use InvalidArgumentException;
 
 final class TargetMode implements Enum
 {
+    public const VALUES = ['psr2', 'fpp', ];               
+    public const NAMES = ['MODE_PSR2', 'MODE_FPP', ];               
     public const OPTIONS = [ 
         'MODE_PSR2' => 'psr2',
         'MODE_FPP' => 'fpp',

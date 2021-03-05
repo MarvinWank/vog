@@ -24,7 +24,8 @@ class Psr2TestCase extends TestCase
 
         $config = [
             'generatorOptions' => [
-                'target' => TargetMode::MODE_PSR2()->name()
+                'target' => TargetMode::MODE_PSR2()->name(),
+                'dateTimeFormat' => "Y-m-d"
             ],
         ];
         $hub->run($argv, $config);

@@ -73,14 +73,7 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
         $val = $other->toArray();
                 
         return ($ref === $val);
-    }
-    
-    public function add(Recipe $item): self {
-        $values = $this->toArray();
-        $values[] = $item;
-        return self::fromArray($values);
-    }
-    
+    }    
     
     public function contains(Recipe $item): bool {
         return array_search($item, $this->items) !== false;
@@ -95,16 +88,8 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
         return isset($this->items[$offset]);
     }
 
-    public function offsetSet($offset, $value) {
-        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
-    }
-
     public function offsetGet($offset) {
         return $this->items[$offset];
-    }
-
-    public function offsetUnset($offset) {
-        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
     }
 
     public function current() {
@@ -125,6 +110,20 @@ final class RecipeSet implements Set,\Countable,\ArrayAccess,\Iterator
 
     public function valid() {
         return isset($this->items[$this->position]);
+    }
+    
+    public function add(Recipe $item): self {
+        $values = $this->toArray();
+        $values[] = $item;
+        return self::fromArray($values);
+    }
+
+    public function offsetSet($offset, $value) {
+        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
+    }
+
+    public function offsetUnset($offset) {
+        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
     }
     
     public function remove(Recipe $item): self {

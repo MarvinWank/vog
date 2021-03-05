@@ -186,6 +186,29 @@
       "name": "mutableSetWithPrimitiveType",
       "itemType": "string",
       "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithDate",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "creationDate": "\\DateTimeImmutable"
+      },
+      "string_value": "title"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithIndividualDateFormat",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "creationDate": "\\DateTimeImmutable"
+      },
+      "string_value": "title",
+      "dateTimeFormat": "d.m.Y"
     }
   ]
 }

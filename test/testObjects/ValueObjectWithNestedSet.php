@@ -66,8 +66,7 @@ final class ValueObjectWithNestedSet implements ValueObject
         if (!array_key_exists('recipes', $array)) {
             throw new UnexpectedValueException('Array key recipes does not exist');
         }
-        
-        if (is_string($array['recipes']) && is_a(RecipeSet::class, Enum::class, true)) {
+                if (is_string($array['recipes']) && is_a(RecipeSet::class, Enum::class, true)) {
             $array['recipes'] = RecipeSet::fromName($array['recipes']);
         }
     
@@ -87,8 +86,13 @@ final class ValueObjectWithNestedSet implements ValueObject
             return $value->toArray();
         }
         
+        if(is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+            return $value->format('Y-m-d');
+        }
+        
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -96,4 +100,5 @@ final class ValueObjectWithNestedSet implements ValueObject
         
         return ($ref === $val);
     }
+    
 }
