@@ -66,8 +66,7 @@ final class ValueObjectWithNestedSet implements ValueObject
         if (!array_key_exists('recipes', $array)) {
             throw new UnexpectedValueException('Array key recipes does not exist');
         }
-        
-        if (is_string($array['recipes']) && is_a(RecipeSet::class, Enum::class, true)) {
+                if (is_string($array['recipes']) && is_a(RecipeSet::class, Enum::class, true)) {
             $array['recipes'] = RecipeSet::fromName($array['recipes']);
         }
     

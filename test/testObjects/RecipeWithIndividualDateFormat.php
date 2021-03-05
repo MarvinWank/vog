@@ -116,15 +116,11 @@ final class RecipeWithIndividualDateFormat implements ValueObject
         if (!array_key_exists('creationDate', $array)) {
             throw new UnexpectedValueException('Array key creationDate does not exist');
         }
+            
+        if (is_string($array['creationDate'])){
+            $array['creationDate'] = \DateTimeImmutable::createFromFormat('d.m.Y', $array['creationDate']);
+        }
         
-        if (is_string($array['creationDate']) && is_a(\DateTimeImmutable::class, Enum::class, true)) {
-            $array['creationDate'] = \DateTimeImmutable::fromName($array['creationDate']);
-        }
-    
-        if (is_array($array['creationDate']) && (is_a(\DateTimeImmutable::class, Set::class, true) || is_a(\DateTimeImmutable::class, ValueObject::class, true))) {
-            $array['creationDate'] = \DateTimeImmutable::fromArray($array['creationDate']);
-        }
-
         return new self(
             $array['title'],
             $array['minutesToPrepare'],

@@ -62,8 +62,7 @@ final class RecipeCollection implements ValueObject
         if (!array_key_exists('recipe1', $array)) {
             throw new UnexpectedValueException('Array key recipe1 does not exist');
         }
-        
-        if (is_string($array['recipe1']) && is_a(RecipeIntStringValue::class, Enum::class, true)) {
+                if (is_string($array['recipe1']) && is_a(RecipeIntStringValue::class, Enum::class, true)) {
             $array['recipe1'] = RecipeIntStringValue::fromName($array['recipe1']);
         }
     
@@ -74,8 +73,7 @@ final class RecipeCollection implements ValueObject
         if (!array_key_exists('recipe2', $array)) {
             throw new UnexpectedValueException('Array key recipe2 does not exist');
         }
-        
-        if (is_string($array['recipe2']) && is_a(RecipeEnumStringValue::class, Enum::class, true)) {
+                if (is_string($array['recipe2']) && is_a(RecipeEnumStringValue::class, Enum::class, true)) {
             $array['recipe2'] = RecipeEnumStringValue::fromName($array['recipe2']);
         }
     

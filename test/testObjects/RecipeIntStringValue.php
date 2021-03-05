@@ -116,8 +116,7 @@ final class RecipeIntStringValue implements ValueObject
         if (!array_key_exists('dietStyle', $array)) {
             throw new UnexpectedValueException('Array key dietStyle does not exist');
         }
-        
-        if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
+                if (is_string($array['dietStyle']) && is_a(DietStyle::class, Enum::class, true)) {
             $array['dietStyle'] = DietStyle::fromName($array['dietStyle']);
         }
     

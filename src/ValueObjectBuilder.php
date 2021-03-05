@@ -59,7 +59,7 @@ class ValueObjectBuilder extends AbstractBuilder
 
     public function getPhpCode(): string
     {
-        if ($this->dateTimeFormat === null){
+        if ($this->dateTimeFormat === null) {
             $this->dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
         }
 
@@ -274,9 +274,23 @@ class ValueObjectBuilder extends AbstractBuilder
                     
             EOT;
 
-            if (!$this->isPrimitive($datatype)) {
+            if ($datatype === "\\DateTime") {
                 $phpcode .= <<<EOT
-                
+                        
+                        if (is_string(\$array['$name']))
+                            \$array['$name'] = \\DateTime::createFromFormat('$this->dateTimeFormat', \$array['$name']);
+                        }
+                EOT;
+            } elseif ($datatype === "\\DateTimeImmutable") {
+                $phpcode .= <<<EOT
+                    
+                        if (is_string(\$array['$name'])){
+                            \$array['$name'] = \\DateTimeImmutable::createFromFormat('$this->dateTimeFormat', \$array['$name']);
+                        }
+                        
+                EOT;
+            } elseif (!$this->isPrimitive($datatype)) {
+                $phpcode .= <<<EOT
                         if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
                             \$array['$name'] = $datatype::fromName(\$array['$name']);
                         }
@@ -286,7 +300,6 @@ class ValueObjectBuilder extends AbstractBuilder
                         }
 
                 EOT;
-
             }
         }
 
