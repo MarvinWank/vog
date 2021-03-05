@@ -12,6 +12,8 @@ use InvalidArgumentException;
 
 final class DietStyle implements Enum
 {
+    public const VALUES = ['Omnivore', 'Vegetarian', 'Vegan', ];               
+    public const NAMES = ['OMNIVORE', 'VEGETARIAN', 'VEGAN', ];               
     public const OPTIONS = [ 
         'OMNIVORE' => 'Omnivore',
         'VEGETARIAN' => 'Vegetarian',

@@ -62,7 +62,8 @@ final class MutableObject implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -70,4 +71,5 @@ final class MutableObject implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

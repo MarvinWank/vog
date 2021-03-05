@@ -16,6 +16,7 @@ use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
+use Test\TestObjects\RecipeWithDate;
 use Test\TestObjects\ValueObjectNoDataType;
 use Test\TestObjects\WithCamelCase;
 use Test\TestObjects\WithUnderscore;
@@ -257,5 +258,18 @@ class ValueObjectTest extends Psr2TestCase
 
         $array = $object->toArray();
         self::assertEquals(['noCamelCase' => $value], $array);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTime()
+    {
+        $recipe = new RecipeWithDate("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
+            "Y-m-d",
+            "2000-07-18"
+        ));
+
+        $array = $recipe->toArray();
     }
 }

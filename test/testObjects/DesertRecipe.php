@@ -80,7 +80,8 @@ final class DesertRecipe extends BaseClass implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +89,5 @@ final class DesertRecipe extends BaseClass implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

@@ -80,7 +80,8 @@ final class ImplementsMany implements ValueObject,Interface1,Interface2
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +89,5 @@ final class ImplementsMany implements ValueObject,Interface1,Interface2
         
         return ($ref === $val);
     }
+    
 }

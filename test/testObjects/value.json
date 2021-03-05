@@ -1,5 +1,5 @@
 {
-  "root_path": "/home/marvinw/Projekte/vog/test/testObjects/value.json",
+  "root_path": "/home/marvinw/Projekte/vog/test/testObjects",
   "namespace": "Test\\TestObjects",
   ".": [
     {
@@ -194,7 +194,7 @@
         "title": "string",
         "minutesToPrepare": "?int",
         "rating": "float",
-        "creationDate": "DateTime"
+        "creationDate": "\\DateTimeImmutable"
       },
       "string_value": "title"
     }

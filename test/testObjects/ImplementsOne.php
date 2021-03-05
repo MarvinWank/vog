@@ -80,7 +80,8 @@ final class ImplementsOne implements ValueObject,Interface1
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +89,5 @@ final class ImplementsOne implements ValueObject,Interface1
         
         return ($ref === $val);
     }
+    
 }

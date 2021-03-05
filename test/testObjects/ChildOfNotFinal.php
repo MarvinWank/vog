@@ -57,7 +57,8 @@ final class ChildOfNotFinal extends NotFinal implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -65,4 +66,5 @@ final class ChildOfNotFinal extends NotFinal implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

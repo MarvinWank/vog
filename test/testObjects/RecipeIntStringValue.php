@@ -140,7 +140,8 @@ final class RecipeIntStringValue implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -148,6 +149,7 @@ final class RecipeIntStringValue implements ValueObject
         
         return ($ref === $val);
     }
+    
     public function __toString(): string
     {
         return $this->toString();

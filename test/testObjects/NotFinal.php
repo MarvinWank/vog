@@ -80,7 +80,8 @@ class NotFinal implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +89,5 @@ class NotFinal implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

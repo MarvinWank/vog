@@ -140,7 +140,8 @@ final class RecipeNoStringValue implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -148,4 +149,5 @@ final class RecipeNoStringValue implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

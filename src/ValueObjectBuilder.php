@@ -338,6 +338,7 @@ class ValueObjectBuilder extends AbstractBuilder
                 
                 return (string) \$value;
             }
+            
         EOT;
 
         return $phpcode;
@@ -354,6 +355,7 @@ class ValueObjectBuilder extends AbstractBuilder
                 
                 return ($ref === $val);
             }
+            
         EOT;
 
         return $phpcode;

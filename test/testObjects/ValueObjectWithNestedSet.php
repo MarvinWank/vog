@@ -88,7 +88,8 @@ final class ValueObjectWithNestedSet implements ValueObject
         }
         
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -96,4 +97,5 @@ final class ValueObjectWithNestedSet implements ValueObject
         
         return ($ref === $val);
     }
+    
 }
