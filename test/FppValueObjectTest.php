@@ -1,7 +1,7 @@
 <?php
 
 
-use Test\TestObjectsFpp\BaseClass;
+use Test\BaseClass;
 use Test\TestObjectsFpp\ChildOfNotFinal;
 use Test\TestObjectsFpp\DesertRecipe;
 use Test\TestObjectsFpp\DietStyle;
@@ -9,8 +9,8 @@ use Test\TestObjectsFpp\ExplicitlyImmutableObject;
 use Test\TestObjectsFpp\ImplementsMany;
 use Test\TestObjectsFpp\ImplementsOne;
 use Test\TestObjectsFpp\ImplicitlyImmutableObject;
-use Test\TestObjectsFpp\Interface1;
-use Test\TestObjectsFpp\Interface2;
+use Test\Interface1;
+use Test\Interface2;
 use Test\TestObjectsFpp\MutableObject;
 use Test\TestObjectsFpp\NotFinal;
 use Test\TestObjectsFpp\Recipe;

@@ -10,48 +10,43 @@ namespace Test\TestObjectsFpp;
 
 use UnexpectedValueException;
 
-final class MutableObject implements ValueObject
+final class WithUnderscore implements ValueObject
 {
-    private string $foo;
+    private string $no_camel_case;
 
     public function __construct (
-        string $foo
+        string $no_camel_case
     ) {
-        $this->foo = $foo;
+        $this->no_camel_case = $no_camel_case;
     }
     
-    public function foo(): string 
+    public function no_camel_case(): string 
     {
-        return $this->foo;
+        return $this->no_camel_case;
     }
     
-    public function set_foo(string $foo) 
-    {
-        $this->foo = $foo;
-    }
-    
-    public function with_foo(string $foo): self 
+    public function with_no_camel_case(string $no_camel_case): self 
     {
         return new self(
-            $foo
+            $no_camel_case
         );
     }
     
     public function toArray(): array
     {
         return [
-            'foo' => $this->foo,
+            'no_camel_case' => $this->no_camel_case,
         ];
     }
     
     public static function fromArray(array $array): self
     {
-        if (!array_key_exists('foo', $array)) {
-            throw new UnexpectedValueException('Array key foo does not exist');
+        if (!array_key_exists('no_camel_case', $array)) {
+            throw new UnexpectedValueException('Array key no_camel_case does not exist');
         }
         
         return new self(
-            $array['foo']
+            $array['no_camel_case']
         );
     }
         

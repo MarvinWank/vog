@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 
 use UnexpectedValueException;
 
-final class DesertRecipe extends BaseClass implements ValueObject
+final class DesertRecipe extends \Test\BaseClass implements ValueObject
 {
     private bool $lactosefree;
     private bool $light;

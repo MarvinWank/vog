@@ -10,7 +10,7 @@ namespace Test\TestObjectsFpp;
 
 use UnexpectedValueException;
 
-final class ImplementsOne implements ValueObject,Interface1
+final class ImplementsOne implements ValueObject,\Test\Interface1
 {
     private string $foo;
     private int $bar;
@@ -79,8 +79,13 @@ final class ImplementsOne implements ValueObject,Interface1
             return $value->toArray();
         }
         
+        if(is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+            return $value->format('Y-m-d');
+        }
+        
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +93,5 @@ final class ImplementsOne implements ValueObject,Interface1
         
         return ($ref === $val);
     }
+    
 }

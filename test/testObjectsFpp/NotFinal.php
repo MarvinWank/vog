@@ -79,8 +79,13 @@ class NotFinal implements ValueObject
             return $value->toArray();
         }
         
+        if(is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+            return $value->format('Y-m-d');
+        }
+        
         return (string) $value;
-    }    
+    }
+        
     public function equals($value): bool
     {
         $ref = $this->toArray();
@@ -88,4 +93,5 @@ class NotFinal implements ValueObject
         
         return ($ref === $val);
     }
+    
 }

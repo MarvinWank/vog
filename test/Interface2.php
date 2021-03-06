@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Test\TestObjectsFpp;
+namespace Test;
 
 
 interface Interface2

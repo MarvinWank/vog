@@ -87,7 +87,7 @@
         "lactosefree": "bool",
         "light": "bool"
       },
-      "extends": "BaseClass"
+      "extends": "\\Test\\BaseClass"
     },
     {
       "type": "valueObject",
@@ -96,7 +96,7 @@
         "foo": "string",
         "bar": "int"
       },
-      "implements": ["Interface1"]
+      "implements": ["\\Test\\Interface1"]
     },
     {
       "type": "valueObject",
@@ -105,7 +105,7 @@
         "foo": "string",
         "bar": "int"
       },
-      "implements": ["Interface1", "Interface2"]
+      "implements": ["\\Test\\Interface1", "\\Test\\Interface2"]
     },
     {
       "type": "valueObject",
@@ -152,6 +152,20 @@
       "type": "set",
       "name": "RecipeSet",
       "itemType": "Recipe"
+    },
+    {
+      "type": "valueObject",
+      "name": "WithCamelCase",
+      "values": {
+        "camelCased": "string"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "WithUnderscore",
+      "values": {
+        "no_camel_case": "string"
+      }
     }
   ]
 }

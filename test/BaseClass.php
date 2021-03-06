@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Test\TestObjects;
+namespace Test;
 
 
 class BaseClass

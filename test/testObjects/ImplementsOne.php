@@ -10,7 +10,7 @@ namespace Test\TestObjects;
 
 use UnexpectedValueException;
 
-final class ImplementsOne implements ValueObject,Interface1
+final class ImplementsOne implements ValueObject,\Test\Interface1
 {
     private string $foo;
     private int $bar;

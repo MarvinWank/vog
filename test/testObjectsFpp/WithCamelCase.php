@@ -10,48 +10,43 @@ namespace Test\TestObjectsFpp;
 
 use UnexpectedValueException;
 
-final class MutableObject implements ValueObject
+final class WithCamelCase implements ValueObject
 {
-    private string $foo;
+    private string $camelCased;
 
     public function __construct (
-        string $foo
+        string $camelCased
     ) {
-        $this->foo = $foo;
+        $this->camelCased = $camelCased;
     }
     
-    public function foo(): string 
+    public function camelCased(): string 
     {
-        return $this->foo;
+        return $this->camelCased;
     }
     
-    public function set_foo(string $foo) 
-    {
-        $this->foo = $foo;
-    }
-    
-    public function with_foo(string $foo): self 
+    public function with_camelCased(string $camelCased): self 
     {
         return new self(
-            $foo
+            $camelCased
         );
     }
     
     public function toArray(): array
     {
         return [
-            'foo' => $this->foo,
+            'camelCased' => $this->camelCased,
         ];
     }
     
     public static function fromArray(array $array): self
     {
-        if (!array_key_exists('foo', $array)) {
-            throw new UnexpectedValueException('Array key foo does not exist');
+        if (!array_key_exists('camelCased', $array)) {
+            throw new UnexpectedValueException('Array key camelCased does not exist');
         }
         
         return new self(
-            $array['foo']
+            $array['camelCased']
         );
     }
         
