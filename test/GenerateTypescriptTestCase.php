@@ -8,7 +8,7 @@ use Vog\CommandHub;
 use Vog\ValueObjects\TargetMode;
 
 
-class Psr2TestCase extends TestCase
+class GenerateTypescriptTestCase extends TestCase
 {
     public function setUp(): void
     {
@@ -16,8 +16,9 @@ class Psr2TestCase extends TestCase
 
         $argv = [
             "test",
-            "generate",
-            __DIR__."/testObjects/value.json"
+            "generate-typescript",
+            __DIR__."/testObjects/value.json",
+            __DIR__."/testObjectsTypescript/"
         ];
         $hub = new CommandHub();
 
@@ -28,5 +29,13 @@ class Psr2TestCase extends TestCase
             ],
         ];
         $hub->run($argv, $config);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_typescript_generation()
+    {
+        $this->assertTrue(true);
     }
 }
