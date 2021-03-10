@@ -8,17 +8,13 @@ use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 use function json_decode;
 
-class GenerateCommand
+class GenerateCommand extends AbstractCommand
 {
-    private Config $config;
     private string $rootPath;
     private string $rootNamespace;
 
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
-    public function __construct(Config $config) {
-        $this->config = $config;
-    }
 
     public function run(string $target): void
     {

@@ -4,7 +4,12 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
-class GenerateTypescriptCommand
-{
+use Vog\Commands\Generate\AbstractCommand;
 
+class GenerateTypescriptCommand extends AbstractCommand
+{
+    public function run(string $sourcePath, string $targetPath)
+    {
+
+    }
 }
