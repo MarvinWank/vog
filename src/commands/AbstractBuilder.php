@@ -20,6 +20,7 @@ abstract class AbstractBuilder
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
     abstract public function setValues(array $values): void;
+    abstract  public function getTargetFilepath(): string;
 
     public function __construct(string $name, Config $config)
     {
@@ -42,10 +43,7 @@ abstract class AbstractBuilder
         $this->target_filepath = $target_filepath;
     }
 
-    public function getTargetFilepath(): string
-    {
-        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
-    }
+
 
     public function getValues(): array
     {

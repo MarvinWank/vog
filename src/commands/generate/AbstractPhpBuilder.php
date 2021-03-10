@@ -87,6 +87,11 @@ abstract class AbstractPhpBuilder extends AbstractBuilder
         $this->is_mutable = $is_mutable;
     }
 
+    public function getTargetFilepath(): string
+    {
+        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
+    }
+
     protected function generateGenericPhpHeader(array $use = self::USE_EXCEPTIONS, string $type = 'class'): string
     {
         $class_statement = $type . ' ' . ucfirst($this->name);
