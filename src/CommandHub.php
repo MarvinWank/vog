@@ -5,6 +5,7 @@ namespace Vog;
 
 
 use UnexpectedValueException;
+use Vog\Commands\Generate\GenerateCommand;
 use Vog\ValueObjects\Config;
 
 class CommandHub
@@ -36,13 +37,13 @@ class CommandHub
     {
         $configObject = $this->getConfig($config);
 
-        $generate = new Generate($configObject);
+        $generate = new GenerateCommand($configObject);
         $generate->run($targetPath);
     }
 
     private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
     {
-        $fppConvert = new FppConvert($config);
+        $fppConvert = new FppConvertCommand($config);
         $fppConvert->run($fileToConvert, $outputPath);
     }
 

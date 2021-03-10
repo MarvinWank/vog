@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Vog;
+namespace Vog\Commands\Generate;
 
 use UnexpectedValueException;
 use Vog\ValueObjects\Config;

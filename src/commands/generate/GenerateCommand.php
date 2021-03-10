@@ -1,6 +1,6 @@
 <?php
 
-namespace Vog;
+namespace Vog\Commands\Generate;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
@@ -8,7 +8,7 @@ use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 use function json_decode;
 
-class Generate
+class GenerateCommand
 {
     private Config $config;
     private string $rootPath;

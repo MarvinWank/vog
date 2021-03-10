@@ -1,6 +1,6 @@
 <?php
 
-namespace Vog;
+namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;

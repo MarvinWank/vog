@@ -1,14 +1,6 @@
 <?php
-/**
- * Dirk Benkert (https://www.dirk-benkert.de/)
- *
- * @link  https://gitlab.dirk-benkert.de/ for the canonical source repository
- *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
- */
 
-namespace Vog;
+namespace Vog\Commands\Generate;
 
 
 use Vog\ValueObjects\Config;

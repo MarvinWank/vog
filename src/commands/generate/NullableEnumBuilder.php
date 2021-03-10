@@ -1,6 +1,6 @@
 <?php
 
-namespace Vog;
+namespace Vog\Commands\Generate;
 
 class NullableEnumBuilder extends EnumBuilder
 {

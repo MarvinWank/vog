@@ -4,7 +4,7 @@
 namespace Vog;
 
 
-class FppConvert
+class FppConvertCommand
 {
 
     private array $config;
