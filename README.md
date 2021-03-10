@@ -39,11 +39,49 @@ It is designed to be a dev dependency as you generate the value objects with it 
 
 After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has currently one subcommand. That generates the value objects, enums, sets and some marker interfaces according to your definition.  
 
-#### generate
+### generate
 
 The `generate` subcommand is the core of vog. It allows you to generate both immutable and mutable PHP objects from a JSON definition as described below. It takes one additional argument: the path to the json file with the definitions.
 
 Example call: `./vendor/bin/vog generate ./value.json`
+
+### generate-typescript
+
+The `generate-typescript` subcommand allows you to generate typescript interfaces and types from existing vog definitions.
+It takes two additional arguments: The path to the definition file and the output directory. 
+
+*Note*: namespaces are ignored by this command. All typescript files will be written to the same directory.
+
+#### value objects
+
+`generate-typescript` will create typescript interfaces from value objects. Example:
+
+```json
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      },
+      "string_value": "title"
+    }
+```
+
+Will result in 
+
+```typescript
+interface Recipe{
+    title: string
+    minutesToPrepare?: int
+    rating: float,
+    dietStyle: DietStyle
+}
+```
+
+*Note*: Non-primitive types have to be defined in the same value file. 
 
 ## Configuration
 
