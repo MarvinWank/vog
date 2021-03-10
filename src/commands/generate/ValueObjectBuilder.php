@@ -7,7 +7,7 @@ use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
-class ValueObjectBuilder extends AbstractBuilder
+class ValueObjectBuilder extends AbstractPhpBuilder
 {
     protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $stringValue;

@@ -4,7 +4,7 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class SetBuilder extends ValueObjectBuilder
+class SetBuilder extends AbstractPhpBuilder
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];

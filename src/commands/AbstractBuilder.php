@@ -24,8 +24,6 @@ abstract class AbstractBuilder
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
-    abstract public function getPhpCode(): string;
-
     public function __construct(string $name, Config $config)
     {
         $this->name = $name;
