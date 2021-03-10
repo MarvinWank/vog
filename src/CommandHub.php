@@ -29,7 +29,7 @@ class CommandHub
                 $this->runGenerateCommand($argv[2], $config);
                 break;
             case self::COMMAND_GENERATE_TYPESCRIPT:
-                $this->runGenerateTypescriptCommand($argv[2], $argv[3], $argv[4]);
+                $this->runGenerateTypescriptCommand($argv[2], $argv[3], $config);
                 break;
             case self::COMMAND_FPP_CONVERT:
                 $this->runConvertToFppCommand($argv[3], $argv[4], $config);
