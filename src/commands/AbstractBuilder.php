@@ -18,6 +18,7 @@ abstract class AbstractBuilder
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
+    protected const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
 
     abstract public function setValues(array $values): void;
     abstract  public function getTargetFilepath(): string;
@@ -43,19 +44,14 @@ abstract class AbstractBuilder
         $this->target_filepath = $target_filepath;
     }
 
-
-
     public function getValues(): array
     {
         return $this->values;
     }
 
-    protected function closeClass($phpcode): string
+    protected function isPrimitivePhpType(string $type): bool
     {
-        $phpcode .= <<<EOT
-
-}
-EOT;
-        return $phpcode;
+        return in_array($type, self::PHP_PRIMITIVE_TYPES);
     }
+
 }

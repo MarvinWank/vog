@@ -31,6 +31,15 @@ abstract class AbstractPhpBuilder extends AbstractBuilder
         $this->values = $values;
     }
 
+    protected function closeClass($phpcode): string
+    {
+        $phpcode .= <<<EOT
+
+}
+EOT;
+        return $phpcode;
+    }
+
     public static function toCamelCase(string $string): string
     {
         return lcfirst(str_replace('_', '', ucwords($string, '_')));

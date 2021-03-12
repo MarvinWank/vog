@@ -9,7 +9,6 @@ use Vog\ValueObjects\TargetMode;
 
 class ValueObjectBuilder extends AbstractPhpBuilder
 {
-    protected const PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
     private string $stringValue;
     private ?string $dateTimeFormat;
     protected array $implements = ['ValueObject'];
@@ -236,7 +235,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         EOT;
 
         foreach ($this->values as $name => $datatype) {
-            if (!$this->isPrimitive($datatype)) {
+            if (!$this->isPrimitivePhpType($datatype)) {
                 $phpcode .= <<<EOT
                 
                             '$name' =>  \$this->valueToArray(\$this->$name),
@@ -289,7 +288,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
                         }
                         
                 EOT;
-            } elseif (!$this->isPrimitive($datatype)) {
+            } elseif (!$this->isPrimitivePhpType($datatype)) {
                 $phpcode .= <<<EOT
                         if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
                             \$array['$name'] = $datatype::fromName(\$array['$name']);
@@ -324,11 +323,6 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         EOT;
 
         return $phpcode;
-    }
-
-    protected function isPrimitive(string $type): bool
-    {
-        return in_array($type, self::PRIMITIVE_TYPES);
     }
 
     private function generateToString(string $phpcode)

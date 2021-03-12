@@ -18,7 +18,7 @@ class GenerateTypescriptTestCase extends TestCase
             "test",
             "generate-typescript",
             __DIR__."/testObjects/value.json",
-            __DIR__."/testObjectsTypescript/"
+            __DIR__."/testObjectsTypescript/types.d.ts"
         ];
         $hub = new CommandHub();
 

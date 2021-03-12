@@ -48,7 +48,8 @@ Example call: `./vendor/bin/vog generate ./value.json`
 ### generate-typescript
 
 The `generate-typescript` subcommand allows you to generate typescript interfaces and types from existing vog definitions.
-It takes two additional arguments: The path to the definition file and the output directory. 
+It takes two additional arguments: The path to the definition file and the output file. All generated types and interface
+will be written to the same file.
 
 *Note*: namespaces are ignored by this command. All typescript files will be written to the same directory.
 

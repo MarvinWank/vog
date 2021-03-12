@@ -4,15 +4,12 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
-use UnexpectedValueException;
 use Vog\Commands\Generate\AbstractCommand;
-use Vog\Commands\Generate\AbstractPhpBuilder;
 
 class GenerateTypescriptCommand extends AbstractCommand
 {
     public function run(string $sourcePath, string $targetPath)
     {
-        $this->validatePaths($sourcePath, $targetPath);
         $json = $this->parseFileToJson($sourcePath);
 
         // Unnecessary for ts generation
@@ -21,30 +18,27 @@ class GenerateTypescriptCommand extends AbstractCommand
             unset($json['namespace']);
         }
 
+        $typescriptCode = "";
         foreach ($json as $namespace => $objects) {
             foreach ($objects as $object) {
-                $this->buildObject($object);
-                $success = $this->writeToFile($object);
 
-                if ($success) {
-                    echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
+                if ($object['type'] !== "valueObject"){
+                    continue;
                 }
+                $builder = $this->getBuilder($object);
+                $typescriptCode .= $builder->getTypescriptCode();
             }
+
         }
+        $success = $this->writeToFile($typescriptCode, $targetPath);
+        if ($success) {
+            echo PHP_EOL . 'Typescript successfully written to ' . $targetPath;
+        }
+
 
     }
 
-    private function validatePaths(string $sourcePath, string $targetPath)
-    {
-        if (!file_exists($sourcePath)) {
-            throw new \UnexpectedValueException("No file was found at $sourcePath");
-        }
-        if (!is_dir($targetPath)) {
-            throw new \UnexpectedValueException("Target path $targetPath is not a directory");
-        }
-    }
-
-    private function buildObject(array $object): AbstractTypescriptBuilder
+    private function getBuilder(array $object): AbstractTypescriptBuilder
     {
         $this->validateObject($object);
         $builder = null;
@@ -64,8 +58,8 @@ class GenerateTypescriptCommand extends AbstractCommand
         return $builder;
     }
 
-    private function writeToFile(AbstractTypescriptBuilder $builderInstance)
+    private function writeToFile(string $typescriptCode, string $targetFile)
     {
-        return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getTypescriptCode());
+        return file_put_contents($targetFile, $typescriptCode);
     }
 }
