@@ -16,7 +16,7 @@ class SetToTypescriptBuilder extends AbstractTypescriptBuilder
     public function getTypescriptCode(): string
     {
        $itemType = $this->sanitizeDataTypeForTypescript($this->itemType);
-       return "type $this->name = Array<$itemType>\n\n";
+       return "export type $this->name = Array<$itemType>\n\n";
     }
 
 

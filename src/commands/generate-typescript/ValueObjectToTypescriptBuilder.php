@@ -16,7 +16,7 @@ class ValueObjectToTypescriptBuilder extends AbstractTypescriptBuilder
     public function getTypescriptCode(): string
     {
         $typescriptCode = <<<EOT
-interface $this->name {
+export interface $this->name {
 
 EOT;
 

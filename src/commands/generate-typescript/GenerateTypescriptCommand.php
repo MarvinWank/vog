@@ -4,6 +4,7 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
+use UnexpectedValueException;
 use Vog\Commands\Generate\AbstractCommand;
 
 class GenerateTypescriptCommand extends AbstractCommand
@@ -21,10 +22,6 @@ class GenerateTypescriptCommand extends AbstractCommand
         $typescriptCode = "";
         foreach ($json as $namespace => $objects) {
             foreach ($objects as $object) {
-
-                if ($object['type'] !== "valueObject" && $object['type'] !== "set" ) {
-                    continue;
-                }
                 $builder = $this->getBuilder($object);
                 $typescriptCode .= $builder->getTypescriptCode();
             }
@@ -51,18 +48,17 @@ class GenerateTypescriptCommand extends AbstractCommand
                 $builder = new SetToTypescriptBuilder($object['name'], $this->config);
                 if (!array_key_exists("itemType", $object)) {
                     $name = $builder->getName();
-                    throw new \UnexpectedValueException("Object $name is of type set, but misses itemType definition");
+                    throw new UnexpectedValueException("Object $name is of type set, but misses itemType definition");
                 }
                 $builder->setItemType($object['itemType']);
                 break;
-//            case "enum":
-//                break;
-//            case "nullableEnum":
-//                break;
-            default:
-//                throw new UnexpectedValueException("Data typ " . $object['type'] . " should be allowed, but is not
-//                implemented. This is an internal error. Please open an issue on GitHub");
+            case "enum":
+            case "nullableEnum":
+                $builder = new EnumToTypescriptBuilder($object['name'], $this->config);
                 break;
+            default:
+                throw new UnexpectedValueException("Data typ " . $object['type'] . " should be allowed, but is not
+                implemented. This is an internal error. Please open an issue on GitHub");
         }
 
         if (!$builder instanceof SetToTypescriptBuilder) {

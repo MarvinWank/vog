@@ -36,6 +36,9 @@ class GenerateTypescriptTestCase extends TestCase
      */
     public function it_tests_typescript_generation()
     {
-        $this->assertTrue(true);
+        $referenceFile = file_get_contents(__DIR__."/typescriptReferenceFile.ts");
+        $generatedFile = file_get_contents(__DIR__."/testObjectsTypescript/types.d.ts");
+
+        $this->assertEquals($referenceFile, $generatedFile);
     }
 }
