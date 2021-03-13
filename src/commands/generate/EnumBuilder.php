@@ -5,7 +5,7 @@ namespace Vog\Commands\Generate;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
-class EnumBuilder extends AbstractBuilder
+class EnumBuilder extends AbstractPhpBuilder
 {
     protected array $implements = ['Enum'];
 

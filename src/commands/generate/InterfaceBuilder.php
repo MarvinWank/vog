@@ -5,7 +5,7 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class InterfaceBuilder extends AbstractBuilder
+class InterfaceBuilder extends AbstractPhpBuilder
 {
     public function __construct(string $name, Config $config)
     {

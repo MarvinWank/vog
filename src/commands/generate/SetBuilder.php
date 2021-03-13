@@ -4,7 +4,7 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class SetBuilder extends ValueObjectBuilder
+class SetBuilder extends AbstractPhpBuilder
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
@@ -62,7 +62,7 @@ EOT;
         EOT;
 
 
-        if (!in_array($this->itemType, parent::PRIMITIVE_TYPES)) {
+        if (!in_array($this->itemType, parent::PHP_PRIMITIVE_TYPES)) {
             $phpcode .= <<<EOT
                 
                         \$return = [];
@@ -100,7 +100,7 @@ EOT;
                     return new self(\$items);
                 }
             EOT;
-        } else if ($this->isPrimitive($this->itemType)) {
+        } else if ($this->isPrimitivePhpType($this->itemType)) {
             $phpcode .= <<<EOT
     public static function fromArray(array \$items) {
         foreach (\$items as \$key => \$item) {
@@ -225,7 +225,7 @@ EOT;
     
 EOT;
 
-            if (!$this->isPrimitive($this->itemType)){
+            if (!$this->isPrimitivePhpType($this->itemType)){
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
@@ -274,7 +274,7 @@ EOT;
     }
     
 EOT;
-            if (!$this->isPrimitive($this->itemType)){
+            if (!$this->isPrimitivePhpType($this->itemType)){
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
