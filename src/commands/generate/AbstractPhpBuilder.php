@@ -4,6 +4,7 @@
 namespace Vog\Commands\Generate;
 
 
+use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
 abstract class AbstractPhpBuilder extends AbstractBuilder
@@ -12,6 +13,15 @@ abstract class AbstractPhpBuilder extends AbstractBuilder
     protected array $implements = [];
     protected bool $is_final;
     protected bool $is_mutable;
+
+    public function __construct(string $name, Config $config)
+    {
+        parent::__construct($name, $config);
+
+        $this->extends = null;
+        $this->is_final = false;
+        $this->is_mutable = false;
+    }
 
     abstract public function getPhpCode(): string;
 

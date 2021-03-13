@@ -109,7 +109,7 @@ class GenerateCommand extends AbstractCommand
         }
 
         if (array_key_exists('mutable', $data)) {
-            if ( !($vog_obj instanceof ValueObjectBuilder)){
+            if ( !($vog_obj instanceof ValueObjectBuilder) && !($vog_obj instanceof SetBuilder)){
                 $name = $vog_obj->getName();
                 $type = $vog_obj->getType();
                 throw new UnexpectedValueException("Mutability is only available on value objects, yet object 
