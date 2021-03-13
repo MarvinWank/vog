@@ -4,6 +4,7 @@ require_once __DIR__ . '/src/commands/AbstractBuilder.php';
 require_once __DIR__ . '/src/commands/generate/AbstractPhpBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/AbstractTypescriptBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/ValueObjectToTypescriptBuilder.php';
+require_once __DIR__ . '/src/commands/generate-typescript/SetToTypescriptBuilder.php';
 require_once __DIR__ . '/src/ValueObjects/Set.php';
 require_once __DIR__ . '/src/ValueObjects/Enum.php';
 require_once __DIR__ . '/src/ValueObjects/ValueObject.php';

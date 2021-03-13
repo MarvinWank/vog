@@ -22,7 +22,7 @@ class GenerateTypescriptCommand extends AbstractCommand
         foreach ($json as $namespace => $objects) {
             foreach ($objects as $object) {
 
-                if ($object['type'] !== "valueObject"){
+                if ($object['type'] !== "valueObject" && $object['type'] !== "set" ) {
                     continue;
                 }
                 $builder = $this->getBuilder($object);
@@ -47,13 +47,27 @@ class GenerateTypescriptCommand extends AbstractCommand
             case "valueObject":
                 $builder = new ValueObjectToTypescriptBuilder($object['name'], $this->config);
                 break;
+            case "set":
+                $builder = new SetToTypescriptBuilder($object['name'], $this->config);
+                if (!array_key_exists("itemType", $object)) {
+                    $name = $builder->getName();
+                    throw new \UnexpectedValueException("Object $name is of type set, but misses itemType definition");
+                }
+                $builder->setItemType($object['itemType']);
+                break;
+//            case "enum":
+//                break;
+//            case "nullableEnum":
+//                break;
             default:
 //                throw new UnexpectedValueException("Data typ " . $object['type'] . " should be allowed, but is not
 //                implemented. This is an internal error. Please open an issue on GitHub");
                 break;
         }
 
-        $builder->setValues($object['values']);
+        if (!$builder instanceof SetToTypescriptBuilder) {
+            $builder->setValues($object['values']);
+        }
 
         return $builder;
     }
