@@ -1,7 +1,6 @@
 {
-  "root_path": "./test/testObjects",
-  "namespace": "Test\\TestObjects",
-  ".": [
+  "root_path": ".",
+  "test/testObjectsFpp": [
     {
       "type": "enum",
       "name": "DietStyle",
@@ -27,9 +26,9 @@
       "name": "Recipe",
       "values": {
         "title": "string",
-        "minutesToPrepare": "?int",
+        "minutes_to_prepare": "?int",
         "rating": "float",
-        "dietStyle": "DietStyle"
+        "diet_style": "DietStyle"
       },
       "string_value": "title"
     },
@@ -38,9 +37,9 @@
       "name": "RecipeNoStringValue",
       "values": {
         "title": "string",
-        "minutesToPrepare": "?int",
+        "minutes_to_prepare": "?int",
         "rating": "float",
-        "dietStyle": "DietStyle"
+        "diet_style": "DietStyle"
       }
     },
     {
@@ -48,9 +47,9 @@
       "name": "RecipeIntStringValue",
       "values": {
         "title": "string",
-        "minutesToPrepare": "?int",
+        "minutes_to_prepare": "?int",
         "rating": "float",
-        "dietStyle": "DietStyle"
+        "diet_style": "DietStyle"
       },
       "string_value": "rating"
     },
@@ -59,11 +58,11 @@
       "name": "RecipeEnumStringValue",
       "values": {
         "title": "string",
-        "minutesToPrepare": "?int",
+        "minutes_to_prepare": "?int",
         "rating": "float",
-        "dietStyle": "DietStyle"
+        "diet_style": "DietStyle"
       },
-      "string_value": "dietStyle"
+      "string_value": "diet_style"
     },
     {
       "type": "valueObject",
@@ -85,8 +84,8 @@
       "type": "valueObject",
       "name": "DesertRecipe",
       "values": {
-          "lactosefree": "bool",
-          "light": "bool"
+        "lactosefree": "bool",
+        "light": "bool"
       },
       "extends": "\\Test\\BaseClass"
     },
@@ -150,6 +149,11 @@
       "mutable": false
     },
     {
+      "type": "set",
+      "name": "RecipeSet",
+      "itemType": "Recipe"
+    },
+    {
       "type": "valueObject",
       "name": "WithCamelCase",
       "values": {
@@ -162,53 +166,6 @@
       "values": {
         "no_camel_case": "string"
       }
-    },
-    {
-      "type": "set",
-      "name": "RecipeSet",
-      "itemType": "Recipe"
-    },
-    {
-      "type": "valueObject",
-      "name": "ValueObjectWithNestedSet",
-      "values": {
-        "title": "string",
-        "recipes": "RecipeSet"
-      }
-    },
-    {
-      "type": "set",
-      "name": "setWithPrimitiveType",
-      "itemType": "string"
-    },
-    {
-      "type": "set",
-      "name": "mutableSetWithPrimitiveType",
-      "itemType": "string",
-      "mutable": true
-    },
-    {
-      "type": "valueObject",
-      "name": "RecipeWithDate",
-      "values": {
-        "title": "string",
-        "minutesToPrepare": "?int",
-        "rating": "float",
-        "creationDate": "\\DateTimeImmutable"
-      },
-      "string_value": "title"
-    },
-    {
-      "type": "valueObject",
-      "name": "RecipeWithIndividualDateFormat",
-      "values": {
-        "title": "string",
-        "minutesToPrepare": "?int",
-        "rating": "float",
-        "creationDate": "\\DateTimeImmutable"
-      },
-      "string_value": "title",
-      "dateTimeFormat": "d.m.Y"
     }
   ]
 }

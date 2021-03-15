@@ -1,23 +1,15 @@
 <?php
 
 
-use Test\TestObjects\DietStyle;
+use PHPUnit\Framework\TestCase;
+use Test\TestObjectsFpp\DietStyle;
 
-class EnumTest extends Psr2TestCase
+class FppEnumTest extends FppTestCase
 {
     /**
      * @test
      */
-    public function it_tests_casting_to_string() {
-        $enum = DietStyle::VEGETARIAN();
-        self::assertIsString((string)$enum);
-        self::assertEquals($enum->toString(), (string) $enum);
-    }
-
-    /**
-     * @test
-     */
-    public function it_tests_from_value()
+    public function es_testet_from_value()
     {
         $diet_style = DietStyle::fromName('OMNIVORE');
 
@@ -29,7 +21,7 @@ class EnumTest extends Psr2TestCase
     /**
      * @test
      */
-    public function it_tests_from_name()
+    public function es_testet_from_name()
     {
         $diet_style = DietStyle::fromName("VEGAN");
 
@@ -40,7 +32,7 @@ class EnumTest extends Psr2TestCase
     /**
      * @test
      */
-    public function it_tests_from_function()
+    public function es_testet_from_function()
     {
         $diet_style = DietStyle::VEGETARIAN();
 

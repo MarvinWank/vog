@@ -1,77 +1,83 @@
 <?php
 
-
-use Test\TestObjects\BaseClass;
+use Test\Interface1;
+use Test\Interface2;
+use Test\BaseClass;
 use Test\TestObjects\ChildOfNotFinal;
 use Test\TestObjects\DesertRecipe;
 use Test\TestObjects\DietStyle;
-use Test\TestObjects\implementsMany;
-use Test\TestObjects\implementsOne;
-use Test\TestObjects\Interface1;
-use Test\TestObjects\Interface2;
-use Test\TestObjects\notFinal;
+use Test\TestObjects\ExplicitlyImmutableObject;
+use Test\TestObjects\ImplementsMany;
+use Test\TestObjects\ImplementsOne;
+use Test\TestObjects\ImplicitlyImmutableObject;
+use Test\TestObjects\MutableObject;
+use Test\TestObjects\NotFinal;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeCollection;
 use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
+use Test\TestObjects\RecipeWithDate;
+use Test\TestObjects\RecipeWithIndividualDateFormat;
 use Test\TestObjects\ValueObjectNoDataType;
+use Test\TestObjects\WithCamelCase;
+use Test\TestObjects\WithUnderscore;
 
-class ValueObjectTest extends VogTestCase
+class ValueObjectTest extends Psr2TestCase
 {
     /**
      * @test
      */
-    public function es_testet_values()
+    public function it_tests_values()
     {
         $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
 
-        $this->assertEquals("Test Recipe", $recipe->title());
-        $this->assertEquals(30, $recipe->minutes_to_prepare());
-        $this->assertEquals(5.5, $recipe->rating());
-        $this->assertTrue(DietStyle::OMNIVORE()->equals($recipe->diet_style()));
-        $this->assertEquals("Test Recipe", strval($recipe));
-        $this->assertEquals("Test Recipe", $recipe->toString());
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->getDietStyle()));
+        self::assertEquals("Test Recipe", strval($recipe));
+        self::assertEquals("Test Recipe", $recipe->toString());
     }
 
     /**
      * @test
      */
-    public function es_testet_from_array()
+    public function it_tests_from_array()
     {
         $recipe = Recipe::fromArray([
             "title" => "Test Recipe",
-            "minutes_to_prepare" => 30,
+            "minutesToPrepare" => 30,
             "rating" => 5.5,
-            "diet_style" => DietStyle::VEGETARIAN()
+            "dietStyle" => DietStyle::VEGETARIAN()
         ]);
 
-        $this->assertEquals("Test Recipe", $recipe->title());
-        $this->assertEquals(30, $recipe->minutes_to_prepare());
-        $this->assertEquals(5.5, $recipe->rating());
-        $this->assertTrue(DietStyle::VEGETARIAN()->equals($recipe->diet_style()));
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::VEGETARIAN()->equals($recipe->getDietStyle()));
     }
 
     /**
      * @test
      */
-    public function es_testet_to_array()
+    public function it_tests_to_array()
     {
         $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::VEGAN());
         $recipe = $recipe->toArray();
 
-        $this->assertEquals("Test Recipe", $recipe['title']);
-        $this->assertEquals(30, $recipe['minutes_to_prepare']);
-        $this->assertEquals(5.5, $recipe['rating']);
-        $this->assertEquals("VEGAN", $recipe['diet_style']);
+        self::assertEquals("Test Recipe", $recipe['title']);
+        self::assertEquals(30, $recipe['minutesToPrepare']);
+        self::assertEquals(5.5, $recipe['rating']);
+        self::assertEquals("VEGAN", $recipe['dietStyle']);
     }
 
     /**
      * @test
      */
-    public function es_testet_mit_int_als_string_value()
+    public function it_tests_mit_int_als_string_value()
     {
         $recipe = new RecipeIntStringValue("Test Recipe", 30, 5.5, DietStyle::VEGAN());
-        $this->assertEquals("5.5", strval($recipe));
+        self::assertEquals("5.5", strval($recipe));
     }
 
     /**
@@ -80,7 +86,7 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_value_object_with_enum_as_string_value()
     {
         $recipe = new RecipeEnumStringValue("Test Recipe", 30, 5.5, DietStyle::VEGAN());
-        $this->assertEquals('VEGAN', strval($recipe));
+        self::assertEquals('VEGAN', strval($recipe));
     }
 
     /**
@@ -94,18 +100,18 @@ class ValueObjectTest extends VogTestCase
         );
 
         //String value of recipe: $recipe_1; String value of $recipe_1: $rating
-        $this->assertEquals(5.5, strval($recipe));
+        self::assertEquals(5.5, strval($recipe));
 
         $recipe_as_array = $recipe->toArray();
 
-        $this->assertIsArray($recipe_as_array['recipe1']);
-        $this->assertIsArray($recipe_as_array['recipe2']);
+        self::assertIsArray($recipe_as_array['recipe1']);
+        self::assertIsArray($recipe_as_array['recipe2']);
 
-        $this->assertEquals("Test Recipe 1", $recipe_as_array['recipe1']['title']);
-        $this->assertEquals("VEGAN", $recipe_as_array['recipe1']['diet_style']);
+        self::assertEquals("Test Recipe 1", $recipe_as_array['recipe1']['title']);
+        self::assertEquals("VEGAN", $recipe_as_array['recipe1']['dietStyle']);
 
-        $this->assertEquals("Test Recipe 2", $recipe_as_array['recipe2']['title']);
-        $this->assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['diet_style']);
+        self::assertEquals("Test Recipe 2", $recipe_as_array['recipe2']['title']);
+        self::assertEquals("VEGETARIAN", $recipe_as_array['recipe2']['dietStyle']);
     }
 
     /**
@@ -116,7 +122,7 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_value_object_with_undefined_datatype($value)
     {
         $object = new ValueObjectNoDataType($value);
-        $this->assertEquals($object->property(), $value);
+        self::assertEquals($object->getProperty(), $value);
     }
 
     public function undefined_datatype_data_provider()
@@ -135,7 +141,7 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_extension_generation()
     {
         $desert_recipe = new DesertRecipe(false, false);
-        $this->assertInstanceOf(BaseClass::class, $desert_recipe);
+        self::assertInstanceOf(BaseClass::class, $desert_recipe);
     }
 
     /**
@@ -143,8 +149,8 @@ class ValueObjectTest extends VogTestCase
      */
     public function it_tests_implementation_generation_with_one_interface()
     {
-        $instance = new implementsOne("bar", 42);
-        $this->assertInstanceOf(Interface1::class, $instance);
+        $instance = new ImplementsOne("bar", 42);
+        self::assertInstanceOf(Interface1::class, $instance);
     }
 
     /**
@@ -152,9 +158,9 @@ class ValueObjectTest extends VogTestCase
      */
     public function it_tests_implementation_generation_with_multiple_interfaces()
     {
-        $instance = new implementsMany("bar", 42);
-        $this->assertInstanceOf(Interface1::class, $instance);
-        $this->assertInstanceOf(Interface2::class, $instance);
+        $instance = new ImplementsMany("bar", 42);
+        self::assertInstanceOf(Interface1::class, $instance);
+        self::assertInstanceOf(Interface2::class, $instance);
     }
 
     /**
@@ -163,7 +169,158 @@ class ValueObjectTest extends VogTestCase
     public function it_tests_class_is_nonfinal()
     {
         $instance = new ChildOfNotFinal("blaze it");
-        $this->assertInstanceOf(NotFinal::class, $instance);
+        self::assertInstanceOf(NotFinal::class, $instance);
     }
 
+    /**
+     * @test
+     */
+    public function it_tests_mutability()
+    {
+        $instance = new MutableObject("bar");
+        self::assertEquals("bar", $instance->getFoo());
+        $instance->setFoo("foobar");
+        self::assertEquals("foobar", $instance->getFoo());
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_explicit_immutability()
+    {
+        $instance = new ExplicitlyImmutableObject("bar");
+        self::assertEquals("bar", $instance->getFoo());
+
+        self::assertFalse(method_exists($instance, "setFoo"));
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_implicit_immutability()
+    {
+        $instance = new ImplicitlyImmutableObject("bar");
+        self::assertEquals("bar", $instance->getFoo());
+
+        self::assertFalse(method_exists($instance, "setFoo"));
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_with_functions()
+    {
+        $recipe = new Recipe("Test Recipe", 30, 5.5, DietStyle::OMNIVORE());
+
+        self::assertEquals("Test Recipe", $recipe->getTitle());
+        self::assertEquals(30, $recipe->getMinutesToPrepare());
+        self::assertEquals(5.5, $recipe->getRating());
+        self::assertTrue(DietStyle::OMNIVORE()->equals($recipe->getDietStyle()));
+        self::assertEquals("Test Recipe", strval($recipe));
+        self::assertEquals("Test Recipe", $recipe->toString());
+
+        $recipe = $recipe->withTitle("New Title");
+        self::assertEquals("New Title", $recipe->getTitle());
+        $recipe = $recipe->withMinutesToPrepare(31);
+        self::assertEquals(31, $recipe->getMinutesToPrepare());
+        $recipe = $recipe->withRating(10);
+        self::assertEquals(10, $recipe->getRating());
+        $recipe = $recipe->withDietStyle(DietStyle::VEGAN());
+        self::assertEquals(DietStyle::VEGAN(), $recipe->getDietStyle());
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_camelcase()
+    {
+        $value = "lorem ipsum";
+        $object = new WithCamelCase($value);
+
+        self::assertEquals($value, $object->getCamelCased());
+        $array = $object->toArray();
+        self::assertEquals(['camelCased' => $value], $array);
+
+        $new = $object::fromArray($array);
+        self::assertEquals($object, $new);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_with_underscore()
+    {
+        $value = "lorem ipsum";
+        $object = new WithUnderscore($value);
+        self::assertTrue(method_exists($object, "getNoCamelCase"));
+        self::assertTrue(method_exists($object, "withNoCamelCase"));
+
+        self::assertFalse(method_exists($object, "getNo_camel_case"));
+
+        $array = $object->toArray();
+        self::assertEquals(['noCamelCase' => $value], $array);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTime()
+    {
+        $recipe = new RecipeWithDate("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
+            "Y-m-d",
+            "2000-07-18"
+        ));
+
+        $array = $recipe->toArray();
+
+        $this->assertEquals("2000-07-18", $array['creationDate']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTime_with_individual_format()
+    {
+        $recipe = new RecipeWithIndividualDateFormat("Test Recipe", 30, 5.5, DateTimeImmutable::createFromFormat(
+            "Y-m-d",
+            "2000-07-18"
+        ));
+
+        $array = $recipe->toArray();
+
+        $this->assertEquals("18.07.2000", $array['creationDate']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTimeFromArray()
+    {
+        $recipe = RecipeWithIndividualDateFormat::fromArray([
+            "title" => "Test Recipe",
+            "minutesToPrepare" => 30,
+            "rating" => 5.5,
+            "creationDate" => DateTimeImmutable::createFromFormat(
+                "Y-m-d",
+                "2000-07-18"
+            )
+        ]);
+
+        $this->assertEquals("2000-07-18",$recipe->getCreationDate()->format('Y-m-d'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_tests_dateTimeFromArray_with_string_value()
+    {
+        $recipe = RecipeWithIndividualDateFormat::fromArray([
+            "title" => "Test Recipe",
+            "minutesToPrepare" => 30,
+            "rating" => 5.5,
+            "creationDate" => "18.07.2000"
+        ]);
+
+        $this->assertEquals("2000-07-18",$recipe->getCreationDate()->format('Y-m-d'));
+    }
 }

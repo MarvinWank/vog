@@ -1,9 +1,9 @@
 <?php
 
 
-use Test\TestObjects\Cuisine;
+use Test\TestObjectsFpp\Cuisine;
 
-class NullableEnumTest extends Psr2TestCase
+class FppNullableEnumTest extends FppTestCase
 {
     /**
      * @test
