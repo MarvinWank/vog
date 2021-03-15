@@ -37,7 +37,8 @@ It is designed to be a dev dependency as you generate the value objects with it 
 
 ## Usage and subcommands
 
-After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. It has currently one subcommand. That generates the value objects, enums, sets and some marker interfaces according to your definition.  
+After installing with composer, there is a plain php file in `vendor/bin/vog`, which can be called from the CLI. 
+It has multiple subcommands, which are as follows: 
 
 #### generate
 
