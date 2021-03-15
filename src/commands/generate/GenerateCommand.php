@@ -8,21 +8,14 @@ use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 use function json_decode;
 
-class GenerateCommand
+class GenerateCommand extends AbstractCommand
 {
-    private Config $config;
     private string $rootPath;
     private string $rootNamespace;
 
-    private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
-
-    public function __construct(Config $config) {
-        $this->config = $config;
-    }
-
     public function run(string $target): void
     {
-        $data = $this->parseFile($target);
+        $data = $this->parseFileToJson($target);
 
         if (!array_key_exists('root_path', $data)) {
             throw new UnexpectedValueException("Root Path not specified");
@@ -51,49 +44,14 @@ class GenerateCommand
         echo  PHP_EOL;
     }
 
-    private function parseFile(string $filepath)
+    private function buildObject(array $data, string $targetFilepath): AbstractPhpBuilder
     {
-        if (!file_exists($filepath)) {
-            throw new InvalidArgumentException("File $filepath was not found");
-        }
-        $file = file_get_contents($filepath);
-
-        $data = json_decode($file, true);
-        if ($data === null) {
-            throw new UnexpectedValueException("Could not parse " . $filepath . "\n json_last_error_msg(): " . json_last_error_msg());
-        }
-        return $data;
-    }
-
-    private function buildObject(array $data, string $targetFilepath): AbstractBuilder
-    {
-        if (!array_key_exists("name", $data)) {
-            throw new UnexpectedValueException(
-                "No name was given for an object"
-            );
-        }
         if (!$targetFilepath || $targetFilepath === "") {
             throw new UnexpectedValueException(
                 "No namespace was given" . " for object " . $data['name']
             );
         }
-        if (!array_key_exists("type", $data)) {
-            throw new UnexpectedValueException(
-                "Value Object type not specified. Allowed types: " . implode(", ", self::ALL_DATA_TYPES)
-                . " for object " . $data['name']
-            );
-        }
-        if (!in_array($data['type'], self::ALL_DATA_TYPES)) {
-            throw new UnexpectedValueException(
-                "Unknown value object type '" . $data['type'] . "' Allowed types: " . implode(", ", self::ALL_DATA_TYPES)
-                . " for object " . $data['name']
-            );
-        }
-        if ($data['type'] !== 'set' && !array_key_exists("values", $data)) {
-            throw new UnexpectedValueException(
-                "No values were given" . " for object " . $data['name']
-            );
-        }
+        $this->validateObject($data);
 
         $vog_obj = null;
 
@@ -129,7 +87,7 @@ class GenerateCommand
             }
         }
 
-        $vog_obj->setTargetFilepath($this->getTargetFilePath($targetFilepath));
+        $vog_obj->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
 
         $target_namespace = $this->getTargetNamespace($targetFilepath);
         $vog_obj->setNamespace($target_namespace);
@@ -151,7 +109,7 @@ class GenerateCommand
         }
 
         if (array_key_exists('mutable', $data)) {
-            if ( !($vog_obj instanceof ValueObjectBuilder)){
+            if ( !($vog_obj instanceof ValueObjectBuilder) && !($vog_obj instanceof SetBuilder)){
                 $name = $vog_obj->getName();
                 $type = $vog_obj->getType();
                 throw new UnexpectedValueException("Mutability is only available on value objects, yet object 
@@ -163,7 +121,7 @@ class GenerateCommand
         return $vog_obj;
     }
 
-    private function writeToFile(AbstractBuilder $builderInstance)
+    private function writeToFile(AbstractPhpBuilder $builderInstance)
     {
         return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getPhpCode());
     }
@@ -191,29 +149,7 @@ class GenerateCommand
         return implode('\\', array_values($filePathAsArray));
     }
 
-    private function getTargetFilePath(string $targetFilepath): string
-    {
-        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
-        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
-            if (empty($pathFragment)) {
-                return false;
-            }
 
-            if ($pathFragment === '.') {
-                return false;
-            }
-
-            return true;
-        });
-
-        $targetFilepath = implode(DIRECTORY_SEPARATOR, array_values($filePathAsArray));
-
-        if (!file_exists($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath)) {
-            throw new UnexpectedValueException("Directory " . $this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath . " does not exist");
-        }
-
-        return rtrim($this->rootPath . DIRECTORY_SEPARATOR . $targetFilepath, DIRECTORY_SEPARATOR);
-    }
 
     private function generateMarkerInterfaces(string $targetFilepath): void
     {
@@ -225,7 +161,7 @@ class GenerateCommand
 
         foreach ($interfaces as $interface) {
             $object = new InterfaceBuilder($interface, $this->config);
-            $object->setTargetFilepath($this->getTargetFilePath($targetFilepath));
+            $object->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
             $object->setNamespace($this->getTargetNamespace($targetFilepath));
             $success = $this->writeToFile($object);
 
