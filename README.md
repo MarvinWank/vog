@@ -28,12 +28,6 @@ The syntax is not inspired by Haskell and thus readable.
 This is basically a ripoff of https://github.com/prolic/fpp, but rewritten from scratch, with less fancy 
 but readable code, full test coverage and proper documentation. 
 
-## Installation
-
-vog can be most easily installed with composer:
-`composer require-dev marvinwank/vog`
-
-It is designed to be a dev dependency as you generate the value objects with it and commit/deploy the generated files with your application.
 
 ## Usage and subcommands
 
