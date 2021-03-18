@@ -1,7 +1,6 @@
 # Vog documentation
 
-You think the docs suck? So do I. If you figured out jekyll, feel free to 
-contribute.
+Official documentation for [vog](https://github.com/MarvinWank/vog)
 
 ## Table of contents
 
