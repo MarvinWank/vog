@@ -1,10 +1,10 @@
-export enum DietStyle { 
+export enum DietStyle {
 	OMNIVORE = 'Omnivore',
 	VEGETARIAN = 'Vegetarian',
 	VEGAN = 'Vegan',
 }
 
-export enum Cuisine { 
+export enum Cuisine {
 	DEUTSCH = 'deutsch',
 	MEDITERAN = 'mediteran',
 	ASIATISCH = 'asiatisch',
@@ -49,7 +49,7 @@ export interface ValueObjectNoDataType {
 	property: any
 }
 
-export interface DesertRecipe {
+export interface DesertRecipe extends TestBaseClass {
 	lactosefree: boolean
 	light: boolean
 }
@@ -69,7 +69,7 @@ export interface NotFinal {
 	bar: number
 }
 
-export interface ChildOfNotFinal {
+export interface ChildOfNotFinal extends NotFinal {
 	foo: string
 }
 
