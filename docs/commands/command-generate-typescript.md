@@ -1,4 +1,4 @@
-### generate-typescript
+# generate-typescript
 
 The `generate-typescript` subcommand allows you to generate typescript interfaces and types from existing vog definitions.
 It takes two additional arguments: The path to the definition file and the output file. All generated types and interface
@@ -6,7 +6,7 @@ will be written to the same file.
 
 *Note*: namespaces are ignored by this command. All typescript files will be written to the same directory.
 
-#### value objects
+## value objects
 
 `generate-typescript` will create typescript interfaces from value objects. Example:
 
@@ -27,7 +27,7 @@ will be written to the same file.
 Will result in
 
 ```typescript
-interface Recipe{
+interface Recipe {
     title: string
     minutesToPrepare?: int
     rating: float,
@@ -36,3 +36,5 @@ interface Recipe{
 ```
 
 *Note*: Non-primitive types have to be defined in the same value file. 
+
+## 
