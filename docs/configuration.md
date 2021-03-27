@@ -13,11 +13,10 @@ Vog comes with a default config explicitly stating all available options.
 
 You may alter the configuration, but
 
-- Your custom config must define all available options, so its best to copy the default conf and change the values you need 
 - Your custom config must be namend `vog_config.json` 
 - Your custom config must be in the same directoy as you `vendor` directory
 
-I know this is less than ideal and I am working on it.
+I know this is an annoying restraint I am working on it.
 
 These are the currently available options:
 
