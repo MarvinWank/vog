@@ -10,7 +10,7 @@ namespace Vog\ValueObjects;
 
 use UnexpectedValueException;
 
-final class GeneratorOptions implements ValueObject
+class GeneratorOptions implements ValueObject
 {
     private TargetMode $target;
     private ?string $dateTimeFormat;
@@ -62,8 +62,7 @@ final class GeneratorOptions implements ValueObject
         if (!array_key_exists('target', $array)) {
             throw new UnexpectedValueException('Array key target does not exist');
         }
-        
-        if (is_string($array['target']) && is_a(TargetMode::class, Enum::class, true)) {
+                if (is_string($array['target']) && is_a(TargetMode::class, Enum::class, true)) {
             $array['target'] = TargetMode::fromName($array['target']);
         }
     

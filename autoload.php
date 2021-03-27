@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/src/commands/AbstractBuilder.php';
+require_once __DIR__ . '/src/commands/AbstractCommand.php';
 require_once __DIR__ . '/src/commands/generate/AbstractPhpBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/AbstractTypescriptBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/ValueObjectToTypescriptBuilder.php';

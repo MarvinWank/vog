@@ -10,7 +10,7 @@ namespace Vog\ValueObjects;
 
 use UnexpectedValueException;
 
-final class Config implements ValueObject
+class Config implements ValueObject
 {
     private GeneratorOptions $generatorOptions;
 
@@ -44,8 +44,7 @@ final class Config implements ValueObject
         if (!array_key_exists('generatorOptions', $array)) {
             throw new UnexpectedValueException('Array key generatorOptions does not exist');
         }
-        
-        if (is_string($array['generatorOptions']) && is_a(GeneratorOptions::class, Enum::class, true)) {
+                if (is_string($array['generatorOptions']) && is_a(GeneratorOptions::class, Enum::class, true)) {
             $array['generatorOptions'] = GeneratorOptions::fromName($array['generatorOptions']);
         }
     
