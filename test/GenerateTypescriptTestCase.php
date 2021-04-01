@@ -25,7 +25,8 @@ class GenerateTypescriptTestCase extends TestCase
         $config = [
             'generatorOptions' => [
                 'target' => TargetMode::MODE_PSR2()->name(),
-                'dateTimeFormat' => "Y-m-d"
+                'dateTimeFormat' => "Y-m-d",
+                'toArrayMode' => 'DEEP'
             ],
         ];
         $hub->run($argv, $config);

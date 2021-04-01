@@ -76,7 +76,9 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         $phpcode = $this->generateWithMethods($phpcode);
         $phpcode = $this->generateToArray($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
-        $phpcode = $this->generateValueToArray($phpcode);
+        if ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())){
+            $phpcode = $this->generateValueToArray($phpcode);
+        }
         $phpcode = $this->generateEquals($phpcode);
 
         if (isset($this->stringValue)) {
