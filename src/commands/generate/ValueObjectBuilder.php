@@ -6,6 +6,7 @@ namespace Vog\Commands\Generate;
 use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
+use Vog\ValueObjects\ToArrayMode;
 
 class ValueObjectBuilder extends AbstractPhpBuilder
 {
@@ -67,6 +68,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
 
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateGetters($phpcode);
+
         if ($this->is_mutable) {
             $phpcode = $this->generateSetters($phpcode);
         }
@@ -234,29 +236,46 @@ class ValueObjectBuilder extends AbstractPhpBuilder
                 return [
         EOT;
 
-        foreach ($this->values as $name => $datatype) {
-            if (!$this->isPrimitivePhpType($datatype)) {
-                $phpcode .= <<<EOT
+        if ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())) {
+
+            foreach ($this->values as $name => $datatype) {
+                if (!$this->isPrimitivePhpType($datatype)) {
+                    $phpcode .= <<<EOT
                 
                             '$name' =>  \$this->valueToArray(\$this->$name),
                 EOT;
-            } else {
+                } else {
+                    $phpcode .= <<<EOT
+                
+                            '$name' => \$this->$name,
+                EOT;
+                }
+            }
+
+        } elseif ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
+
+            foreach ($this->values as $name => $datatype) {
                 $phpcode .= <<<EOT
                 
                             '$name' => \$this->$name,
                 EOT;
             }
+        } else {
+            throw new \UnexpectedValueException("Unexpected Config value for toArrayMode");
         }
+
         $phpcode .= <<<EOT
         
                 ];
             }
             
         EOT;
+
         return $phpcode;
     }
 
-    protected function generateFromArray(string $phpcode): string
+    protected
+    function generateFromArray(string $phpcode): string
     {
         $phpcode .= <<<'EOT'
         
@@ -325,7 +344,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $phpcode;
     }
 
-    private function generateToString(string $phpcode)
+    private
+    function generateToString(string $phpcode)
     {
         $phpcode .= <<<EOT
         
@@ -344,7 +364,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $phpcode;
     }
 
-    private function generateValueToArray(string $phpcode)
+    private
+    function generateValueToArray(string $phpcode)
     {
         $dateTimeFormat = $this->dateTimeFormat;
         $phpcode .= <<<EOT
@@ -367,7 +388,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $phpcode;
     }
 
-    private function generateEquals(string $phpcode)
+    private
+    function generateEquals(string $phpcode)
     {
         $phpcode .= <<<'EOT'
             
@@ -384,7 +406,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $phpcode;
     }
 
-    private function getGetterName(string $name): string
+    private
+    function getGetterName(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
@@ -394,7 +417,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $name;
     }
 
-    private function getWithFunctionName(string $name): string
+    private
+    function getWithFunctionName(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
@@ -404,7 +428,8 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return 'with_' . $name;
     }
 
-    private function getSetter(string $name): string
+    private
+    function getSetter(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
