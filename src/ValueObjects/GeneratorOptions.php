@@ -14,13 +14,16 @@ class GeneratorOptions implements ValueObject
 {
     private TargetMode $target;
     private ?string $dateTimeFormat;
+    private ToArrayMode $toArrayMode;
 
     public function __construct (
         TargetMode $target,
-        ?string $dateTimeFormat
+        ?string $dateTimeFormat,
+        ToArrayMode $toArrayMode
     ) {
         $this->target = $target;
         $this->dateTimeFormat = $dateTimeFormat;
+        $this->toArrayMode = $toArrayMode;
     }
     
     public function getTarget(): TargetMode 
@@ -33,11 +36,17 @@ class GeneratorOptions implements ValueObject
         return $this->dateTimeFormat;
     }
     
+    public function getToArrayMode(): ToArrayMode 
+    {
+        return $this->toArrayMode;
+    }
+    
     public function withTarget(TargetMode $target): self 
     {
         return new self(
             $target,
-            $this->dateTimeFormat
+            $this->dateTimeFormat,
+            $this->toArrayMode
         );
     }
     
@@ -45,7 +54,17 @@ class GeneratorOptions implements ValueObject
     {
         return new self(
             $this->target,
-            $dateTimeFormat
+            $dateTimeFormat,
+            $this->toArrayMode
+        );
+    }
+    
+    public function withToArrayMode(ToArrayMode $toArrayMode): self 
+    {
+        return new self(
+            $this->target,
+            $this->dateTimeFormat,
+            $toArrayMode
         );
     }
     
@@ -54,6 +73,7 @@ class GeneratorOptions implements ValueObject
         return [
             'target' =>  $this->valueToArray($this->target),
             'dateTimeFormat' => $this->dateTimeFormat,
+            'toArrayMode' =>  $this->valueToArray($this->toArrayMode),
         ];
     }
     
@@ -74,9 +94,21 @@ class GeneratorOptions implements ValueObject
             throw new UnexpectedValueException('Array key dateTimeFormat does not exist');
         }
         
+        if (!array_key_exists('toArrayMode', $array)) {
+            throw new UnexpectedValueException('Array key toArrayMode does not exist');
+        }
+                if (is_string($array['toArrayMode']) && is_a(ToArrayMode::class, Enum::class, true)) {
+            $array['toArrayMode'] = ToArrayMode::fromName($array['toArrayMode']);
+        }
+    
+        if (is_array($array['toArrayMode']) && (is_a(ToArrayMode::class, Set::class, true) || is_a(ToArrayMode::class, ValueObject::class, true))) {
+            $array['toArrayMode'] = ToArrayMode::fromArray($array['toArrayMode']);
+        }
+
         return new self(
             $array['target'],
-            $array['dateTimeFormat']
+            $array['dateTimeFormat'],
+            $array['toArrayMode']
         );
     }
         
