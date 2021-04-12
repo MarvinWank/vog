@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/src/commands/AbstractBuilder.php';
+require_once __DIR__ . '/src/commands/AbstractCommand.php';
 require_once __DIR__ . '/src/commands/generate/AbstractPhpBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/AbstractTypescriptBuilder.php';
 require_once __DIR__ . '/src/commands/generate-typescript/ValueObjectToTypescriptBuilder.php';
@@ -12,6 +13,7 @@ require_once __DIR__ . '/src/ValueObjects/ValueObject.php';
 require_once __DIR__ . '/src/ValueObjects/Config.php';
 require_once __DIR__ . '/src/ValueObjects/GeneratorOptions.php';
 require_once __DIR__ . '/src/ValueObjects/TargetMode.php';
+require_once __DIR__ . '/src/ValueObjects/ToArrayMode.php';
 require_once __DIR__ . '/src/commands/generate/ValueObjectBuilder.php';
 require_once __DIR__ . '/src/commands/generate/EnumBuilder.php';
 require_once __DIR__ . "/src/commands/generate/NullableEnumBuilder.php";

@@ -14,7 +14,8 @@
             "name": "GeneratorOptions",
             "values": {
                 "target": "TargetMode",
-                "dateTimeFormat": "?string"
+                "dateTimeFormat": "?string",
+                "toArrayMode": "ToArrayMode"
             }
         },
         {
@@ -23,6 +24,14 @@
             "values": {
                 "MODE_PSR2": "psr2",
                 "MODE_FPP": "fpp"
+            }
+        },
+        {
+            "type": "nullableEnum",
+            "name": "ToArrayMode",
+            "values": {
+                "DEEP": "deep",
+                "SHALLOW": "shallow"
             }
         }
     ]

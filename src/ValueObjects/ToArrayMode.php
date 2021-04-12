@@ -10,17 +10,17 @@ namespace Vog\ValueObjects;
 
 use InvalidArgumentException;
 
-class TargetMode implements Enum
+class ToArrayMode implements Enum
 {
-    public const VALUES = ['psr2', 'fpp', ];               
-    public const NAMES = ['MODE_PSR2', 'MODE_FPP', ];               
+    public const VALUES = ['deep', 'shallow', ];               
+    public const NAMES = ['DEEP', 'SHALLOW', ];               
     public const OPTIONS = [ 
-        'MODE_PSR2' => 'psr2',
-        'MODE_FPP' => 'fpp',
+        'DEEP' => 'deep',
+        'SHALLOW' => 'shallow',
     ];
 
-    public const MODE_PSR2 = 'psr2';               
-    public const MODE_FPP = 'fpp';               
+    public const DEEP = 'deep';               
+    public const SHALLOW = 'shallow';               
         
     private ?string $name;
     private ?string $value;
@@ -36,14 +36,14 @@ class TargetMode implements Enum
         }
     }
 
-    public static function MODE_PSR2(): self
+    public static function DEEP(): self
     {
-        return new self('MODE_PSR2');
+        return new self('DEEP');
     }
     
-    public static function MODE_FPP(): self
+    public static function SHALLOW(): self
     {
-        return new self('MODE_FPP');
+        return new self('SHALLOW');
     }
     
     public static function fromValue(?string $value): self

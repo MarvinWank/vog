@@ -8,7 +8,7 @@ class EnumToTypescriptBuilder extends AbstractTypescriptBuilder
 {
     public function getTypescriptCode(): string
     {
-        $typeScriptCode = "export enum $this->name { \n";
+        $typeScriptCode = "export enum $this->name {\n";
 
         foreach ($this->values as $name => $value){
 

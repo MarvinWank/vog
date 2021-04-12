@@ -79,6 +79,11 @@ class CommandHub
                     throw new UnexpectedValueException('Could not parse ' . $configFile . '\n json_last_error_msg(): ' . json_last_error_msg());
                 }
             }
+            $generatorOptions = $config['generatorOptions'];
+            $generatorOptionsDefault = $defaultConfig['generatorOptions'];
+            $generatorOptions = array_merge($generatorOptions, $generatorOptionsDefault);
+            $config['generatorOptions'] = $generatorOptions;
+
             $config = array_merge($defaultConfig, $config);
         }
 

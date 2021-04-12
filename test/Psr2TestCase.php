@@ -24,7 +24,8 @@ class Psr2TestCase extends TestCase
         $config = [
             'generatorOptions' => [
                 'target' => TargetMode::MODE_PSR2()->name(),
-                'dateTimeFormat' => "Y-m-d"
+                'dateTimeFormat' => "Y-m-d",
+                'toArrayMode' => \Vog\ValueObjects\ToArrayMode::DEEP()
             ],
         ];
         $hub->run($argv, $config);

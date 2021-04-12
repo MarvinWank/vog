@@ -43,6 +43,9 @@ class GenerateTypescriptCommand extends AbstractCommand
         switch ($object['type']) {
             case "valueObject":
                 $builder = new ValueObjectToTypescriptBuilder($object['name'], $this->config);
+                if (array_key_exists("extends", $object)){
+                    $builder->setExtends($object['extends']);
+                }
                 break;
             case "set":
                 $builder = new SetToTypescriptBuilder($object['name'], $this->config);
@@ -64,6 +67,7 @@ class GenerateTypescriptCommand extends AbstractCommand
         if (!$builder instanceof SetToTypescriptBuilder) {
             $builder->setValues($object['values']);
         }
+
 
         return $builder;
     }

@@ -1,6 +1,5 @@
 {
     "generatorOptions": {
-        "target": "MODE_PSR2",
-        "dateTimeFormat": "Y-m-d"
+        "target": "MODE_PSR2"
     }
 }
