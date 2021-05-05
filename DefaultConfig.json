@@ -2,6 +2,6 @@
     "generatorOptions": {
         "target": "MODE_PSR2",
         "dateTimeFormat": "Y-m-d",
-        "arrayMode": "DEEP"
+        "toArrayMode": "DEEP"
     }
 }
