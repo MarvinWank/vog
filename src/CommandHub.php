@@ -81,7 +81,7 @@ class CommandHub
             }
             $generatorOptions = $config['generatorOptions'];
             $generatorOptionsDefault = $defaultConfig['generatorOptions'];
-            $generatorOptions = array_merge($generatorOptions, $generatorOptionsDefault);
+            $generatorOptions = array_merge($generatorOptionsDefault, $generatorOptions);
             $config['generatorOptions'] = $generatorOptions;
 
             $config = array_merge($defaultConfig, $config);
