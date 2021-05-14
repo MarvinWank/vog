@@ -12,7 +12,8 @@
     "bin" : ["bin/vog"],
     "scripts": {
         "test": "./vendor/bin/phpunit test/",
-        "vog-generate": "./bin/vog generate ./ValueObjects.json"
+        "vog-generate": "./bin/vog generate ./ValueObjects.json",
+        "vog-generate-typescript": "./bin/vog generate-typescript ./ValueObjects.json ./test/testObjectsTypescript/generated.ts"
     },
     "require": {
         "ext-json": "*"

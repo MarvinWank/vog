@@ -1,10 +1,8 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Test\TestObjects\Recipe;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\DietStyle;
-use BadMethodCallException;
 use Test\TestObjects\SetWithPrimitiveType;
 use Test\TestObjects\MutableSetWithPrimitiveType;
 

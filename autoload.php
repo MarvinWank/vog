@@ -20,5 +20,6 @@ require_once __DIR__ . "/src/commands/generate/NullableEnumBuilder.php";
 require_once __DIR__ . "/src/commands/generate/InterfaceBuilder.php";
 require_once __DIR__ . '/src/commands/generate/SetBuilder.php';
 require_once __DIR__ . '/src/commands/generate/GenerateCommand.php';
+require_once __DIR__ . '/src/commands/generate-typescript/GenerateTypescriptCommand.php';
 require_once __DIR__ . '/src/commands/fpp-convert/FppConvertCommand.php';
 require_once __DIR__ . '/src/CommandHub.php';
