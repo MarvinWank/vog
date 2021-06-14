@@ -297,7 +297,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
             if ($datatype === "\\DateTime") {
                 $phpcode .= <<<EOT
                         
-                        if (is_string(\$array['$name']))
+                        if (is_string(\$array['$name'])){
                             \$array['$name'] = \\DateTime::createFromFormat('$this->dateTimeFormat', \$array['$name']);
                         }
                 EOT;
