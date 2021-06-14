@@ -323,4 +323,18 @@ class ValueObjectTest extends Psr2TestCase
 
         $this->assertEquals("2000-07-18",$recipe->getCreationDate()->format('Y-m-d'));
     }
+
+    /** @test */
+    public function it_tests_from_array_with_unset_properties_test()
+    {
+        $recipe = \Test\TestObjects\RecipeWithNullableProperties::fromArray([
+            "title" => "Test Recipe",
+            "rating" => 5.5,
+        ]);
+
+        $this->assertNull($recipe->getDietStyle());
+
+        $recipeAsArray = $recipe->toArray();
+        $this->assertNull($recipe['dietStyle']);
+    }
 }

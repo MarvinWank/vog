@@ -40,11 +40,12 @@ class Config implements ValueObject
     }
     
     public static function fromArray(array $array): self
-    {
+    {        
         if (!array_key_exists('generatorOptions', $array)) {
             throw new UnexpectedValueException('Array key generatorOptions does not exist');
         }
-                if (is_string($array['generatorOptions']) && is_a(GeneratorOptions::class, Enum::class, true)) {
+        
+        if (is_string($array['generatorOptions']) && is_a(GeneratorOptions::class, Enum::class, true)) {
             $array['generatorOptions'] = GeneratorOptions::fromName($array['generatorOptions']);
         }
     

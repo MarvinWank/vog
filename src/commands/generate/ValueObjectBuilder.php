@@ -192,7 +192,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         return $phpcode;
     }
 
-    private function generateWithMethods(string $phpcode)
+    private function generateWithMethods(string $phpcode): string
     {
         foreach ($this->values as $name => $data_type) {
             $functionName = $this->getWithFunctionName($name);
@@ -286,13 +286,18 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         EOT;
 
         foreach ($this->values as $name => $datatype) {
-            $phpcode .= <<<EOT
-            
+
+            if (!$this->isDataTypeNullable($datatype)){
+                $phpcode .= <<<EOT
+                    
                     if (!array_key_exists('$name', \$array)) {
                         throw new UnexpectedValueException('Array key $name does not exist');
                     }
                     
             EOT;
+            }
+
+            $datatype = $this->sanitizeNullableDatatype($datatype);
 
             if ($datatype === "\\DateTime") {
                 $phpcode .= <<<EOT
@@ -311,11 +316,12 @@ class ValueObjectBuilder extends AbstractPhpBuilder
                 EOT;
             } elseif (!$this->isPrimitivePhpType($datatype)) {
                 $phpcode .= <<<EOT
-                        if (is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
+                
+                        if (isset(\$array['$name']) && is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
                             \$array['$name'] = $datatype::fromName(\$array['$name']);
                         }
                     
-                        if (is_array(\$array['$name']) && (is_a($datatype::class, Set::class, true) || is_a($datatype::class, ValueObject::class, true))) {
+                        if (isset(\$array['$name']) && is_array(\$array['$name']) && (is_a($datatype::class, Set::class, true) || is_a($datatype::class, ValueObject::class, true))) {
                             \$array['$name'] = $datatype::fromArray(\$array['$name']);
                         }
 
@@ -331,7 +337,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
         foreach ($this->values as $name => $datatype) {
             $phpcode .= <<<EOT
             
-                        \$array['$name'],
+                        \$array['$name'] ?? null,
             EOT;
         }
 
@@ -374,6 +380,10 @@ class ValueObjectBuilder extends AbstractPhpBuilder
             
             private function valueToArray(\$value)
             {
+                if(\$value === null){
+                    return null;
+                }
+            
                 if (method_exists(\$value, 'toArray')) {
                     return \$value->toArray();
                 }

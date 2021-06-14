@@ -111,21 +111,35 @@ EOT;
         return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
+    protected function isDataTypeNullable(string $datatype): bool
+    {
+        if (strpos($datatype, '?') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function sanitizeNullableDatatype(string $datatype): string
+    {
+        return str_replace('?', '', $datatype);
+    }
+
     protected function generateGenericPhpHeader(array $use = self::USE_EXCEPTIONS, string $type = 'class'): string
     {
         $class_statement = $type . ' ' . ucfirst($this->name);
         $useStatement = '';
 
-        if ($this->is_final){
+        if ($this->is_final) {
             $class_statement = 'final ' . $class_statement;
         }
 
-        if (!is_null($this->extends)){
+        if (!is_null($this->extends)) {
             //TODO: if you extend a value object both this class and the parent class implement the marker interface.
-            $class_statement .= ' extends '. $this->extends;
+            $class_statement .= ' extends ' . $this->extends;
         }
 
-        if (!empty($this->implements)){
+        if (!empty($this->implements)) {
             $class_statement .= ' implements ' . implode(',', $this->implements);
         }
 

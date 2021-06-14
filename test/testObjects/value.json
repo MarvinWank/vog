@@ -209,6 +209,17 @@
       },
       "string_value": "title",
       "dateTimeFormat": "d.m.Y"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithNullableProperties",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "?DietStyle"
+      },
+      "string_value": "title"
     }
   ]
 }

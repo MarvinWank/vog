@@ -78,26 +78,24 @@ class GeneratorOptions implements ValueObject
     }
     
     public static function fromArray(array $array): self
-    {
+    {        
         if (!array_key_exists('target', $array)) {
             throw new UnexpectedValueException('Array key target does not exist');
         }
-                if (is_string($array['target']) && is_a(TargetMode::class, Enum::class, true)) {
+        
+        if (is_string($array['target']) && is_a(TargetMode::class, Enum::class, true)) {
             $array['target'] = TargetMode::fromName($array['target']);
         }
     
         if (is_array($array['target']) && (is_a(TargetMode::class, Set::class, true) || is_a(TargetMode::class, ValueObject::class, true))) {
             $array['target'] = TargetMode::fromArray($array['target']);
         }
-
-        if (!array_key_exists('dateTimeFormat', $array)) {
-            throw new UnexpectedValueException('Array key dateTimeFormat does not exist');
-        }
         
         if (!array_key_exists('toArrayMode', $array)) {
             throw new UnexpectedValueException('Array key toArrayMode does not exist');
         }
-                if (is_string($array['toArrayMode']) && is_a(ToArrayMode::class, Enum::class, true)) {
+        
+        if (is_string($array['toArrayMode']) && is_a(ToArrayMode::class, Enum::class, true)) {
             $array['toArrayMode'] = ToArrayMode::fromName($array['toArrayMode']);
         }
     
