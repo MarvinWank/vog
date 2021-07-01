@@ -74,6 +74,10 @@ EOT;
                             if(is_a($this->itemType::class, Enum::class, true)) {
                                 \$return[] = \$item->toString();
                             }
+                            
+                            else{
+                                \$return[] = \$item;
+                            }
                         }
                         
                         return \$return;
