@@ -96,7 +96,6 @@ EOT;
     {
         if (empty($this->itemType)) {
             $phpcode .= <<<EOT
-            
                 public static function fromArray(array \$items) {
                     return new self(\$items);
                 }
@@ -130,15 +129,9 @@ EOT;
                             case 'array':
                                 if(is_a($this->itemType::class, ValueObject::class, true) || is_a($this->itemType::class, Set::class, true)) {
                                     \$items[\$key] = $this->itemType::fromArray(\$item);
-                                    break;
-                                }
-                                
-                                try {
-                                    \$items[\$key] = $this->itemType::fromArray(\$item);
-                                } catch(\Throwable \$e) {
+                                } else {
                                     throw new UnexpectedValueException('fromArray can not create $this->itemType from array on index ' . \$key);
                                 }
-                                
                                 break;    
                             case 'string':
                                 if(is_a($this->itemType::class, Enum::class, true)) {
