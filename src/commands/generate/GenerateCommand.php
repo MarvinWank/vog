@@ -1,12 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace Vog\Commands\Generate;
 
-use InvalidArgumentException;
 use UnexpectedValueException;
-
-use Vog\ValueObjects\Config;
-use function json_decode;
 
 class GenerateCommand extends AbstractCommand
 {
