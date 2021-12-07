@@ -71,7 +71,7 @@ EOT;
                                 \$return[] = \$item->toArray();
                             }
                             
-                            if(is_a($this->itemType::class, Enum::class, true)) {
+                            else if(is_a($this->itemType::class, Enum::class, true)) {
                                 \$return[] = \$item->toString();
                             }
                             

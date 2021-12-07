@@ -14,7 +14,6 @@ class EnumToTypescriptBuilder extends AbstractTypescriptBuilder
             $typeScriptCode .= " | " . $name;
         }
 
-
         return $typeScriptCode;
     }
 

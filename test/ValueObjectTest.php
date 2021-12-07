@@ -18,6 +18,7 @@ use Test\TestObjects\RecipeEnumStringValue;
 use Test\TestObjects\RecipeIntStringValue;
 use Test\TestObjects\RecipeWithDate;
 use Test\TestObjects\RecipeWithIndividualDateFormat;
+use Test\TestObjects\RecipeWithNullableProperties;
 use Test\TestObjects\ValueObjectNoDataType;
 use Test\TestObjects\WithCamelCase;
 use Test\TestObjects\WithUnderscore;
@@ -327,7 +328,7 @@ class ValueObjectTest extends Psr2TestCase
     /** @test */
     public function it_tests_from_array_with_unset_properties_test()
     {
-        $recipe = \Test\TestObjects\RecipeWithNullableProperties::fromArray([
+        $recipe = RecipeWithNullableProperties::fromArray([
             "title" => "Test Recipe",
             "rating" => 5.5,
         ]);
@@ -335,6 +336,6 @@ class ValueObjectTest extends Psr2TestCase
         $this->assertNull($recipe->getDietStyle());
 
         $recipeAsArray = $recipe->toArray();
-        $this->assertNull($recipe['dietStyle']);
+        $this->assertNull($recipeAsArray['dietStyle']);
     }
 }
