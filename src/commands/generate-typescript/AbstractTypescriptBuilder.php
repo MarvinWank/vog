@@ -13,8 +13,8 @@ abstract class AbstractTypescriptBuilder extends AbstractBuilder
     private const PRIMITIVE_TYPES_MAP = [
         "int" => "number",
         "float" => "number",
-        "string" => "string",
-        "array" => "[]",
+        "string" => "String",
+        "array" => 'Array<any>',
         "" => "any",
         "bool" => "boolean"
     ];
@@ -42,7 +42,7 @@ abstract class AbstractTypescriptBuilder extends AbstractBuilder
         $dataType = str_replace("\\", "", $dataType);
 
         if ($dataType === "DateTime" || $dataType === "DateTimeImmutable"){
-            $dataType = "string";
+            $dataType = "String";
         }
 
         if ($this->isPrimitivePhpType($dataType)){
