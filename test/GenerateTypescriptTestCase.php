@@ -4,7 +4,7 @@ require_once __DIR__."/../vendor/autoload.php";
 require_once __DIR__."/../autoload.php";
 
 use PHPUnit\Framework\TestCase;
-use Vog\CommandHub;
+use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
 
 
@@ -20,7 +20,7 @@ class GenerateTypescriptTestCase extends TestCase
             __DIR__."/testObjects/value.json",
             __DIR__."/testObjectsTypescript/types.d.ts"
         ];
-        $hub = new CommandHub();
+        $hub = new CommandFactory();
 
         $config = [
             'generatorOptions' => [
@@ -29,7 +29,7 @@ class GenerateTypescriptTestCase extends TestCase
                 'toArrayMode' => 'DEEP'
             ],
         ];
-        $hub->run($argv, $config);
+        $hub->buildCommand($argv, $config);
     }
 
     /**

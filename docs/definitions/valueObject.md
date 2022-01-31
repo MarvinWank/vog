@@ -2,6 +2,20 @@
 
 A value object is an object that once constructed cannot be changed. It has getters, but no setters. Also, it doesn't do any business logic at all. It truly is an object that holds values - and nothing more.
 
+### Properties
+
+| name           | data type | default      | optionality                 | description                                                                                                 |
+| -------------- | --------- | ------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| type           | string    | -            | required for all            | defines the type of object to be generated. valid types are 'enum', 'nullableEnum', 'valueObject' and 'set' |
+| name           | string    | -            | required for all            | defines both the php class name and file name of the value object to be generated                           |
+| values         | object    | -            | required for all except set | defines the values to be represented by the value object to be generated. Syntax and effect vary by type.   |
+| extends        | ?string   | ""           | optional                    | Optionally states the name of the class this object should extend                                           |
+| implements     | array     | []           | optional                    | Optionally states the name(s) of the interface(s) this object should implement                              |
+| mutable        | bool      | false        | optional for value objects  | Optionally states the mutability of the object. If so, the object will have setters.                        |
+| dateTimeFormat | string    | global value | optional for value objects  | Optionally defines an object-specific DateTime-Format                                                       |
+
+### Example
+
 ```json
     {
       "type": "valueObject",
@@ -15,14 +29,11 @@ A value object is an object that once constructed cannot be changed. It has gett
       "string_value": "title"
     }
 ```
-
-The properties are similar to those of the Enum. The `values` object follows the `"identifier": "datatype"` syntax.
-
 If you don't want to specify a datatype, simply provide an empty string.
 
 Notice that you may also define nullable types and object types. You'll have to provide the namespace to the object, but in this case, "DietStyle" hast the same namespace as "Recipe".
 
-#### result
+### Example Result
 
 Vog will generate private class members according to the definition in the value file.
 

@@ -4,7 +4,7 @@ require_once __DIR__."/../vendor/autoload.php";
 require_once __DIR__."/../autoload.php";
 
 use PHPUnit\Framework\TestCase;
-use Vog\CommandHub;
+use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
 
 
@@ -19,7 +19,7 @@ class Psr2TestCase extends TestCase
             "generate",
             __DIR__."/testObjects/value.json"
         ];
-        $hub = new CommandHub();
+        $hub = new CommandFactory();
 
         $config = [
             'generatorOptions' => [
@@ -28,6 +28,6 @@ class Psr2TestCase extends TestCase
                 'toArrayMode' => \Vog\ValueObjects\ToArrayMode::DEEP()
             ],
         ];
-        $hub->run($argv, $config);
+        $hub->buildCommand($argv, $config);
     }
 }

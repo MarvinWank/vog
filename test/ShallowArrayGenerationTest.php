@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\Recipe;
-use Vog\CommandHub;
+use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
@@ -21,7 +21,7 @@ class ShallowArrayGenerationTest extends TestCase
             "generate",
             __DIR__."/testObjects/value.json"
         ];
-        $hub = new CommandHub();
+        $hub = new CommandFactory();
 
         $config = [
             'generatorOptions' => [
@@ -30,7 +30,7 @@ class ShallowArrayGenerationTest extends TestCase
                 'toArrayMode' => ToArrayMode::SHALLOW()
             ],
         ];
-        $hub->run($argv, $config);
+        $hub->buildCommand($argv, $config);
     }
 
     /**

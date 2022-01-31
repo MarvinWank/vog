@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Vog\CommandHub;
+use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\ToArrayMode;
@@ -17,7 +17,7 @@ class FppTestCase extends TestCase
             "generate",
             __DIR__."/testObjectsFpp/value.json"
         ];
-        $hub = new CommandHub();
+        $hub = new CommandFactory();
 
         $config = [
             'generatorOptions' => [
@@ -26,6 +26,6 @@ class FppTestCase extends TestCase
                 'toArrayMode' => ToArrayMode::DEEP()
             ],
         ];
-        $hub->run($argv, $config);
+        $hub->buildCommand($argv, $config);
     }
 }

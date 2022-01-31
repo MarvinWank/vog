@@ -1,15 +1,16 @@
 <?php
 
 
-namespace Vog;
+namespace Vog\Factories;
 
 
 use UnexpectedValueException;
+use Vog\Commands\Generate\AbstractCommand;
 use Vog\Commands\Generate\GenerateCommand;
 use Vog\Commands\GenerateTypescript\GenerateTypescriptCommand;
 use Vog\ValueObjects\Config;
 
-class CommandHub
+class CommandFactory
 {
     private const COMMAND_GENERATE = "generate";
     private const COMMAND_GENERATE_TYPESCRIPT = "generate-typescript";
@@ -17,14 +18,14 @@ class CommandHub
 
     private const COMMANDS = [self::COMMAND_GENERATE, self::COMMAND_FPP_CONVERT, self::COMMAND_GENERATE_TYPESCRIPT];
 
-    public function run(array $argv, array $config = []): void
+    public function buildCommand(string $commandString, Config $config = null): AbstractCommand
     {
-        if (!isset($argv[1])) {
-            $this->printUsage();
-            exit;
+        if ($config === null) {
+            $configFactory = new ConfigFactory();
+            $config = $configFactory->buildConfig();
         }
 
-        switch ($argv[1]) {
+        switch ($commandString) {
             case self::COMMAND_GENERATE:
                 $this->runGenerateCommand($argv[2], $config);
                 break;
@@ -62,43 +63,4 @@ class CommandHub
         $fppConvert->run($fileToConvert, $outputPath);
     }
 
-    private function getConfig(array $config): Config
-    {
-
-        if (empty($config)) {
-            $config = [];
-
-            $configFile = getcwd() . '/vog_config.json';
-            $defaultConfig = json_decode(file_get_contents(__DIR__ . '/../DefaultConfig.json'), JSON_OBJECT_AS_ARRAY);
-            if ($defaultConfig === null) {
-                throw new UnexpectedValueException('Could not parse ' . __DIR__ . '/../DefaultConfig.json\n json_last_error_msg(): ' . json_last_error_msg());
-            }
-            if (file_exists($configFile)) {
-                $config = json_decode(file_get_contents($configFile), JSON_OBJECT_AS_ARRAY);
-                if ($config === null) {
-                    throw new UnexpectedValueException('Could not parse ' . $configFile . '\n json_last_error_msg(): ' . json_last_error_msg());
-                }
-            }
-            $generatorOptions = $config['generatorOptions'];
-            $generatorOptionsDefault = $defaultConfig['generatorOptions'];
-            $generatorOptions = array_merge($generatorOptionsDefault, $generatorOptions);
-            $config['generatorOptions'] = $generatorOptions;
-
-            $config = array_merge($defaultConfig, $config);
-        }
-
-        return Config::fromArray($config);
-    }
-
-    private function printUsage(): void
-    {
-        print("Value Object Generator" . PHP_EOL);
-        print("generates PHP value objects from a json file." . PHP_EOL);
-        print(PHP_EOL);
-        print("Usage: " . PHP_EOL);
-        print("vendor/bin/vog [command] [path/to/definitionfile.json]" . PHP_EOL);
-        print(PHP_EOL);
-        print("Commands:" . PHP_EOL);
-        print("\tgenerate" . PHP_EOL);
-    }
 }
