@@ -2,11 +2,11 @@
 
 namespace Feature\Fpp;
 
-use PHPUnit\Framework\TestCase;
+use Feature\FeatureTestCase;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-class FppTestCase extends TestCase
+class FppTestCase extends FeatureTestCase
 {
     public function setUp(): void
     {
