@@ -17,7 +17,7 @@ class ConfigFactory
         $config = [];
 
         $configFile = getcwd() . '/vog_config.json';
-        $defaultConfig = json_decode(file_get_contents(__DIR__ . '/../DefaultConfig.json'), JSON_OBJECT_AS_ARRAY);
+        $defaultConfig = json_decode(file_get_contents(__DIR__ . '/../../DefaultConfig.json'), JSON_OBJECT_AS_ARRAY);
         if ($defaultConfig === null) {
             throw new UnexpectedValueException('Could not parse ' . __DIR__ . '/../DefaultConfig.json\n json_last_error_msg(): ' . json_last_error_msg());
         }
@@ -27,7 +27,7 @@ class ConfigFactory
                 throw new UnexpectedValueException('Could not parse ' . $configFile . '\n json_last_error_msg(): ' . json_last_error_msg());
             }
         }
-        $generatorOptions = $config['generatorOptions'];
+        $generatorOptions = $config['generatorOptions'] ?? [];
         $generatorOptionsDefault = $defaultConfig['generatorOptions'];
         $generatorOptions = array_merge($generatorOptionsDefault, $generatorOptions);
         $config['generatorOptions'] = $generatorOptions;
