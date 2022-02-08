@@ -1,5 +1,6 @@
 <?php
 
+namespace Feature\Fpp;
 
 use Test\BaseClass;
 use Test\TestObjectsFpp\ChildOfNotFinal;

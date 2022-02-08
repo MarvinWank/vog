@@ -1,9 +1,9 @@
 <?php
 
+namespace Feature\Fpp;
+
 use PHPUnit\Framework\TestCase;
-use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
-use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\ToArrayMode;
 
 class FppTestCase extends TestCase

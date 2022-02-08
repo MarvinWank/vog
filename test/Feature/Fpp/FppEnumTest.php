@@ -1,7 +1,8 @@
 <?php
 
+namespace Feature\Fpp;
 
-use PHPUnit\Framework\TestCase;
+use FppTestCase;
 use Test\TestObjectsFpp\DietStyle;
 
 class FppEnumTest extends FppTestCase
