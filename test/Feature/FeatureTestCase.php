@@ -2,9 +2,9 @@
 
 namespace Feature;
 
-use PHPUnit\Framework\TestCase;
+use VogTestCase;
 
-class FeatureTestCase extends TestCase
+class FeatureTestCase extends VogTestCase
 {
 
 }
