@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Test\TestObjects\RecipeSet;
 use Test\TestObjects\Enum;
 use Test\TestObjects\Recipe;

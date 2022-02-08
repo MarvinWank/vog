@@ -15,7 +15,7 @@ class FppTestCase extends TestCase
         $argv = [
             "test",
             "generate",
-            __DIR__."/testObjectsFpp/value.json"
+            __DIR__ . "/testObjectsFpp/value.json"
         ];
         $hub = new CommandFactory();
 

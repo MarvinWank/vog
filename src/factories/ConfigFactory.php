@@ -2,16 +2,17 @@
 
 namespace Vog\Factories;
 
+use UnexpectedValueException;
 use Vog\ValueObjects\Config;
 
 class ConfigFactory
 {
     public function buildConfig(): Config
     {
-
+        return $this->getJsonConfig();
     }
 
-    private function getConfig(): Config
+    private function getJsonConfig(): Config
     {
         $config = [];
 
