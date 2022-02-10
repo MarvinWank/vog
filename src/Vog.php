@@ -16,7 +16,8 @@ class Vog
 
         $commandFactory = new CommandFactory();
 
-        $command = $commandFactory->buildCommand($argv[1], $config, $argv);
+        $additionalArguments = array_slice($argv, 2);
+        $command = $commandFactory->buildCommand($argv[1], $additionalArguments, $config);
         $command->run();
     }
 

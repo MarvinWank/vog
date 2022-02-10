@@ -22,9 +22,6 @@ abstract class AbstractCommand
 
     protected function parseFileToJson(string $filepath): array
     {
-        if (!file_exists($filepath)) {
-            throw new InvalidArgumentException("File $filepath was not found");
-        }
         $file = file_get_contents($filepath);
 
         $data = json_decode($file, true);
