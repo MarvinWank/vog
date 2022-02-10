@@ -33,6 +33,37 @@
                 "DEEP": "deep",
                 "SHALLOW": "shallow"
             }
+        },
+        {
+            "type": "valueObject",
+            "name": "VogDefinitionFile",
+            "values": {
+                "root_path": "string",
+                "namespace": "string",
+                "FilePathGroup": "VogDefinitionSet"
+            }
+        },
+        {
+            "type": "set",
+            "name": "VogDefinitionSet",
+            "itemType": "VogDefinition",
+            "mutable": true
+        },
+        {
+            "type": "valueObject",
+            "name": "VogDefinition",
+            "values": {
+                "name": "string",
+                "type": "string",
+                "values": "array",
+                "string_value": "?string",
+                "dateTimeFormat": "?string",
+                "itemType": "?string",
+                "extends": "?string",
+                "implements": "?string",
+                "final": "?string",
+                "mutable": "?bool"
+            }
         }
     ]
 }
