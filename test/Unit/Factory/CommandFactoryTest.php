@@ -21,7 +21,7 @@ class CommandFactoryTest extends UnitTestCase
 
     public function testBuildGenerateCommand()
     {
-        $command = $this->commandFactory->buildCommand('generate', null, [__DIR__ . '/../../testDataSources/value.json']);
+        $command = $this->commandFactory->buildCommand('generate',[__DIR__ . '/../../testDataSources/value.json']);
 
         $this->assertInstanceOf(GenerateCommand::class, $command);
         $this->assertInstanceOf(AbstractCommand::class, $command);
@@ -30,7 +30,7 @@ class CommandFactoryTest extends UnitTestCase
     public function testThrowsExceptionWhenFileDoesNotExist()
     {
         $this->expectException(VogException::class);
-        $this->commandFactory->buildCommand('generate', null, ["./foo.json"]);
+        $this->commandFactory->buildCommand('generate', ["./foo.json"]);
     }
 
     public function testThrowsExceptionWhenNoFileGiven()

@@ -27,7 +27,7 @@ class CommandFactory
     /**
      * @throws VogException
      */
-    public function buildCommand(string $commandString, Config $config = null, array $additionalArguments = []): AbstractCommand
+    public function buildCommand(string $commandString, array $additionalArguments = [], Config $config = null): AbstractCommand
     {
         if ($config === null) {
             $configFactory = new ConfigFactory();
