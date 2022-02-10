@@ -7,6 +7,8 @@ use UnexpectedValueException;
 
 use Vog\Exception\VogException;
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\VogDefinition;
+use Vog\ValueObjects\VogDefinitionFile;
 use function json_decode;
 
 class GenerateCommand extends AbstractCommand
@@ -26,31 +28,33 @@ class GenerateCommand extends AbstractCommand
     {
         $data = $this->parseFile($this->target);
 
-        if (!array_key_exists('root_path', $data)) {
-            throw new VogException("Root Path not specified");
-        }
-        $this->rootPath = rtrim($data['root_path'], '/');
-        unset($data['root_path']);
+        $definition = VogDefinitionFile::fromArray($data);
 
-        $this->rootNamespace = '';
-        if (array_key_exists('namespace', $data)) {
-            $this->rootNamespace = rtrim($data['namespace'], '\\');
-            unset($data['namespace']);
-        }
-
-        foreach ($data as $targetFilepath => $objects) {
-            $this->generateMarkerInterfaces($targetFilepath);
-
-            foreach ($objects as $object) {
-                $object = $this->buildObject($object, $targetFilepath);
-                $success = $this->writeToFile($object);
-
-                if ($success) {
-                    echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
-                }
-            }
-        }
-        echo  PHP_EOL;
+//        if (!array_key_exists('root_path', $data)) {
+//            throw new VogException("Root Path not specified");
+//        }
+//        $this->rootPath = rtrim($data['root_path'], '/');
+//        unset($data['root_path']);
+//
+//        $this->rootNamespace = '';
+//        if (array_key_exists('namespace', $data)) {
+//            $this->rootNamespace = rtrim($data['namespace'], '\\');
+//            unset($data['namespace']);
+//        }
+//
+//        foreach ($data as $targetFilepath => $objects) {
+//            $this->generateMarkerInterfaces($targetFilepath);
+//
+//            foreach ($objects as $object) {
+//                $object = $this->buildObject($object, $targetFilepath);
+//                $success = $this->writeToFile($object);
+//
+//                if ($success) {
+//                    echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
+//                }
+//            }
+//        }
+//        echo  PHP_EOL;
     }
 
     /**
