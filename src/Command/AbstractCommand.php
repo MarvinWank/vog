@@ -6,6 +6,7 @@ namespace Vog\Commands\Generate;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
+use Vog\Factories\ParserFactory;
 use Vog\ValueObjects\Config;
 
 abstract class AbstractCommand
@@ -22,13 +23,8 @@ abstract class AbstractCommand
 
     protected function parseFileToJson(string $filepath): array
     {
-        $file = file_get_contents($filepath);
-
-        $data = json_decode($file, true);
-        if (json_last_error_msg() !== "No error") {
-            throw new UnexpectedValueException("Could not parse " . $filepath . "\n json_last_error_msg(): " . json_last_error_msg());
-        }
-        return $data;
+        $factory = new ParserFactory();
+        $parser = $factory->buildParser($filepath);
     }
 
     protected function validateObject(array $data)
