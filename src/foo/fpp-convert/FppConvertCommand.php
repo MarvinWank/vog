@@ -4,15 +4,11 @@
 namespace Vog;
 
 
-class FppConvertCommand
+use Vog\Commands\Generate\AbstractCommand;
+use Vog\ValueObjects\Config;
+
+class FppConvertCommand extends AbstractCommand
 {
-
-    private array $config;
-
-    public function __construct(array $config) {
-        $this->config = $config;
-    }
-
     public function run(string $fileToConvert, ?string $outputPath = null)
     {
 

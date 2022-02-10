@@ -18,6 +18,8 @@ abstract class AbstractCommand
         $this->config = $config;
     }
 
+    abstract public function run(): void;
+
     protected function parseFileToJson(string $filepath): array
     {
         if (!file_exists($filepath)) {

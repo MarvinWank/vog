@@ -16,7 +16,8 @@ class Vog
 
         $commandFactory = new CommandFactory();
 
-        $command = $commandFactory->buildCommand($argv[1], $config);
+        $command = $commandFactory->buildCommand($argv[1], $config, $argv);
+        $command->run();
     }
 
     private function printUsage(): void

@@ -8,7 +8,9 @@ use UnexpectedValueException;
 use Vog\Commands\Generate\AbstractCommand;
 use Vog\Commands\Generate\GenerateCommand;
 use Vog\Commands\GenerateTypescript\GenerateTypescriptCommand;
+use Vog\FppConvertCommand;
 use Vog\ValueObjects\Config;
+use VogException;
 
 class CommandFactory
 {
@@ -16,9 +18,16 @@ class CommandFactory
     private const COMMAND_GENERATE_TYPESCRIPT = "generate-typescript";
     private const COMMAND_FPP_CONVERT = "fpp-convert";
 
-    private const COMMANDS = [self::COMMAND_GENERATE, self::COMMAND_FPP_CONVERT, self::COMMAND_GENERATE_TYPESCRIPT];
+    private const COMMANDS = [
+        self::COMMAND_GENERATE,
+        self::COMMAND_FPP_CONVERT,
+        self::COMMAND_GENERATE_TYPESCRIPT
+    ];
 
-    public function buildCommand(string $commandString, Config $config = null): AbstractCommand
+    /**
+     * @throws VogException
+     */
+    public function buildCommand(string $commandString, Config $config = null, array $additionalArguments = []): AbstractCommand
     {
         if ($config === null) {
             $configFactory = new ConfigFactory();
@@ -27,40 +36,30 @@ class CommandFactory
 
         switch ($commandString) {
             case self::COMMAND_GENERATE:
-                $this->runGenerateCommand($argv[2], $config);
-                break;
+                return $this->buildGenerateCommand($config, $additionalArguments);
             case self::COMMAND_GENERATE_TYPESCRIPT:
-                $this->runGenerateTypescriptCommand($argv[2], $argv[3], $config);
-                break;
+                return new GenerateTypescriptCommand($config);
             case self::COMMAND_FPP_CONVERT:
-                $this->runConvertToFppCommand($argv[3], $argv[4], $config);
-                break;
+                return new FppConvertCommand($config);
             default:
-                throw new UnexpectedValueException("Command $argv is not defined. Defined commands are: "
+                throw new UnexpectedValueException("Command $commandString is not defined. Defined commands are: "
                     . implode(", ", self::COMMANDS));
         }
     }
 
-    private function runGenerateCommand(string $targetPath, array $config = []): void
+    /**
+     * @throws VogException
+     */
+    private function buildGenerateCommand(Config $config, array $argv): GenerateCommand
     {
-        $configObject = $this->getConfig($config);
+        if (!isset($argv[0])){
+            throw new VogException("No target was given");
+        }
+        $target = $argv[0];
+        if (!file_exists($target)){
+            throw new VogException("No file was found at $target");
+        }
 
-        $generate = new GenerateCommand($configObject);
-        $generate->run($targetPath);
+        return new GenerateCommand($config, $target);
     }
-
-    private function runGenerateTypescriptCommand(string $sourcePath, string $targetPath, array $config = []): void
-    {
-        $configObject = $this->getConfig($config);
-
-        $generateTypescript = new GenerateTypescriptCommand($configObject);
-        $generateTypescript->run($sourcePath, $targetPath);
-    }
-
-    private function runConvertToFppCommand(string $fileToConvert, ?string $outputPath = null, array $config): void
-    {
-        $fppConvert = new FppConvertCommand($config);
-        $fppConvert->run($fileToConvert, $outputPath);
-    }
-
 }

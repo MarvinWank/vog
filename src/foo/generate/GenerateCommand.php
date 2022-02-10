@@ -12,10 +12,18 @@ class GenerateCommand extends AbstractCommand
 {
     private string $rootPath;
     private string $rootNamespace;
+    private string $target;
 
-    public function run(string $target): void
+    public function __construct(Config $config, string $target)
     {
-        $data = $this->parseFileToJson($target);
+        parent::__construct($config);
+
+        $this->target = $target;
+    }
+
+    public function run(): void
+    {
+        $data = $this->parseFileToJson($this->target);
 
         if (!array_key_exists('root_path', $data)) {
             throw new UnexpectedValueException("Root Path not specified");
