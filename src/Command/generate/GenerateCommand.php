@@ -5,6 +5,7 @@ namespace Vog\Commands\Generate;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
+use Vog\Exception\VogException;
 use Vog\ValueObjects\Config;
 use function json_decode;
 
@@ -26,7 +27,7 @@ class GenerateCommand extends AbstractCommand
         $data = $this->parseFile($this->target);
 
         if (!array_key_exists('root_path', $data)) {
-            throw new UnexpectedValueException("Root Path not specified");
+            throw new VogException("Root Path not specified");
         }
         $this->rootPath = rtrim($data['root_path'], '/');
         unset($data['root_path']);
@@ -52,10 +53,13 @@ class GenerateCommand extends AbstractCommand
         echo  PHP_EOL;
     }
 
+    /**
+     * @throws VogException
+     */
     private function buildObject(array $data, string $targetFilepath): AbstractPhpBuilder
     {
         if (!$targetFilepath || $targetFilepath === "") {
-            throw new UnexpectedValueException(
+            throw new VogException(
                 "No namespace was given" . " for object " . $data['name']
             );
         }
