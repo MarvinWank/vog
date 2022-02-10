@@ -11,7 +11,7 @@ class GenerateTypescriptCommand extends AbstractCommand
 {
     public function run(string $sourcePath, string $targetPath)
     {
-        $json = $this->parseFileToJson($sourcePath);
+        $json = $this->parseFile($sourcePath);
 
         // Unnecessary for ts generation
         unset($json['root_path']);

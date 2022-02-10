@@ -23,7 +23,7 @@ class GenerateCommand extends AbstractCommand
 
     public function run(): void
     {
-        $data = $this->parseFileToJson($this->target);
+        $data = $this->parseFile($this->target);
 
         if (!array_key_exists('root_path', $data)) {
             throw new UnexpectedValueException("Root Path not specified");

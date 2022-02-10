@@ -21,10 +21,12 @@ abstract class AbstractCommand
 
     abstract public function run(): void;
 
-    protected function parseFileToJson(string $filepath): array
+    protected function parseFile(string $filepath): array
     {
         $factory = new ParserFactory();
         $parser = $factory->buildParser($filepath);
+
+        return $parser->parseFile($filepath);
     }
 
     protected function validateObject(array $data)
