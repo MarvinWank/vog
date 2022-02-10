@@ -5,7 +5,7 @@ namespace Vog\Commands\Generate;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
-abstract class AbstractBuilder
+abstract class AbstractGenerator
 {
     protected string $type;
     protected string $name;

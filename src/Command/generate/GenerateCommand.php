@@ -56,7 +56,7 @@ class GenerateCommand extends AbstractCommand
     /**
      * @throws VogException
      */
-    private function buildObject(array $data, string $targetFilepath): AbstractPhpBuilder
+    private function buildObject(array $data, string $targetFilepath): AbstractPhpGenerator
     {
         if (!$targetFilepath || $targetFilepath === "") {
             throw new VogException(
@@ -69,28 +69,28 @@ class GenerateCommand extends AbstractCommand
 
         switch ($data['type']) {
             case "set":
-                $vog_obj = new SetBuilder($data['name'], $this->config);
+                $vog_obj = new SetGenerator($data['name'], $this->config);
                 break;
             case "enum":
-                $vog_obj = new EnumBuilder($data['name'], $this->config);
+                $vog_obj = new EnumGenerator($data['name'], $this->config);
                 break;
             case "nullableEnum":
-                $vog_obj = new NullableEnumBuilder($data['name'], $this->config);
+                $vog_obj = new NullableEnumGenerator($data['name'], $this->config);
                 break;
             case "valueObject":
-                $vog_obj = new ValueObjectBuilder($data['name'], $this->config);
+                $vog_obj = new ValueObjectGenerator($data['name'], $this->config);
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not
                 implemented. This is an internal error. Please open an issue on GitHub");
         }
 
-        if (!$vog_obj instanceof SetBuilder) {
+        if (!$vog_obj instanceof SetGenerator) {
             $vog_obj->setValues($data['values']);
         }
 
         //These Options are only allowed on value objects
-        if ($vog_obj instanceof ValueObjectBuilder){
+        if ($vog_obj instanceof ValueObjectGenerator){
             if (array_key_exists("string_value", $data)) {
                 $vog_obj->setStringValue($data['string_value']);
             }
@@ -121,7 +121,7 @@ class GenerateCommand extends AbstractCommand
         }
 
         if (array_key_exists('mutable', $data)) {
-            if ( !($vog_obj instanceof ValueObjectBuilder) && !($vog_obj instanceof SetBuilder)){
+            if ( !($vog_obj instanceof ValueObjectGenerator) && !($vog_obj instanceof SetGenerator)){
                 $name = $vog_obj->getName();
                 $type = $vog_obj->getType();
                 throw new UnexpectedValueException("Mutability is only available on value objects, yet object 
@@ -133,7 +133,7 @@ class GenerateCommand extends AbstractCommand
         return $vog_obj;
     }
 
-    private function writeToFile(AbstractPhpBuilder $builderInstance)
+    private function writeToFile(AbstractPhpGenerator $builderInstance)
     {
         return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getPhpCode());
     }
@@ -172,7 +172,7 @@ class GenerateCommand extends AbstractCommand
         ];
 
         foreach ($interfaces as $interface) {
-            $object = new InterfaceBuilder($interface, $this->config);
+            $object = new InterfaceGenerator($interface, $this->config);
             $object->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
             $object->setNamespace($this->getTargetNamespace($targetFilepath));
             $success = $this->writeToFile($object);

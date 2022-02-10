@@ -6,7 +6,7 @@ namespace Vog\Commands\GenerateTypescript;
 
 use Vog\ValueObjects\Config;
 
-class ValueObjectToTypescriptBuilder extends AbstractTypescriptBuilder
+class ValueObjectToTypescriptBuilder extends AbstractTypescriptGenerator
 {
     protected ?string $extends;
 

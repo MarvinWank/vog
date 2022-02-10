@@ -4,7 +4,7 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class SetBuilder extends AbstractPhpBuilder
+class SetGenerator extends AbstractPhpGenerator
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
@@ -18,8 +18,8 @@ class SetBuilder extends AbstractPhpBuilder
     public function getPhpCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader([
-            AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION,
-            AbstractBuilder::BAD_METHOD_CALL_EXCEPTION
+            AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION,
+            AbstractGenerator::BAD_METHOD_CALL_EXCEPTION
         ]);
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);

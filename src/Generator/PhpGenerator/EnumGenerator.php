@@ -5,7 +5,7 @@ namespace Vog\Commands\Generate;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
-class EnumBuilder extends AbstractPhpBuilder
+class EnumGenerator extends AbstractPhpGenerator
 {
     protected array $implements = ['Enum'];
 
@@ -17,7 +17,7 @@ class EnumBuilder extends AbstractPhpBuilder
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::INVALID_ARGUMENT_EXCEPTION]);
+        $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::INVALID_ARGUMENT_EXCEPTION]);
         $phpcode = $this->generateConstNamesAndValues($phpcode);
         $phpcode = $this->generateConstOptions($phpcode);
         $phpcode = $this->generateConstructor($phpcode);

@@ -8,7 +8,7 @@ use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-class ValueObjectBuilder extends AbstractPhpBuilder
+class ValueObjectGenerator extends AbstractPhpGenerator
 {
     private string $stringValue;
     private ?string $dateTimeFormat;
@@ -63,7 +63,7 @@ class ValueObjectBuilder extends AbstractPhpBuilder
             $this->dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
         }
 
-        $phpcode = $this->generateGenericPhpHeader([AbstractBuilder::UNEXPECTED_VALUE_EXCEPTION]);
+        $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateProperties($phpcode);
 
         $phpcode = $this->generateConstructor($phpcode);

@@ -4,7 +4,7 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
-class EnumToTypescriptBuilder extends AbstractTypescriptBuilder
+class EnumToTypescriptBuilder extends AbstractTypescriptGenerator
 {
     public function getTypescriptCode(): string
     {

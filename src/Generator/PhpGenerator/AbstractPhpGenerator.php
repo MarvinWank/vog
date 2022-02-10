@@ -7,7 +7,7 @@ namespace Vog\Commands\Generate;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 
-abstract class AbstractPhpBuilder extends AbstractBuilder
+abstract class AbstractPhpGenerator extends AbstractGenerator
 {
     protected ?string $extends;
     protected array $implements = [];

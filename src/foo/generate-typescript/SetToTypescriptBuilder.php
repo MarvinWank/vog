@@ -4,7 +4,7 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
-class SetToTypescriptBuilder extends AbstractTypescriptBuilder
+class SetToTypescriptBuilder extends AbstractTypescriptGenerator
 {
     private string $itemType;
 

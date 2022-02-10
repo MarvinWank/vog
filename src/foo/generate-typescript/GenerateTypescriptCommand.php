@@ -35,7 +35,7 @@ class GenerateTypescriptCommand extends AbstractCommand
 
     }
 
-    private function getBuilder(array $object): AbstractTypescriptBuilder
+    private function getBuilder(array $object): AbstractTypescriptGenerator
     {
         $this->validateObject($object);
         $builder = null;

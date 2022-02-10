@@ -4,10 +4,10 @@
 namespace Vog\Commands\GenerateTypescript;
 
 
-use Vog\Commands\Generate\AbstractBuilder;
+use Vog\Commands\Generate\AbstractGenerator;
 use Vog\ValueObjects\Config;
 
-abstract class AbstractTypescriptBuilder extends AbstractBuilder
+abstract class AbstractTypescriptGenerator extends AbstractGenerator
 {
     // Primitive Type in PHP => Primitive Type in ts
     private const PRIMITIVE_TYPES_MAP = [
