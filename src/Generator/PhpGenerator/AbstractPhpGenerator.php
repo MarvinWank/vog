@@ -5,7 +5,9 @@ namespace Vog\Commands\Generate;
 
 
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
+use Vog\ValueObjects\VogDefinition;
 
 abstract class AbstractPhpGenerator extends AbstractGenerator
 {
@@ -14,9 +16,9 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected bool $is_final;
     protected bool $is_mutable;
 
-    public function __construct(string $name, Config $config)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($definition, $generatorOptions);
 
         $this->extends = null;
         $this->is_final = false;
@@ -28,7 +30,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     public function setValues(array $values): void
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
             $camelized = [];
             foreach ($values as $key => $value) {
                 $camelized[self::toCamelCase($key)] = $value;
@@ -108,7 +110,7 @@ EOT;
 
     public function getTargetFilepath(): string
     {
-        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
+        return $this->targetFilepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
     protected function isDataTypeNullable(string $datatype): bool

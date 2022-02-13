@@ -21,9 +21,9 @@ abstract class AbstractTypescriptGenerator extends AbstractGenerator
 
     abstract public function getTypescriptCode(): string;
 
-    public function __construct(string $name, Config $config)
+    public function __construct(string $targetFilepath, Config $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($targetFilepath, $generatorOptions);
     }
 
     public function setValues(array $values): void
@@ -33,7 +33,7 @@ abstract class AbstractTypescriptGenerator extends AbstractGenerator
 
     public function getTargetFilepath(): string
     {
-        return $this->target_filepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".ts";
+        return $this->targetFilepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".ts";
     }
 
     protected function sanitizeDataTypeForTypescript(string $dataType): string

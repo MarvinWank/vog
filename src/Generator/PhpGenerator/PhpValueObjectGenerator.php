@@ -8,15 +8,15 @@ use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-class ValueObjectGenerator extends AbstractPhpGenerator
+class PhpValueObjectGenerator extends AbstractPhpGenerator
 {
     private string $stringValue;
     private ?string $dateTimeFormat;
     protected array $implements = ['ValueObject'];
 
-    public function __construct(string $name, Config $config)
+    public function __construct(string $targetFilepath, Config $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($targetFilepath, $generatorOptions);
         $this->type = "valueObject";
         $this->dateTimeFormat = null;
     }
@@ -60,7 +60,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
     public function getPhpCode(): string
     {
         if ($this->dateTimeFormat === null) {
-            $this->dateTimeFormat = $this->config->getGeneratorOptions()->getDateTimeFormat();
+            $this->dateTimeFormat = $this->generatorOptions->getGeneratorOptions()->getDateTimeFormat();
         }
 
         $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION]);
@@ -76,7 +76,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
         $phpcode = $this->generateWithMethods($phpcode);
         $phpcode = $this->generateToArray($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
-        if ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())){
+        if ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())){
             $phpcode = $this->generateValueToArray($phpcode);
         }
         $phpcode = $this->generateEquals($phpcode);
@@ -238,7 +238,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
                 return [
         EOT;
 
-        if ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())) {
+        if ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())) {
 
             foreach ($this->values as $name => $datatype) {
                 if (!$this->isPrimitivePhpType($datatype)) {
@@ -254,7 +254,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
                 }
             }
 
-        } elseif ($this->config->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
+        } elseif ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
 
             foreach ($this->values as $name => $datatype) {
                 $phpcode .= <<<EOT
@@ -422,7 +422,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
     function getGetterName(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
             return 'get' . ucfirst($name);
         }
 
@@ -433,7 +433,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
     function getWithFunctionName(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
@@ -444,7 +444,7 @@ class ValueObjectGenerator extends AbstractPhpGenerator
     function getSetter(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->config->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
             return 'set' . ucfirst($name);
         }
 

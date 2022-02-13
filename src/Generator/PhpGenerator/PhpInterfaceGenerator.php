@@ -5,11 +5,11 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class InterfaceGenerator extends AbstractPhpGenerator
+class PhpInterfaceGenerator extends AbstractPhpGenerator
 {
-    public function __construct(string $name, Config $config)
+    public function __construct(string $targetFilepath, Config $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($targetFilepath, $generatorOptions);
         $this->type = "interface";
         $this->setIsFinal(false);
         $this->setIsMutable(false);

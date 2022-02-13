@@ -29,6 +29,7 @@ abstract class AbstractParser
         $definitions = VogDefinitionSet::fromArray([]);
         foreach ($data as $targetFilepath => $objects) {
             foreach ($objects as $object) {
+                $object['directory'] = $targetFilepath . DIRECTORY_SEPARATOR;
                 $object['type'] = VogTypes::fromValue($object['type']);
                 $definition = VogDefinition::fromArray($object);
                 $definitions->add($definition);

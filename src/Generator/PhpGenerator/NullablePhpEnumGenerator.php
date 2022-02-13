@@ -2,7 +2,7 @@
 
 namespace Vog\Commands\Generate;
 
-class NullableEnumGenerator extends EnumGenerator
+class NullablePhpEnumGenerator extends PhpEnumGenerator
 {
     protected function generateConstructor(string $phpcode): string
     {

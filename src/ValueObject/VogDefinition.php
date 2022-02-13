@@ -13,9 +13,10 @@ use UnexpectedValueException;
 class VogDefinition implements ValueObject
 {
     private string $name;
+    private string $directory;
     private VogTypes $type;
     private ?array $values;
-    private ?string $string_value;
+    private ?string $stringValue;
     private ?string $dateTimeFormat;
     private ?string $itemType;
     private ?string $extends;
@@ -25,9 +26,10 @@ class VogDefinition implements ValueObject
 
     public function __construct (
         string $name,
+        string $directory,
         VogTypes $type,
         ?array $values,
-        ?string $string_value,
+        ?string $stringValue,
         ?string $dateTimeFormat,
         ?string $itemType,
         ?string $extends,
@@ -36,9 +38,10 @@ class VogDefinition implements ValueObject
         ?bool $mutable
     ) {
         $this->name = $name;
+        $this->directory = $directory;
         $this->type = $type;
         $this->values = $values;
-        $this->string_value = $string_value;
+        $this->stringValue = $stringValue;
         $this->dateTimeFormat = $dateTimeFormat;
         $this->itemType = $itemType;
         $this->extends = $extends;
@@ -52,6 +55,11 @@ class VogDefinition implements ValueObject
         return $this->name;
     }
     
+    public function directory(): string 
+    {
+        return $this->directory;
+    }
+    
     public function type(): VogTypes 
     {
         return $this->type;
@@ -62,9 +70,9 @@ class VogDefinition implements ValueObject
         return $this->values;
     }
     
-    public function string_value(): ?string 
+    public function stringValue(): ?string 
     {
-        return $this->string_value;
+        return $this->stringValue;
     }
     
     public function dateTimeFormat(): ?string 
@@ -101,9 +109,27 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
+            $this->dateTimeFormat,
+            $this->itemType,
+            $this->extends,
+            $this->implements,
+            $this->final,
+            $this->mutable
+        );
+    }
+    
+    public function with_directory(string $directory): self 
+    {
+        return new self(
+            $this->name,
+            $directory,
+            $this->type,
+            $this->values,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -117,9 +143,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -133,9 +160,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -145,13 +173,14 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_string_value(?string $string_value): self 
+    public function with_stringValue(?string $stringValue): self 
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $string_value,
+            $stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -165,9 +194,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -181,9 +211,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $itemType,
             $this->extends,
@@ -197,9 +228,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $extends,
@@ -213,9 +245,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -229,9 +262,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -245,9 +279,10 @@ class VogDefinition implements ValueObject
     {
         return new self(
             $this->name,
+            $this->directory,
             $this->type,
             $this->values,
-            $this->string_value,
+            $this->stringValue,
             $this->dateTimeFormat,
             $this->itemType,
             $this->extends,
@@ -261,9 +296,10 @@ class VogDefinition implements ValueObject
     {
         return [
             'name' => $this->name,
+            'directory' => $this->directory,
             'type' =>  $this->valueToArray($this->type),
             'values' => $this->values,
-            'string_value' => $this->string_value,
+            'stringValue' => $this->stringValue,
             'dateTimeFormat' => $this->dateTimeFormat,
             'itemType' => $this->itemType,
             'extends' => $this->extends,
@@ -277,6 +313,10 @@ class VogDefinition implements ValueObject
     {        
         if (!array_key_exists('name', $array)) {
             throw new UnexpectedValueException('Array key name does not exist');
+        }
+                
+        if (!array_key_exists('directory', $array)) {
+            throw new UnexpectedValueException('Array key directory does not exist');
         }
                 
         if (!array_key_exists('type', $array)) {
@@ -293,9 +333,10 @@ class VogDefinition implements ValueObject
 
         return new self(
             $array['name'] ?? null,
+            $array['directory'] ?? null,
             $array['type'] ?? null,
             $array['values'] ?? null,
-            $array['string_value'] ?? null,
+            $array['stringValue'] ?? null,
             $array['dateTimeFormat'] ?? null,
             $array['itemType'] ?? null,
             $array['extends'] ?? null,

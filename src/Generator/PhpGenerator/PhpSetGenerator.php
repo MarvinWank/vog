@@ -4,14 +4,14 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\Config;
 
-class SetGenerator extends AbstractPhpGenerator
+class PhpSetGenerator extends AbstractPhpGenerator
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
 
-    public function __construct(string $name, Config $config)
+    public function __construct(string $targetFilepath, Config $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($targetFilepath, $generatorOptions);
         $this->type = 'set';
     }
 

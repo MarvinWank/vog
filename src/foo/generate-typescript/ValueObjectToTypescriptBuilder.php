@@ -10,9 +10,9 @@ class ValueObjectToTypescriptBuilder extends AbstractTypescriptGenerator
 {
     protected ?string $extends;
 
-    public function __construct(string $name, Config $config)
+    public function __construct(string $targetFilepath, Config $generatorOptions)
     {
-        parent::__construct($name, $config);
+        parent::__construct($targetFilepath, $generatorOptions);
         $this->extends = null;
     }
 

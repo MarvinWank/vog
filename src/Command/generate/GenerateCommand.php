@@ -46,28 +46,28 @@ class GenerateCommand extends AbstractCommand
 
         switch ($data['type']) {
             case "set":
-                $vog_obj = new SetGenerator($data['name'], $this->config);
+                $vog_obj = new PhpSetGenerator($data['name'], $this->config);
                 break;
             case "enum":
-                $vog_obj = new EnumGenerator($data['name'], $this->config);
+                $vog_obj = new PhpEnumGenerator($data['name'], $this->config);
                 break;
             case "nullableEnum":
-                $vog_obj = new NullableEnumGenerator($data['name'], $this->config);
+                $vog_obj = new NullablePhpEnumGenerator($data['name'], $this->config);
                 break;
             case "valueObject":
-                $vog_obj = new ValueObjectGenerator($data['name'], $this->config);
+                $vog_obj = new PhpValueObjectGenerator($data['name'], $this->config);
                 break;
             default:
                 throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not
                 implemented. This is an internal error. Please open an issue on GitHub");
         }
 
-        if (!$vog_obj instanceof SetGenerator) {
+        if (!$vog_obj instanceof PhpSetGenerator) {
             $vog_obj->setValues($data['values']);
         }
 
         //These Options are only allowed on value objects
-        if ($vog_obj instanceof ValueObjectGenerator){
+        if ($vog_obj instanceof PhpValueObjectGenerator){
             if (array_key_exists("string_value", $data)) {
                 $vog_obj->setStringValue($data['string_value']);
             }
@@ -98,7 +98,7 @@ class GenerateCommand extends AbstractCommand
         }
 
         if (array_key_exists('mutable', $data)) {
-            if ( !($vog_obj instanceof ValueObjectGenerator) && !($vog_obj instanceof SetGenerator)){
+            if ( !($vog_obj instanceof PhpValueObjectGenerator) && !($vog_obj instanceof PhpSetGenerator)){
                 $name = $vog_obj->getName();
                 $type = $vog_obj->getType();
                 throw new UnexpectedValueException("Mutability is only available on value objects, yet object 
@@ -149,7 +149,7 @@ class GenerateCommand extends AbstractCommand
         ];
 
         foreach ($interfaces as $interface) {
-            $object = new InterfaceGenerator($interface, $this->config);
+            $object = new PhpInterfaceGenerator($interface, $this->config);
             $object->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
             $object->setNamespace($this->getTargetNamespace($targetFilepath));
             $success = $this->writeToFile($object);
