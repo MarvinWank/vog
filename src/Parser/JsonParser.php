@@ -3,14 +3,15 @@
 namespace Vog\Parser;
 
 use Vog\Exception\VogException;
+use Vog\ValueObjects\VogDefinitionFile;
 
-class JsonParser implements Parser
+class JsonParser extends AbstractParser
 {
 
     /**
      * @throws VogException
      */
-    public function parseFile(string $filePath): array
+    public function parseFile(string $filePath): VogDefinitionFile
     {
         $file = file_get_contents($filePath);
 
@@ -18,6 +19,6 @@ class JsonParser implements Parser
         if (json_last_error_msg() !== "No error") {
             throw new VogException("Could not parse " . $filePath . "\n json_last_error_msg(): " . json_last_error_msg());
         }
-        return $data;
+        return $this->arrayToDefinition($data);
     }
 }

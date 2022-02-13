@@ -27,26 +27,7 @@ class GenerateCommand extends AbstractCommand
     {
         $data = $this->parseFile($this->target);
 
-        if (!array_key_exists('root_path', $data)) {
-            throw new VogException("Root Path not specified");
-        }
-        $rootPath = rtrim($data['root_path'], '/');
-        unset($data['root_path']);
 
-        $rootNameSpace = null;
-        if (array_key_exists('namespace', $data)) {
-            $rootNameSpace = rtrim($data['namespace'], '\\');
-            unset($data['namespace']);
-        }
-
-        $definitions = VogDefinitionSet::fromArray([]);
-        foreach ($data as $targetFilepath => $objects) {
-            foreach ($objects as $object) {
-                $definition = VogDefinition::fromArray($object);
-                $definitions->add($definition);
-            }
-        }
-        $definitionFile = new VogDefinitionFile($rootPath, $rootNameSpace,$definitions);
     }
 
     /**

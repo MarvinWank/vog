@@ -1,0 +1,42 @@
+{
+  "root_path": "./test/testObjects",
+  "namespace": "Test\\TestObjects",
+  ".": [
+    {
+      "type": "enum",
+      "name": "DietStyle",
+      "values": {
+        "OMNIVORE": "Omnivore",
+        "VEGETARIAN": "Vegetarian",
+        "VEGAN": "Vegan"
+      }
+    },
+    {
+      "type": "nullableEnum",
+      "name": "Cuisine",
+      "values": {
+        "DEUTSCH": "deutsch",
+        "MEDITERAN": "mediteran",
+        "ASIATISCH": "asiatisch",
+        "AMERIKANISCH": "amerikanisch",
+        "INDISCH": "indisch"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      },
+      "string_value": "title"
+    },
+    {
+      "type": "set",
+      "name": "RecipeSet",
+      "item": "Recipe"
+    }
+  ]
+}

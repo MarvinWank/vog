@@ -4,7 +4,7 @@ namespace Vog\Factories;
 
 use Vog\Exception\VogException;
 use Vog\Parser\JsonParser;
-use Vog\Parser\Parser;
+use Vog\Parser\AbstractParser;
 
 class ParserFactory
 {
@@ -17,7 +17,7 @@ class ParserFactory
     /**
      * @throws VogException
      */
-    public function buildParser(string $filepath): Parser
+    public function buildParser(string $filepath): AbstractParser
     {
         if (strpos($filepath, self::FORMAT_JSON)){
             return new JsonParser();

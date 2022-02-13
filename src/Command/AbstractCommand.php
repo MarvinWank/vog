@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use UnexpectedValueException;
 use Vog\Factories\ParserFactory;
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\VogDefinitionFile;
 
 abstract class AbstractCommand
 {
@@ -21,7 +22,7 @@ abstract class AbstractCommand
 
     abstract public function run(): void;
 
-    protected function parseFile(string $filepath): array
+    protected function parseFile(string $filepath): VogDefinitionFile
     {
         $factory = new ParserFactory();
         $parser = $factory->buildParser($filepath);
