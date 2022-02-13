@@ -1,5 +1,11 @@
 <?php
 
+require_once __DIR__ . '/src/Vog.php';
+
+require_once __DIR__ . '/src/factories/CommandFactory.php';
+require_once __DIR__ . '/src/factories/ConfigFactory.php';
+
+
 require_once __DIR__ . '/src/commands/AbstractBuilder.php';
 require_once __DIR__ . '/src/commands/AbstractCommand.php';
 require_once __DIR__ . '/src/commands/generate/AbstractPhpBuilder.php';

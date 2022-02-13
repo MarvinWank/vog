@@ -13,8 +13,10 @@ Official documentation for [vog](https://github.com/MarvinWank/vog)
     2. [Generate-Typescript Command](commands/command-generate-typescript.md)
 
 5. [vog definitions](definitions/definitions.md)
-    3. [valueObject](definitions/valueObject.md)
-    1. [Enum](definitions/enum.md)
-    2. [nullableEnum](definitions/nullableEnum.md)
-    4. [Set](definitions/set.md)
+    1. [valueObject](definitions/valueObject.md)
+       1. DateTimeSupport
+    2. [laravelModel](definitions/laravel.md) 
+    3. [Enum](definitions/enum.md)
+    4. [nullableEnum](definitions/nullableEnum.md)
+    5. [Set](definitions/set.md)
 

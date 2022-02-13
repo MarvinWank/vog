@@ -23,9 +23,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-use Vog\CommandHub;
+use Vog\Vog;
 
 require __DIR__.'/../autoload.php';
 
-$hub = new CommandHub();
+$hub = new Vog();
 $hub->run($argv);
