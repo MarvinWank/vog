@@ -1,5 +1,7 @@
 <?php
 
+namespace Integration;
+
 use Vog\Commands\Generate\GenerateCommand;
 
 class GenerateCommandTest extends IntegrationTestCase

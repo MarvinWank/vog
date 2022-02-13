@@ -14,7 +14,7 @@ class VogDefinition implements ValueObject
 {
     private string $name;
     private string $type;
-    private array $values;
+    private ?array $values;
     private ?string $string_value;
     private ?string $dateTimeFormat;
     private ?string $itemType;
@@ -26,7 +26,7 @@ class VogDefinition implements ValueObject
     public function __construct (
         string $name,
         string $type,
-        array $values,
+        ?array $values,
         ?string $string_value,
         ?string $dateTimeFormat,
         ?string $itemType,
@@ -57,7 +57,7 @@ class VogDefinition implements ValueObject
         return $this->type;
     }
     
-    public function values(): array 
+    public function values(): ?array
     {
         return $this->values;
     }
@@ -129,7 +129,7 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_values(array $values): self 
+    public function with_values(?array $values): self
     {
         return new self(
             $this->name,
@@ -282,11 +282,7 @@ class VogDefinition implements ValueObject
         if (!array_key_exists('type', $array)) {
             throw new UnexpectedValueException('Array key type does not exist');
         }
-                
-        if (!array_key_exists('values', $array)) {
-            throw new UnexpectedValueException('Array key values does not exist');
-        }
-        
+
         return new self(
             $array['name'] ?? null,
             $array['type'] ?? null,
