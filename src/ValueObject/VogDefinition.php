@@ -13,7 +13,7 @@ use UnexpectedValueException;
 class VogDefinition implements ValueObject
 {
     private string $name;
-    private string $type;
+    private VogTypes $type;
     private ?array $values;
     private ?string $string_value;
     private ?string $dateTimeFormat;
@@ -25,7 +25,7 @@ class VogDefinition implements ValueObject
 
     public function __construct (
         string $name,
-        string $type,
+        VogTypes $type,
         ?array $values,
         ?string $string_value,
         ?string $dateTimeFormat,
@@ -52,12 +52,12 @@ class VogDefinition implements ValueObject
         return $this->name;
     }
     
-    public function type(): string 
+    public function type(): VogTypes 
     {
         return $this->type;
     }
     
-    public function values(): ?array
+    public function values(): ?array 
     {
         return $this->values;
     }
@@ -113,7 +113,7 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_type(string $type): self 
+    public function with_type(VogTypes $type): self 
     {
         return new self(
             $this->name,
@@ -129,7 +129,7 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_values(?array $values): self
+    public function with_values(?array $values): self 
     {
         return new self(
             $this->name,
@@ -261,7 +261,7 @@ class VogDefinition implements ValueObject
     {
         return [
             'name' => $this->name,
-            'type' => $this->type,
+            'type' =>  $this->valueToArray($this->type),
             'values' => $this->values,
             'string_value' => $this->string_value,
             'dateTimeFormat' => $this->dateTimeFormat,
@@ -281,6 +281,14 @@ class VogDefinition implements ValueObject
                 
         if (!array_key_exists('type', $array)) {
             throw new UnexpectedValueException('Array key type does not exist');
+        }
+        
+        if (isset($array['type']) && is_string($array['type']) && is_a(VogTypes::class, Enum::class, true)) {
+            $array['type'] = VogTypes::fromName($array['type']);
+        }
+    
+        if (isset($array['type']) && is_array($array['type']) && (is_a(VogTypes::class, Set::class, true) || is_a(VogTypes::class, ValueObject::class, true))) {
+            $array['type'] = VogTypes::fromArray($array['type']);
         }
 
         return new self(

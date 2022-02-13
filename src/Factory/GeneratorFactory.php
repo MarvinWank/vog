@@ -8,11 +8,14 @@ use Vog\Commands\Generate\NullableEnumGenerator;
 use Vog\Commands\Generate\SetGenerator;
 use Vog\Commands\Generate\ValueObjectGenerator;
 use Vog\Exception\VogException;
+use Vog\ValueObjects\VogDefinition;
 
 class GeneratorFactory
 {
-    public function buildPhpGenerator(string $type, array $data): AbstractPhpGenerator
+    public function buildPhpGenerator(VogDefinition $definition): AbstractPhpGenerator
     {
+        switch ($definition->type()){
 
+        }
     }
 }
