@@ -4,10 +4,6 @@ namespace Vog\Factories;
 
 use Vog\Commands\Generate\AbstractPhpGenerator;
 use Vog\Commands\Generate\PhpEnumGenerator;
-use Vog\Commands\Generate\NullablePhpEnumGenerator;
-use Vog\Commands\Generate\PhpSetGenerator;
-use Vog\Commands\Generate\PhpValueObjectGenerator;
-use Vog\Exception\VogException;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
@@ -19,7 +15,7 @@ class GeneratorFactory
         $fullFilepath = $definition->directory() . DIRECTORY_SEPARATOR . $definition->name() . '.php';
         switch ($definition->type()){
             case VogTypes::enum():
-                return new PhpEnumGenerator()
+                return new PhpEnumGenerator($definition, $generatorOptions);
         }
     }
 }
