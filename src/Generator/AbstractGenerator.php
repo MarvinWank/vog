@@ -16,7 +16,6 @@ abstract class AbstractGenerator
     protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
-    protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
     protected const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
 
     abstract public function setValues(array $values): void;

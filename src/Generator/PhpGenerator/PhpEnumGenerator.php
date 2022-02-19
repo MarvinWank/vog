@@ -5,7 +5,6 @@ namespace Vog\Commands\Generate;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
-use Vog\ValueObjects\VogTypes;
 
 class PhpEnumGenerator extends AbstractPhpGenerator
 {
@@ -14,7 +13,7 @@ class PhpEnumGenerator extends AbstractPhpGenerator
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
         parent::__construct($definition, $generatorOptions);
-        $this->type = VogTypes::enum();
+        $this->definition = $this->definition->with_values($this->formatValues($this->definition->values()));
     }
 
     public function getPhpCode(): string
@@ -31,7 +30,7 @@ class PhpEnumGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    public function setValues(array $values): void
+    private function formatValues(array $values): array
     {
         $psrMode = TargetMode::MODE_PSR2();
         if ($psrMode->equals($this->generatorOptions->getTarget())) {
@@ -39,11 +38,10 @@ class PhpEnumGenerator extends AbstractPhpGenerator
             foreach ($values as $key => $value) {
                 $upper[strtoupper($key)] = $value;
             }
-            $this->values = $upper;
-            return;
+            return $upper;
         }
 
-        $this->values = $values;
+        return $values;
     }
 
     protected function generateConstOptions(string $phpcode): string
