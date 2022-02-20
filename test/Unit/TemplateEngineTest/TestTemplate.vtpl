@@ -3,3 +3,5 @@ This is the test of a template named {{template}}
 because all occurrences should be renamed, its name is mentioned here again: {{template}}
 
 FooBar {{anotherVar}}
+
+This {{removedVar}} is a removed var

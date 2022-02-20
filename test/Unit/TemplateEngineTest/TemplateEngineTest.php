@@ -27,7 +27,9 @@ class TemplateEngineTest extends UnitTestCase
 
 because all occurrences should be renamed, its name is mentioned here again: funnyTemplateName
 
-FooBar that Rhymed!";
+FooBar that Rhymed!
+
+This  is a removed var";
 
         $result = $this->templateEngine->replaceValues(__DIR__ . '/TestTemplate.vtpl', $replaceMap);
 

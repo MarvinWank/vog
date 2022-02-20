@@ -13,6 +13,8 @@ class TemplateEngine
             $result = str_replace('{{'.$find.'}}', $replace, $result);
         }
 
+        $result = preg_replace('/\{\{\w+\}\}/', '', $result);
+
         return $result;
     }
 }
