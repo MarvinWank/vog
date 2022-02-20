@@ -11,10 +11,10 @@ class GenericPhpHelper
     public function generateGenericPhpHeader(
         string $name,
         string $namespace,
+        array $use = [],
         bool $isFinal = false,
         string $extends = null,
         array $implements = [],
-        array $use = self::USE_EXCEPTIONS,
         string $type = 'class'
     ): string
     {
