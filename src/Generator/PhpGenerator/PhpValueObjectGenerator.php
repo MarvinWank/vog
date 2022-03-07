@@ -5,20 +5,22 @@ namespace Vog\Commands\Generate;
 
 use UnexpectedValueException;
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
+use Vog\ValueObjects\VogDefinition;
 
 class PhpValueObjectGenerator extends AbstractPhpGenerator
 {
     private string $stringValue;
     private ?string $dateTimeFormat;
-    protected array $implements = ['ValueObject'];
 
-    public function __construct(string $targetFilepath, Config $generatorOptions)
+    private const INTERFACE_NAME = "ValueObject";
+    protected array $implements = [self::INTERFACE_NAME];
+
+    public function __construct(VogDefinition $definition, GeneratorOptions $options)
     {
-        parent::__construct($targetFilepath, $generatorOptions);
-        $this->type = "valueObject";
-        $this->dateTimeFormat = null;
+        parent::__construct($definition, $options);
     }
 
     public function setValues(array $values): void
@@ -59,9 +61,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     public function getPhpCode(): string
     {
-        if ($this->dateTimeFormat === null) {
-            $this->dateTimeFormat = $this->generatorOptions->getGeneratorOptions()->getDateTimeFormat();
-        }
+
 
         $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateProperties($phpcode);
