@@ -1,5 +1,7 @@
 <?php
 
+namespace Vog\Service;
+
 use TemplateEngine\TemplateEngine;
 
 class GenericPhpHelper

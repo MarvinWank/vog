@@ -61,7 +61,9 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     public function getPhpCode(): string
     {
-
+        $phpcode = $this->genericPhpHelper->generateGenericPhpHeader(
+            $this->definition->name(),
+        )
 
         $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION]);
         $phpcode = $this->generateProperties($phpcode);

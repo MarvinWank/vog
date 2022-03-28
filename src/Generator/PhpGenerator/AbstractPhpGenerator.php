@@ -3,6 +3,7 @@
 
 namespace Vog\Commands\Generate;
 
+use Vog\Service\GenericPhpHelper;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
@@ -14,9 +15,13 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected bool $is_final;
     protected bool $is_mutable;
 
+    protected GenericPhpHelper $genericPhpHelper;
+
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
         parent::__construct($definition, $generatorOptions);
+
+        $this->genericPhpHelper = new GenericPhpHelper();
 
         $this->extends = null;
         $this->is_final = false;
