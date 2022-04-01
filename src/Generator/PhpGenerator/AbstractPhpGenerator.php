@@ -10,6 +10,7 @@ use Vog\ValueObjects\VogDefinition;
 
 abstract class AbstractPhpGenerator extends AbstractGenerator
 {
+    protected string $rootNamespace;
     protected ?string $extends;
     protected array $implements = [];
     protected bool $is_final;
@@ -17,7 +18,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
 
     protected PhpService $genericPhpHelper;
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace)
     {
         parent::__construct($definition, $generatorOptions);
 
@@ -26,6 +27,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
         $this->extends = null;
         $this->is_final = false;
         $this->is_mutable = false;
+        $this->rootNamespace = $rootNamespace;
     }
 
     abstract public function getPhpCode(): string;
@@ -62,7 +64,10 @@ EOT;
 
     protected function getNamespace(): string
     {
-        return $this->genericPhpHelper->getTargetNamespace()
+        return $this->genericPhpHelper->getTargetNamespace(
+            $this->rootNamespace,
+            $this->definition->directory()
+        );
     }
 
     public function getExtends(): string
@@ -106,7 +111,7 @@ EOT;
         $this->is_mutable = $is_mutable;
     }
 
-    public function getTargetFilepath(): string
+    public function getAbsoluteFilepath(): string
     {
         return $this->targetFilepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }

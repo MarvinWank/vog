@@ -31,7 +31,7 @@ abstract class AbstractTypescriptGenerator extends AbstractGenerator
         $this->values = $values;
     }
 
-    public function getTargetFilepath(): string
+    public function getAbsoluteFilepath(): string
     {
         return $this->targetFilepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".ts";
     }

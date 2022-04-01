@@ -11,22 +11,26 @@ use Vog\Commands\Generate\PhpValueObjectGenerator;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
-use Vog\Vog;
 
 class GeneratorFactory
 {
-    public function buildPhpGenerator(VogDefinition $definition, GeneratorOptions $generatorOptions): AbstractPhpGenerator
+    //TODO: Generator as singletons
+    public function buildPhpGenerator(
+        VogDefinition $definition,
+        GeneratorOptions $generatorOptions,
+        string $rootNamepath
+    ): AbstractPhpGenerator
     {
         $fullFilepath = $definition->directory() . DIRECTORY_SEPARATOR . $definition->name() . '.php';
         switch ($definition->type()) {
             case VogTypes::enum():
-                return new PhpEnumGenerator($definition, $generatorOptions);
+                return new PhpEnumGenerator($definition, $generatorOptions, $rootNamepath);
             case VogTypes::nullableEnum():
-                return new NullablePhpEnumGenerator($definition, $generatorOptions);
+                return new NullablePhpEnumGenerator($definition, $generatorOptions, $rootNamepath);
             case VogTypes::valueObject():
                 return new PhpValueObjectGenerator($definition, $generatorOptions);
             case VogTypes::set():
-                return new PhpSetGenerator($definition, $generatorOptions);
+                return new PhpSetGenerator($definition, $generatorOptions, $rootNamepath);
             default:
                 throw new LogicException("Switch not exhaustive");
         }

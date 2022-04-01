@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use UnexpectedValueException;
 
 use Vog\Exception\VogException;
+use Vog\Factories\GeneratorFactory;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogDefinitionFile;
@@ -14,20 +15,30 @@ use function json_decode;
 
 class GenerateCommand extends AbstractCommand
 {
-    private string $target;
+    private GeneratorFactory $generatorFactory;
+    private string $targetDir;
 
     public function __construct(Config $config, string $target)
     {
         parent::__construct($config);
 
-        $this->target = $target;
+        $this->targetDir = $target;
+        $this->generatorFactory = new GeneratorFactory();
     }
 
     public function run(): void
     {
-        $data = $this->parseFile($this->target);
+        $data = $this->parseFile($this->targetDir);
 
-
+        /** @var VogDefinition $item */
+        foreach ($data->FilePathGroup() as $item){
+            $generator = $this->generatorFactory->buildPhpGenerator(
+                $item,
+                $this->config->getGeneratorOptions(),
+                $data->namespace()
+            );
+            $this->writeToFile($generator);
+        }
     }
 
     /**
@@ -112,7 +123,7 @@ class GenerateCommand extends AbstractCommand
 
     private function writeToFile(AbstractPhpGenerator $builderInstance)
     {
-        return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getPhpCode());
+        return file_put_contents($builderInstance->getAbsoluteFilepath(), $builderInstance->getPhpCode());
     }
 
 
@@ -134,7 +145,7 @@ class GenerateCommand extends AbstractCommand
             $success = $this->writeToFile($object);
 
             if ($success) {
-                echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getTargetFilepath();
+                echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getAbsoluteFilepath();
             }
         }
     }

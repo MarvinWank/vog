@@ -27,6 +27,8 @@ class PhpServiceTest extends UnitTestCase
 
     public function testGetNamespace()
     {
+        $namepsace = $this->genericPhpHelper->getTargetNamespace('TestApp', 'factories');
 
+        $this->assertEquals('TestApp\\Factories', $namepsace);
     }
 }

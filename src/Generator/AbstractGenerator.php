@@ -20,7 +20,7 @@ abstract class AbstractGenerator
 
     abstract public function setValues(array $values): void;
 
-    abstract public function getTargetFilepath(): string;
+    abstract public function getAbsoluteFilepath(): string;
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
