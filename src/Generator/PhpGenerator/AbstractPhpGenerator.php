@@ -3,6 +3,7 @@
 
 namespace Vog\Commands\Generate;
 
+use Vog\Exception\VogException;
 use Vog\Service\PhpService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;

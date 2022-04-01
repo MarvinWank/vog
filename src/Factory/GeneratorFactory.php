@@ -28,7 +28,7 @@ class GeneratorFactory
             case VogTypes::nullableEnum():
                 return new NullablePhpEnumGenerator($definition, $generatorOptions, $rootNamepath);
             case VogTypes::valueObject():
-                return new PhpValueObjectGenerator($definition, $generatorOptions);
+                return new PhpValueObjectGenerator($definition, $generatorOptions, $rootNamepath);
             case VogTypes::set():
                 return new PhpSetGenerator($definition, $generatorOptions, $rootNamepath);
             default:

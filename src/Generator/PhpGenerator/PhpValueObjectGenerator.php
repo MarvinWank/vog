@@ -4,6 +4,7 @@
 namespace Vog\Commands\Generate;
 
 use UnexpectedValueException;
+use Vog\Exception\VogException;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
@@ -17,11 +18,6 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     private const INTERFACE_NAME = "ValueObject";
     protected array $implements = [self::INTERFACE_NAME];
-
-    public function __construct(VogDefinition $definition, GeneratorOptions $options)
-    {
-        parent::__construct($definition, $options);
-    }
 
     public function setValues(array $values): void
     {
@@ -64,10 +60,8 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $phpcode = $this->genericPhpHelper->generateGenericPhpHeader(
             $this->definition->name(),
             $this->getNamespace()
-        )
-
-        $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION]);
-        $phpcode = $this->generateProperties($phpcode);
+        );
+        $phpcode = $this->generateProperties($this->getValues());
 
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateGetters($phpcode);
@@ -93,9 +87,10 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private function generateProperties(string $phpcode): string
+    private function generateProperties(array $values): string
     {
-        foreach ($this->values as $name => $data_type) {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
             $phpcode .= <<<EOT
             
                 private $data_type $$name;
@@ -452,5 +447,21 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         }
 
         return 'set_' . $name;
+    }
+
+
+    /**
+     * @throws VogException
+     */
+    public function getValues(): array
+    {
+        $values = parent::getValues();
+
+        if ($values === null){
+            $name = $this->definition->name();
+            throw new VogException("No values where specified for value object '$name'");
+        }
+
+        return $values;
     }
 }

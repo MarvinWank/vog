@@ -43,9 +43,9 @@ abstract class AbstractGenerator
         $this->targetFilepath = $targetFilepath;
     }
 
-    public function getValues(): array
+    public function getValues(): ?array
     {
-        return $this->values;
+        return $this->definition->values();
     }
 
     protected function isPrimitivePhpType(string $type): bool
