@@ -4,7 +4,7 @@ namespace Vog\Service;
 
 use TemplateEngine\TemplateEngine;
 
-class GenericPhpHelper
+class PhpService
 {
     protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
@@ -49,5 +49,28 @@ class GenericPhpHelper
            'useStatement' => $useStatement,
            'classStatement' => $classStatement
         ]);
+    }
+
+    public function getTargetNamespace(string $rootNamespace, string $targetFilepath): string
+    {
+        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
+        array_unshift($filePathAsArray, $rootNamespace);
+
+        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
+            if (empty($pathFragment)) {
+                return false;
+            }
+
+            if ($pathFragment === '.') {
+                return false;
+            }
+
+            return true;
+        });
+
+        array_walk($filePathAsArray, static function(&$pathFragment){
+            $pathFragment = ucfirst($pathFragment);
+        });
+        return implode('\\', array_values($filePathAsArray));
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Vog\Commands\Generate;
 
-use Vog\Service\GenericPhpHelper;
+use Vog\Service\PhpService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
@@ -15,13 +15,13 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected bool $is_final;
     protected bool $is_mutable;
 
-    protected GenericPhpHelper $genericPhpHelper;
+    protected PhpService $genericPhpHelper;
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
         parent::__construct($definition, $generatorOptions);
 
-        $this->genericPhpHelper = new GenericPhpHelper();
+        $this->genericPhpHelper = new PhpService();
 
         $this->extends = null;
         $this->is_final = false;
@@ -60,14 +60,9 @@ EOT;
         return lcfirst(str_replace('_', '', ucwords($string, '_')));
     }
 
-    public function getNamespace(): string
+    protected function getNamespace(): string
     {
-        return $this->namespace;
-    }
-
-    public function setNamespace(string $namespace): void
-    {
-        $this->namespace = $namespace;
+        return $this->genericPhpHelper->getTargetNamespace()
     }
 
     public function getExtends(): string

@@ -115,28 +115,7 @@ class GenerateCommand extends AbstractCommand
         return file_put_contents($builderInstance->getTargetFilepath(), $builderInstance->getPhpCode());
     }
 
-    private function getTargetNamespace(string $targetFilepath): string
-    {
-        $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
-        array_unshift($filePathAsArray, $this->rootNamespace);
 
-        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
-            if (empty($pathFragment)) {
-                return false;
-            }
-
-            if ($pathFragment === '.') {
-                return false;
-            }
-
-            return true;
-        });
-
-        array_walk($filePathAsArray, static function(&$pathFragment){
-           $pathFragment = ucfirst($pathFragment);
-        });
-        return implode('\\', array_values($filePathAsArray));
-    }
 
 
 

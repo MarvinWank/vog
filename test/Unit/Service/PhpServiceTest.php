@@ -1,16 +1,17 @@
 <?php
 
 use Unit\UnitTestCase;
+use Vog\Service\PhpService;
 
-class GenericPhpHelperTest extends UnitTestCase
+class PhpServiceTest extends UnitTestCase
 {
-    private GenericPhpHelper $genericPhpHelper;
+    private PhpService $genericPhpHelper;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->genericPhpHelper = new GenericPhpHelper();
+        $this->genericPhpHelper = new PhpService();
     }
 
     public function testGenerateGenericPhpHeaderWithSimpleHeader()
@@ -22,5 +23,10 @@ class GenericPhpHelperTest extends UnitTestCase
         $expectedHeader = file_get_contents(__DIR__ . '/SimplePhpHeder');
 
         $this->assertEquals($expectedHeader, $phpHeader);
+    }
+
+    public function testGetNamespace()
+    {
+
     }
 }
