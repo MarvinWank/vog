@@ -57,11 +57,11 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     public function getPhpCode(): string
     {
-        $phpcode = $this->genericPhpHelper->generateGenericPhpHeader(
+        $phpcode = $this->phpService->generateGenericPhpHeader(
             $this->definition->name(),
             $this->getNamespace()
         );
-        $phpcode = $this->generateProperties($this->getValues());
+        $phpcode .= $this->generateProperties($this->getValues());
 
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateGetters($phpcode);
@@ -100,15 +100,30 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private function generateConstructor(string $phpcode): string
+    /**
+     * @throws VogException
+     */
+    protected function getValues(): array
     {
-        $phpcode .= <<<EOT
+        $values = parent::getValues();
+
+        if ($values === null){
+            $name = $this->definition->name();
+            throw new VogException("No values where specified for value object '$name'");
+        }
+
+        return $values;
+    }
+
+    private function generateConstructor(array $values): string
+    {
+        $phpcode = <<<EOT
         
         
             public function __construct (
         EOT;
 
-        foreach ($this->values as $name => $data_type) {
+        foreach ($values as $name => $data_type) {
             $phpcode .= <<<EOT
             
                     $data_type $$name,
@@ -120,7 +135,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         
             ) {
         ETO;
-        foreach ($this->values as $name => $data_type) {
+        foreach ($values as $name => $data_type) {
             $phpcode .= <<<ETO
             
                     \$this->$name = $$name;
@@ -135,9 +150,10 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private function generateGetters(string $phpcode): string
+    private function generateGetters(array $values): string
     {
-        foreach ($this->values as $name => $data_type) {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
             $functionName = $this->getGetterName($name);
 
             if ($data_type) {
@@ -163,9 +179,10 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private function generateSetters(string $phpcode): string
+    private function generateSetters(array $values): string
     {
-        foreach ($this->values as $name => $data_type) {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
             $functionName = $this->getSetter($name);
             if ($data_type) {
                 $phpcode .= <<<EOT
@@ -190,9 +207,10 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private function generateWithMethods(string $phpcode): string
+    private function generateWithMethods(array $values): string
     {
-        foreach ($this->values as $name => $data_type) {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
             $functionName = $this->getWithFunctionName($name);
             $phpcode .= <<<EOT
             
@@ -201,7 +219,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
                     return new self(
             EOT;
 
-            foreach ($this->values as $name_assigner => $data_type_assginer) {
+            foreach ($values as $name_assigner => $data_type_assginer) {
                 if ($name_assigner === $name) {
                     $phpcode .= <<<EOT
                     
@@ -227,18 +245,18 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    protected function generateToArray(string $phpcode): string
+    protected function generateToArray(array $values): string
     {
-        $phpcode .= <<<EOT
+        $phpcode = <<<EOT
         
             public function toArray(): array
             {
                 return [
         EOT;
 
-        if ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())) {
+        if ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())) {
 
-            foreach ($this->values as $name => $datatype) {
+            foreach ($values as $name => $datatype) {
                 if (!$this->isPrimitivePhpType($datatype)) {
                     $phpcode .= <<<EOT
                 
@@ -252,9 +270,9 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
                 }
             }
 
-        } elseif ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
+        } elseif ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
 
-            foreach ($this->values as $name => $datatype) {
+            foreach ($values as $name => $datatype) {
                 $phpcode .= <<<EOT
                 
                             '$name' => \$this->$name,
@@ -274,16 +292,15 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    protected
-    function generateFromArray(string $phpcode): string
+    protected function generateFromArray(array $values): string
     {
-        $phpcode .= <<<'EOT'
+        $phpcode = <<<'EOT'
         
             public static function fromArray(array $array): self
             {
         EOT;
 
-        foreach ($this->values as $name => $datatype) {
+        foreach ($values as $name => $datatype) {
 
             if (!$this->isDataTypeNullable($datatype)){
                 $phpcode .= <<<EOT
@@ -332,7 +349,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
                 return new self(
         EOT;
 
-        foreach ($this->values as $name => $datatype) {
+        foreach ($values as $name => $datatype) {
             $phpcode .= <<<EOT
             
                         \$array['$name'] ?? null,
@@ -350,58 +367,19 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $phpcode;
     }
 
-    private
-    function generateToString(string $phpcode)
+    private function generateToString(): string
     {
-        $phpcode .= <<<EOT
-        
-            public function __toString(): string
-            {
-                return \$this->toString();
-            }
-            
-            public function toString(): string
-            {
-                return (string) \$this->$this->stringValue;
-            }
-            
-        EOT;
-
-        return $phpcode;
+        return $this->phpService->generateToStringMethod($this->stringValue);
     }
 
-    private
-    function generateValueToArray(string $phpcode)
+    private function generateValueToArray(string $dateTimeFormat): string
     {
-        $dateTimeFormat = $this->dateTimeFormat;
-        $phpcode .= <<<EOT
-            
-            private function valueToArray(\$value)
-            {
-                if(\$value === null){
-                    return null;
-                }
-            
-                if (method_exists(\$value, 'toArray')) {
-                    return \$value->toArray();
-                }
-                
-                if(is_a(\$value, \DateTime::class, true) || is_a(\$value, \DateTimeImmutable::class, true)){
-                    return \$value->format('$dateTimeFormat');
-                }
-                
-                return (string) \$value;
-            }
-            
-        EOT;
-
-        return $phpcode;
+        return $this->phpService->generateValueToArrayMethod($dateTimeFormat);
     }
 
-    private
-    function generateEquals(string $phpcode)
+    private function generateEquals(): string
     {
-        $phpcode .= <<<'EOT'
+        return <<<'EOT'
             
             public function equals($value): bool
             {
@@ -412,8 +390,6 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
             }
             
         EOT;
-
-        return $phpcode;
     }
 
     private
@@ -449,19 +425,4 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return 'set_' . $name;
     }
 
-
-    /**
-     * @throws VogException
-     */
-    public function getValues(): array
-    {
-        $values = parent::getValues();
-
-        if ($values === null){
-            $name = $this->definition->name();
-            throw new VogException("No values where specified for value object '$name'");
-        }
-
-        return $values;
-    }
 }

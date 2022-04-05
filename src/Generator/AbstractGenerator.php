@@ -2,11 +2,8 @@
 
 namespace Vog\Commands\Generate;
 
-use Vog\ValueObjects\Config;
 use Vog\ValueObjects\GeneratorOptions;
-use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
-use Vog\ValueObjects\VogTypes;
 
 abstract class AbstractGenerator
 {
@@ -43,7 +40,7 @@ abstract class AbstractGenerator
         $this->targetFilepath = $targetFilepath;
     }
 
-    public function getValues(): ?array
+    protected function getValues(): ?array
     {
         return $this->definition->values();
     }

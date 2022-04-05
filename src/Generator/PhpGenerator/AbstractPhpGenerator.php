@@ -3,7 +3,6 @@
 
 namespace Vog\Commands\Generate;
 
-use Vog\Exception\VogException;
 use Vog\Service\PhpService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
@@ -17,13 +16,13 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected bool $is_final;
     protected bool $is_mutable;
 
-    protected PhpService $genericPhpHelper;
+    protected PhpService $phpService;
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace)
     {
         parent::__construct($definition, $generatorOptions);
 
-        $this->genericPhpHelper = new PhpService();
+        $this->phpService = new PhpService();
 
         $this->extends = null;
         $this->is_final = false;
@@ -65,7 +64,7 @@ EOT;
 
     protected function getNamespace(): string
     {
-        return $this->genericPhpHelper->getTargetNamespace(
+        return $this->phpService->getTargetNamespace(
             $this->rootNamespace,
             $this->definition->directory()
         );

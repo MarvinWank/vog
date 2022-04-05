@@ -10,6 +10,15 @@ class PhpService
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
+    private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
+
+    private TemplateEngine $templateEngine;
+
+    public function __construct()
+    {
+        $this->templateEngine = new TemplateEngine();
+    }
+
     public function generateGenericPhpHeader(
         string $name,
         string $namespace,
@@ -43,8 +52,7 @@ class PhpService
             EOT;
         }
 
-        $templateEngine = new TemplateEngine();
-        return $templateEngine->replaceValues(__DIR__ . '/../../templates/GenericPhpFileHeader.vtpl', [
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'GenericPhpFileHeader.vtpl', [
            'namespace' => $namespace,
            'useStatement' => $useStatement,
            'classStatement' => $classStatement
@@ -72,5 +80,19 @@ class PhpService
             $pathFragment = ucfirst($pathFragment);
         });
         return implode('\\', array_values($filePathAsArray));
+    }
+
+    public function generateToStringMethod(string $stringValue): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PhpToStringMethod.vtpl', [
+            'stringValue' => $stringValue
+        ]);
+    }
+
+    public function generateValueToArrayMethod(string $dateTimeFormat): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PhpGenerateValueToArray.vtpl', [
+            'dateTimeFormat' => $dateTimeFormat
+        ]);
     }
 }
