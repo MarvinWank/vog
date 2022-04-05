@@ -32,6 +32,18 @@ class PhpServiceTest extends UnitTestCase
         $this->assertEquals('TestApp\\Factories', $namepsace);
     }
 
+    public function testGenerateConstructor()
+    {
+        $constructorArguments = [
+          'FooClass' => 'fooClass',
+          'BarClass' => 'barClass'
+        ];
+        $constructor = $this->genericPhpHelper->generateConstructor($constructorArguments);
+        $expected = file_get_contents(__DIR__ . '/SimplePhpConstructor');
+
+        $this->assertEquals($expected, $constructor);
+    }
+
     public function testGenerateToStringMethod()
     {
         $method = $this->genericPhpHelper->generateToStringMethod('id');

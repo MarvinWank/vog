@@ -63,27 +63,26 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         );
         $phpcode .= $this->generateProperties($this->getValues());
 
-        $phpcode = $this->generateConstructor($phpcode);
-        $phpcode = $this->generateGetters($phpcode);
+        $phpcode .= $this->generateConstructor($this->getValues());
+        $phpcode .= $this->generateGetters($this->getValues());
 
         if ($this->is_mutable) {
-            $phpcode = $this->generateSetters($phpcode);
+            $phpcode .= $this->generateSetters($this->getValues());
         }
 
-        $phpcode = $this->generateWithMethods($phpcode);
-        $phpcode = $this->generateToArray($phpcode);
-        $phpcode = $this->generateFromArray($phpcode);
-        if ($this->generatorOptions->getGeneratorOptions()->getToArrayMode()->equals(ToArrayMode::DEEP())){
-            $phpcode = $this->generateValueToArray($phpcode);
+        $phpcode .= $this->generateWithMethods($this->getValues());
+        $phpcode .= $this->generateToArray($this->getValues());
+        $phpcode .= $this->generateFromArray($this->getValues());
+        if ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())){
+            $phpcode .= $this->generateValueToArray($phpcode);
         }
-        $phpcode = $this->generateEquals($phpcode);
+        $phpcode .= $this->generateEquals();
 
         if (isset($this->stringValue)) {
-            $phpcode = $this->generateToString($phpcode);
+            $phpcode .= $this->generateToString();
         }
 
-
-        $phpcode = $this->closeClass($phpcode);
+        $phpcode .= $this->closeClass($phpcode);
         return $phpcode;
     }
 
@@ -117,66 +116,12 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     private function generateConstructor(array $values): string
     {
-        $phpcode = <<<EOT
-        
-        
-            public function __construct (
-        EOT;
-
-        foreach ($values as $name => $data_type) {
-            $phpcode .= <<<EOT
-            
-                    $data_type $$name,
-            EOT;
-        }
-
-        $phpcode = rtrim($phpcode, ',');
-        $phpcode .= <<<ETO
-        
-            ) {
-        ETO;
-        foreach ($values as $name => $data_type) {
-            $phpcode .= <<<ETO
-            
-                    \$this->$name = $$name;
-            ETO;
-        }
-        $phpcode .= <<<ETO
-        
-            }
-            
-        ETO;
-
-        return $phpcode;
+        return $this->phpService->generateConstructor($values);
     }
 
     private function generateGetters(array $values): string
     {
-        $phpcode = "";
-        foreach ($values as $name => $data_type) {
-            $functionName = $this->getGetterName($name);
-
-            if ($data_type) {
-                $phpcode .= <<<ETO
-                
-                    public function $functionName(): $data_type 
-                    {
-                ETO;
-            } else {
-                $phpcode .= <<<ETO
-                
-                    public function $functionName() 
-                    {
-                ETO;
-            }
-            $phpcode .= <<<EOT
-            
-                    return \$this->$name;
-                }
-                
-            EOT;
-        }
-        return $phpcode;
+        return $this->phpService->generateGetters($values);
     }
 
     private function generateSetters(array $values): string
@@ -377,6 +322,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $this->phpService->generateValueToArrayMethod($dateTimeFormat);
     }
 
+    //TODO: Rework
     private function generateEquals(): string
     {
         return <<<'EOT'
@@ -392,33 +338,20 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         EOT;
     }
 
-    private
-    function getGetterName(string $name): string
+    private function getWithFunctionName(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
-            return 'get' . ucfirst($name);
-        }
-
-        return $name;
-    }
-
-    private
-    function getWithFunctionName(string $name): string
-    {
-        $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getTarget())) {
             return 'with' . ucfirst($name);
         }
 
         return 'with_' . $name;
     }
 
-    private
-    function getSetter(string $name): string
+    private function getSetter(string $name): string
     {
         $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getGeneratorOptions()->getTarget())) {
+        if ($psrMode->equals($this->generatorOptions->getTarget())) {
             return 'set' . ucfirst($name);
         }
 

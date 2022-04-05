@@ -3,6 +3,8 @@
 namespace Vog\Service;
 
 use TemplateEngine\TemplateEngine;
+use Vog\ValueObjects\GeneratorOptions;
+use Vog\ValueObjects\TargetMode;
 
 class PhpService
 {
@@ -80,6 +82,81 @@ class PhpService
             $pathFragment = ucfirst($pathFragment);
         });
         return implode('\\', array_values($filePathAsArray));
+    }
+
+    public function generateConstructor(array $values): string
+    {
+        $phpcode = <<<EOT
+        
+        
+            public function __construct (
+        EOT;
+
+        foreach ($values as $data_type => $name) {
+            $phpcode .= <<<EOT
+            
+                    $data_type $$name,
+            EOT;
+        }
+
+        $phpcode = rtrim($phpcode, ',');
+        $phpcode .= <<<ETO
+        
+            ) {
+        ETO;
+        foreach ($values as $name => $data_type) {
+            $name = lcfirst($name);
+            $phpcode .= <<<ETO
+            
+                    \$this->$name = $$name;
+            ETO;
+        }
+        $phpcode .= <<<ETO
+        
+            }
+
+        ETO;
+
+        return $phpcode;
+    }
+
+    public function generateGetters(array $values, GeneratorOptions $generatorOptions): string
+    {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
+            $functionName = $this->getGetterName($name, $generatorOptions);
+
+            if ($data_type) {
+                $phpcode .= <<<ETO
+                
+                    public function $functionName(): $data_type 
+                    {
+                ETO;
+            } else {
+                $phpcode .= <<<ETO
+                
+                    public function $functionName() 
+                    {
+                ETO;
+            }
+            $phpcode .= <<<EOT
+            
+                    return \$this->$name;
+                }
+                
+            EOT;
+        }
+        return $phpcode;
+    }
+
+    private function getGetterName(string $name, GeneratorOptions $generatorOptions): string
+    {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals($generatorOptions->getTarget())) {
+            return 'get' . ucfirst($name);
+        }
+
+        return $name;
     }
 
     public function generateToStringMethod(string $stringValue): string
