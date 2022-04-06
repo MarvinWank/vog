@@ -1,0 +1,10 @@
+
+    public function set_fooClass(FooClass $fooClass): void
+    {
+        $this->fooClass = $fooClass;
+    }
+
+    public function set_name(string $name): void
+    {
+        $this->name = $name;
+    }

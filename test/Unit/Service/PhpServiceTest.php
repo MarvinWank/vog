@@ -146,4 +146,23 @@ class PhpServiceTest extends UnitTestCase
 
         $this->assertEquals($expected, $setters);
     }
+
+    public function testGenerateSettersLegacy()
+    {
+        $values = [
+            'FooClass' => 'fooClass',
+            'string' => 'name'
+        ];
+
+        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_FPP());
+
+        $setters = $this->genericPhpHelper->generateSetters(
+            $values,
+            $generatorOptions
+        );
+        $expected = file_get_contents(__DIR__ . '/PhpLegacySetters');
+
+        $this->assertEquals($expected, $setters);
+    }
 }
