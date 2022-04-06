@@ -1,0 +1,29 @@
+
+    public static function fromArray(array $array): self
+    {        
+        if (!array_key_exists('root_path', $array)) {
+            throw new UnexpectedValueException('Array key root_path does not exist');
+        }
+                
+        if (!array_key_exists('namespace', $array)) {
+            throw new UnexpectedValueException('Array key namespace does not exist');
+        }
+                
+        if (!array_key_exists('filePathGroup', $array)) {
+            throw new UnexpectedValueException('Array key filePathGroup does not exist');
+        }
+        
+        if (isset($array['filePathGroup']) && is_string($array['filePathGroup']) && is_a(VogDefinitionSet::class, Enum::class, true)) {
+            $array['filePathGroup'] = VogDefinitionSet::fromName($array['filePathGroup']);
+        }
+
+        if (isset($array['filePathGroup']) && is_array($array['filePathGroup']) && (is_a(VogDefinitionSet::class, Set::class, true) || is_a(VogDefinitionSet::class, ValueObject::class, true))) {
+            $array['filePathGroup'] = VogDefinitionSet::fromArray($array['filePathGroup']);
+        }
+
+        return new self(
+            $array['root_path'] ?? null,
+            $array['namespace'] ?? null,
+            $array['filePathGroup'] ?? null
+        );
+    }

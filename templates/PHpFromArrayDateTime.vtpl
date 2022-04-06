@@ -1,0 +1,5 @@
+
+        if (is_string($array['{{name}}'])){
+            $array['{{name}}'] = {{dateObject}}::createFromFormat('{{format}}', $array['{{name}}']);
+        }
+                        

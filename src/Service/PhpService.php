@@ -12,6 +12,8 @@ class PhpService
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
     protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
+    private const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
+
     private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
 
     private TemplateEngine $templateEngine;
@@ -24,10 +26,10 @@ class PhpService
     public function generateGenericPhpHeader(
         string $name,
         string $namespace,
-        array $use = [],
-        bool $isFinal = false,
+        array  $use = [],
+        bool   $isFinal = false,
         string $extends = null,
-        array $implements = [],
+        array  $implements = [],
         string $type = 'class'
     ): string
     {
@@ -55,9 +57,9 @@ class PhpService
         }
 
         return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'GenericPhpFileHeader.vtpl', [
-           'namespace' => $namespace,
-           'useStatement' => $useStatement,
-           'classStatement' => $classStatement
+            'namespace' => $namespace,
+            'useStatement' => $useStatement,
+            'classStatement' => $classStatement
         ]);
     }
 
@@ -66,7 +68,7 @@ class PhpService
         $filePathAsArray = explode(DIRECTORY_SEPARATOR, $targetFilepath);
         array_unshift($filePathAsArray, $rootNamespace);
 
-        $filePathAsArray = array_filter($filePathAsArray, static function($pathFragment) {
+        $filePathAsArray = array_filter($filePathAsArray, static function ($pathFragment) {
             if (empty($pathFragment)) {
                 return false;
             }
@@ -78,7 +80,7 @@ class PhpService
             return true;
         });
 
-        array_walk($filePathAsArray, static function(&$pathFragment){
+        array_walk($filePathAsArray, static function (&$pathFragment) {
             $pathFragment = ucfirst($pathFragment);
         });
         return implode('\\', array_values($filePathAsArray));
@@ -127,7 +129,7 @@ class PhpService
         foreach ($values as $dataType => $name) {
             $functionName = $this->getGetterName($name, $generatorOptions);
 
-            if(is_numeric($dataType)){
+            if (is_numeric($dataType)) {
                 $dataType = null;
             }
 
@@ -161,7 +163,7 @@ class PhpService
         foreach ($values as $dataType => $name) {
             $functionName = $this->getSetter($name, $generatorOptions);
 
-            if(is_numeric($dataType)){
+            if (is_numeric($dataType)) {
                 $dataType = null;
             }
 
@@ -220,5 +222,81 @@ class PhpService
         return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PhpGenerateValueToArray.vtpl', [
             'dateTimeFormat' => $dateTimeFormat
         ]);
+    }
+
+    public function generateFromArray(array $values, string $dateTimeFormat): string
+    {
+        $phpcode = <<<'EOT'
+        
+            public static function fromArray(array $array): self
+            {
+        EOT;
+
+        foreach ($values as $name => $datatype) {
+            if (!$this->isDataTypeNullable($datatype)) {
+                $phpcode .= <<<EOT
+                    
+                    if (!array_key_exists('$name', \$array)) {
+                        throw new UnexpectedValueException('Array key $name does not exist');
+                    }
+                    
+            EOT;
+            }
+
+            $datatype = $this->sanitizeNullableDatatype($datatype);
+            if ($datatype === "\\DateTime" || $datatype === "\\DateTimeImmutable") {
+                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR .'PHpFromArrayDateTime.vtpl', [
+                    'name' => $name,
+                    'format' => $dateTimeFormat,
+                    'dateObject' => $datatype
+                ]);
+            } elseif (!$this->isPrimitivePhpType($datatype)) {
+                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR .'PhpFromArrayForVog.vtpl', [
+                    'name' => $name,
+                    'dataType' => $datatype
+                ]);
+            }
+        }
+
+        $phpcode .= <<<EOT
+        
+        
+                return new self(
+        EOT;
+
+        foreach ($values as $name => $datatype) {
+            $phpcode .= <<<EOT
+            
+                        \$array['$name'] ?? null,
+            EOT;
+        }
+
+        $phpcode = rtrim($phpcode, ',');
+        $phpcode .= <<<EOT
+        
+                );
+            }
+        EOT;
+
+        return $phpcode;
+    }
+
+    private function isDataTypeNullable(string $datatype): bool
+    {
+        if (strpos($datatype, '?') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function sanitizeNullableDatatype(string $datatype): string
+    {
+        return str_replace('?', '', $datatype);
+    }
+
+    private function isPrimitivePhpType(string $type): bool
+    {
+        return in_array($type, self::PHP_PRIMITIVE_TYPES);
     }
 }

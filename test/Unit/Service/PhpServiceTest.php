@@ -165,4 +165,18 @@ class PhpServiceTest extends UnitTestCase
 
         $this->assertEquals($expected, $setters);
     }
+
+    public function testGenerateFromArray()
+    {
+        $values = [
+            'root_path' => 'string',
+            'namespace' => 'string',
+            'filePathGroup' => 'VogDefinitionSet'
+        ];
+
+        $method = $this->genericPhpHelper->generateFromArray($values, 'Y-m-d');
+        $expected = file_get_contents(__DIR__ . '/PhpFromArray');
+
+        $this->assertEquals($expected, $method);
+    }
 }

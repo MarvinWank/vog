@@ -116,18 +116,4 @@ EOT;
         return $this->targetFilepath . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
-    protected function isDataTypeNullable(string $datatype): bool
-    {
-        if (strpos($datatype, '?') !== false) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function sanitizeNullableDatatype(string $datatype): string
-    {
-        return str_replace('?', '', $datatype);
-    }
-
 }

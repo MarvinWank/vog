@@ -132,6 +132,11 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $this->phpService->generateSetters($values, $generatorOptions);
     }
 
+    private function generateToArray(array $values, string $dateTimeFormat): string
+    {
+        return $this->phpService->generateFromArray($values, $dateTimeFormat);
+    }
+
     private function generateWithMethods(array $values): string
     {
         $phpcode = "";
@@ -210,81 +215,6 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $phpcode .= <<<EOT
         
                 ];
-            }
-            
-        EOT;
-
-        return $phpcode;
-    }
-
-    protected function generateFromArray(array $values): string
-    {
-        $phpcode = <<<'EOT'
-        
-            public static function fromArray(array $array): self
-            {
-        EOT;
-
-        foreach ($values as $name => $datatype) {
-
-            if (!$this->isDataTypeNullable($datatype)){
-                $phpcode .= <<<EOT
-                    
-                    if (!array_key_exists('$name', \$array)) {
-                        throw new UnexpectedValueException('Array key $name does not exist');
-                    }
-                    
-            EOT;
-            }
-
-            $datatype = $this->sanitizeNullableDatatype($datatype);
-
-            if ($datatype === "\\DateTime") {
-                $phpcode .= <<<EOT
-                        
-                        if (is_string(\$array['$name'])){
-                            \$array['$name'] = \\DateTime::createFromFormat('$this->dateTimeFormat', \$array['$name']);
-                        }
-                EOT;
-            } elseif ($datatype === "\\DateTimeImmutable") {
-                $phpcode .= <<<EOT
-                    
-                        if (is_string(\$array['$name'])){
-                            \$array['$name'] = \\DateTimeImmutable::createFromFormat('$this->dateTimeFormat', \$array['$name']);
-                        }
-                        
-                EOT;
-            } elseif (!$this->isPrimitivePhpType($datatype)) {
-                $phpcode .= <<<EOT
-                
-                        if (isset(\$array['$name']) && is_string(\$array['$name']) && is_a($datatype::class, Enum::class, true)) {
-                            \$array['$name'] = $datatype::fromName(\$array['$name']);
-                        }
-                    
-                        if (isset(\$array['$name']) && is_array(\$array['$name']) && (is_a($datatype::class, Set::class, true) || is_a($datatype::class, ValueObject::class, true))) {
-                            \$array['$name'] = $datatype::fromArray(\$array['$name']);
-                        }
-
-                EOT;
-            }
-        }
-
-        $phpcode .= <<<EOT
-        
-                return new self(
-        EOT;
-
-        foreach ($values as $name => $datatype) {
-            $phpcode .= <<<EOT
-            
-                        \$array['$name'] ?? null,
-            EOT;
-        }
-
-        $phpcode = rtrim($phpcode, ',');
-        $phpcode .= <<<EOT
-        
-                );
             }
             
         EOT;
