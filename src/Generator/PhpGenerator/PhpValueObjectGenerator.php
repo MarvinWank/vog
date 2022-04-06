@@ -55,6 +55,9 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $this->dateTimeFormat = $dateTimeFormat;
     }
 
+    /**
+     * @throws VogException
+     */
     public function getPhpCode(): string
     {
         $phpcode = $this->phpService->generateGenericPhpHeader(
@@ -119,37 +122,14 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $this->phpService->generateConstructor($values);
     }
 
-    private function generateGetters(array $values): string
+    private function generateGetters(array $values, GeneratorOptions $generatorOptions): string
     {
-        return $this->phpService->generateGetters($values);
+        return $this->phpService->generateGetters($values, $generatorOptions);
     }
 
-    private function generateSetters(array $values): string
+    private function generateSetters(array $values, GeneratorOptions $generatorOptions): string
     {
-        $phpcode = "";
-        foreach ($values as $name => $data_type) {
-            $functionName = $this->getSetter($name);
-            if ($data_type) {
-                $phpcode .= <<<EOT
-                
-                    public function $functionName($data_type $$name) 
-                    {
-                EOT;
-            } else {
-                $phpcode .= <<<EOT
-                
-                    public function $functionName($$name) 
-                    {
-                EOT;
-            }
-            $phpcode .= <<<EOT
-            
-                    \$this->$name = $$name;
-                }
-                
-            EOT;
-        }
-        return $phpcode;
+        return $this->phpService->generateSetters($values, $generatorOptions);
     }
 
     private function generateWithMethods(array $values): string
@@ -346,16 +326,6 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         }
 
         return 'with_' . $name;
-    }
-
-    private function getSetter(string $name): string
-    {
-        $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getTarget())) {
-            return 'set' . ucfirst($name);
-        }
-
-        return 'set_' . $name;
     }
 
 }

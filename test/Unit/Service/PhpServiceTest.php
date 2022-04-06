@@ -73,7 +73,7 @@ class PhpServiceTest extends UnitTestCase
             $constructorArguments,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpLegacy2Getters');
+        $expected = file_get_contents(__DIR__ . '/PhpPsr2GettersNoDataType');
 
         $this->assertEquals($expected, $getters);
     }
@@ -110,5 +110,40 @@ class PhpServiceTest extends UnitTestCase
         $expected = file_get_contents(__DIR__ . '/PhpTestGenerateValueToArray');
 
         $this->assertEquals($expected, $method);
+    }
+
+    public function testGenerateSettersPsr2()
+    {
+        $values = [
+            'FooClass' => 'fooClass',
+            'string' => 'name'
+        ];
+
+        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
+
+        $setters = $this->genericPhpHelper->generateSetters(
+            $values,
+            $generatorOptions
+        );
+        $expected = file_get_contents(__DIR__ . '/PhpPsr2Setters');
+
+        $this->assertEquals($expected, $setters);
+    }
+
+    public function testGenerateSettersPsr2NoDataType()
+    {
+        $values = ['fooClass','name'];
+
+        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
+
+        $setters = $this->genericPhpHelper->generateSetters(
+            $values,
+            $generatorOptions
+        );
+        $expected = file_get_contents(__DIR__ . '/PhpPsr2SettersNoDataType');
+
+        $this->assertEquals($expected, $setters);
     }
 }

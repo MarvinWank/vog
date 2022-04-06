@@ -42,7 +42,7 @@ abstract class AbstractGenerator
 
     protected function getValues(): ?array
     {
-        return $this->definition->values();
+        return array_flip($this->definition->values());
     }
 
     protected function isPrimitivePhpType(string $type): bool

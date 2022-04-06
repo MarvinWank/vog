@@ -1,10 +1,10 @@
 
-    public function getFooClass()
+    public function fooClass(): FooClass
     {
         return $this->fooClass;
     }
 
-    public function getName()
+    public function name(): string
     {
         return $this->name;
     }

@@ -120,6 +120,7 @@ class PhpService
         return $phpcode;
     }
 
+    //TODO: Refactor into two methods
     public function generateGetters(array $values, GeneratorOptions $generatorOptions): string
     {
         $phpcode = "";
@@ -151,6 +152,50 @@ class PhpService
             EOT;
         }
         return $phpcode;
+    }
+
+    //TODO: Refactor into two methods
+    public function generateSetters(array $values, GeneratorOptions $generatorOptions): string
+    {
+        $phpcode = "";
+        foreach ($values as $dataType => $name) {
+            $functionName = $this->getSetter($name, $generatorOptions);
+
+            if(is_numeric($dataType)){
+                $dataType = null;
+            }
+
+            if ($dataType) {
+                $phpcode .= <<<EOT
+                
+                    public function $functionName($dataType $$name): void
+                    {
+                EOT;
+            } else {
+                $phpcode .= <<<EOT
+                
+                    public function $functionName($$name): void
+                    {
+                EOT;
+            }
+            $phpcode .= <<<EOT
+            
+                    \$this->$name = $$name;
+                }
+
+            EOT;
+        }
+        return $phpcode;
+    }
+
+    private function getSetter(string $name, GeneratorOptions $generatorOptions): string
+    {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals($generatorOptions->getTarget())) {
+            return 'set' . ucfirst($name);
+        }
+
+        return 'set_' . $name;
     }
 
     private function getGetterName(string $name, GeneratorOptions $generatorOptions): string
