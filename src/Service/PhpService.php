@@ -123,19 +123,23 @@ class PhpService
     public function generateGetters(array $values, GeneratorOptions $generatorOptions): string
     {
         $phpcode = "";
-        foreach ($values as $name => $data_type) {
+        foreach ($values as $dataType => $name) {
             $functionName = $this->getGetterName($name, $generatorOptions);
 
-            if ($data_type) {
+            if(is_numeric($dataType)){
+                $dataType = null;
+            }
+
+            if ($dataType) {
                 $phpcode .= <<<ETO
                 
-                    public function $functionName(): $data_type 
+                    public function $functionName(): $dataType
                     {
                 ETO;
             } else {
                 $phpcode .= <<<ETO
                 
-                    public function $functionName() 
+                    public function $functionName()
                     {
                 ETO;
             }
@@ -143,7 +147,7 @@ class PhpService
             
                     return \$this->$name;
                 }
-                
+
             EOT;
         }
         return $phpcode;
