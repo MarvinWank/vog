@@ -281,6 +281,55 @@ class PhpService
         return $phpcode;
     }
 
+    public function generateWithMethods(array $values, GeneratorOptions $generatorOptions): string
+    {
+        $phpcode = "";
+        foreach ($values as $name => $data_type) {
+            $functionName = $this->getWithFunctionName($name, $generatorOptions);
+            $phpcode .= <<<EOT
+            
+                public function $functionName($data_type $$name): self
+                {
+                    return new self(
+            EOT;
+
+            foreach ($values as $name_assigner => $data_type_assginer) {
+                if ($name_assigner === $name) {
+                    $phpcode .= <<<EOT
+                    
+                                $$name_assigner,
+                    EOT;
+
+                    continue;
+                }
+                $phpcode .= <<<EOT
+                
+                            \$this->$name_assigner,
+                EOT;
+            }
+            $phpcode = rtrim($phpcode, ',');
+            $phpcode .= <<<EOT
+
+                    );
+                }
+            
+            EOT;
+        }
+
+        return $phpcode;
+    }
+
+
+    private function getWithFunctionName(string $name, GeneratorOptions $generatorOptions): string
+    {
+        $psrMode = TargetMode::MODE_PSR2();
+        if ($psrMode->equals($generatorOptions->getTarget())) {
+            return 'with' . ucfirst($name);
+        }
+
+        return 'with_' . $name;
+    }
+
     private function isDataTypeNullable(string $datatype): bool
     {
         if (strpos($datatype, '?') !== false) {

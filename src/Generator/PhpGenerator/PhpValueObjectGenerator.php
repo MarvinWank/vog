@@ -139,40 +139,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     private function generateWithMethods(array $values): string
     {
-        $phpcode = "";
-        foreach ($values as $name => $data_type) {
-            $functionName = $this->getWithFunctionName($name);
-            $phpcode .= <<<EOT
-            
-                public function $functionName($data_type $$name): self 
-                {
-                    return new self(
-            EOT;
-
-            foreach ($values as $name_assigner => $data_type_assginer) {
-                if ($name_assigner === $name) {
-                    $phpcode .= <<<EOT
-                    
-                                $$name_assigner,
-                    EOT;
-
-                    continue;
-                }
-                $phpcode .= <<<EOT
-                
-                            \$this->$name_assigner,
-                EOT;
-            }
-            $phpcode = rtrim($phpcode, ',');
-            $phpcode .= <<<EOT
-
-                    );
-                }
-                
-            EOT;
-        }
-
-        return $phpcode;
+        return $this->phpService->generateWithMethods($values);
     }
 
     protected function generateToArray(array $values): string
@@ -248,14 +215,5 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         EOT;
     }
 
-    private function getWithFunctionName(string $name): string
-    {
-        $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getTarget())) {
-            return 'with' . ucfirst($name);
-        }
-
-        return 'with_' . $name;
-    }
 
 }

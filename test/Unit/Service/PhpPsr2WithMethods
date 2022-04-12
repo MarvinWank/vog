@@ -1,0 +1,16 @@
+
+    public function withFooClass(FooClass $fooClass): self
+    {
+        return new self(
+            $fooClass,
+            $this->name
+        );
+    }
+
+    public function withName(string $name): self
+    {
+        return new self(
+            $this->fooClass,
+            $name
+        );
+    }

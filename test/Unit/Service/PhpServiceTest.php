@@ -179,4 +179,20 @@ class PhpServiceTest extends UnitTestCase
 
         $this->assertEquals($expected, $method);
     }
+
+    public function testGenerateWithMethodsPsr2()
+    {
+        $values = [
+            'fooClass' => 'FooClass',
+            'name' => 'string'
+        ];
+
+        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
+
+        $methods = $this->genericPhpHelper->generateWithMethods($values, $generatorOptions);
+        $expected = file_get_contents(__DIR__ . '/PhpPsr2WithMethods');
+
+        $this->assertEquals($expected, $methods);
+    }
 }
