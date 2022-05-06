@@ -67,15 +67,15 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $phpcode .= $this->generateProperties($this->getValues());
 
         $phpcode .= $this->generateConstructor($this->getValues());
-        $phpcode .= $this->generateGetters($this->getValues());
+        $phpcode .= $this->generateGetters($this->getValues(), $this->generatorOptions);
 
         if ($this->is_mutable) {
-            $phpcode .= $this->generateSetters($this->getValues());
+            $phpcode .= $this->generateSetters($this->getValues(), $this->generatorOptions);
         }
 
-        $phpcode .= $this->generateWithMethods($this->getValues());
+        $phpcode .= $this->generateWithMethods($this->getValues(), $this->generatorOptions);
         $phpcode .= $this->generateToArray($this->getValues());
-        $phpcode .= $this->generateFromArray($this->getValues());
+        $phpcode .= $this->generateFromArray($this->getValues(), $this->dateTimeFormat);
         if ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())){
             $phpcode .= $this->generateValueToArray($phpcode);
         }
@@ -132,61 +132,19 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         return $this->phpService->generateSetters($values, $generatorOptions);
     }
 
-    private function generateToArray(array $values, string $dateTimeFormat): string
+    private function generateFromArray(array $values, string $dateTimeFormat): string
     {
         return $this->phpService->generateFromArray($values, $dateTimeFormat);
     }
 
-    private function generateWithMethods(array $values): string
+    private function generateWithMethods(array $values, GeneratorOptions $generatorOptions): string
     {
-        return $this->phpService->generateWithMethods($values);
+        return $this->phpService->generateWithMethods($values, $generatorOptions);
     }
 
     protected function generateToArray(array $values): string
     {
-        $phpcode = <<<EOT
-        
-            public function toArray(): array
-            {
-                return [
-        EOT;
-
-        if ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())) {
-
-            foreach ($values as $name => $datatype) {
-                if (!$this->isPrimitivePhpType($datatype)) {
-                    $phpcode .= <<<EOT
-                
-                            '$name' =>  \$this->valueToArray(\$this->$name),
-                EOT;
-                } else {
-                    $phpcode .= <<<EOT
-                
-                            '$name' => \$this->$name,
-                EOT;
-                }
-            }
-
-        } elseif ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
-
-            foreach ($values as $name => $datatype) {
-                $phpcode .= <<<EOT
-                
-                            '$name' => \$this->$name,
-                EOT;
-            }
-        } else {
-            throw new \UnexpectedValueException("Unexpected Config value for toArrayMode");
-        }
-
-        $phpcode .= <<<EOT
-        
-                ];
-            }
-            
-        EOT;
-
-        return $phpcode;
+        return $this->phpService->generateToArray($values, $this->generatorOptions);
     }
 
     private function generateToString(): string

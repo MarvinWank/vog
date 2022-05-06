@@ -5,6 +5,7 @@ namespace Vog\Service;
 use TemplateEngine\TemplateEngine;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
+use Vog\ValueObjects\ToArrayMode;
 
 class PhpService
 {
@@ -276,6 +277,53 @@ class PhpService
         
                 );
             }
+        EOT;
+
+        return $phpcode;
+    }
+
+    public function generateToArray(array $values, GeneratorOptions $generatorOptions)
+    {
+        $phpcode = <<<EOT
+        
+            public function toArray(): array
+            {
+                return [
+        EOT;
+
+        if ($generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())) {
+
+            foreach ($values as $name => $datatype) {
+                if (!$this->isPrimitivePhpType($datatype)) {
+                    $phpcode .= <<<EOT
+                
+                            '$name' =>  \$this->valueToArray(\$this->$name),
+                EOT;
+                } else {
+                    $phpcode .= <<<EOT
+                
+                            '$name' => \$this->$name,
+                EOT;
+                }
+            }
+
+        } elseif ($generatorOptions->getToArrayMode()->equals(ToArrayMode::SHALLOW())) {
+
+            foreach ($values as $name => $datatype) {
+                $phpcode .= <<<EOT
+                
+                            '$name' => \$this->$name,
+                EOT;
+            }
+        } else {
+            throw new \UnexpectedValueException("Unexpected Config value for toArrayMode");
+        }
+
+        $phpcode .= <<<EOT
+        
+                ];
+            }
+            
         EOT;
 
         return $phpcode;
