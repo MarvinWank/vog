@@ -1,5 +1,7 @@
 <?php
 
+namespace Vog\Test\Unit\Generator;
+
 use Unit\UnitTestCase;
 use Vog\Commands\Generate\PhpValueObjectGenerator;
 use Vog\Exception\VogException;
@@ -29,7 +31,6 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             'foo'
         );
         $this->expectException(VogException::class);
-        $generator->getValues();
-
+        $generator->getPhpCode();
     }
 }

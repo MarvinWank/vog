@@ -1,17 +1,12 @@
 <?php
 
-namespace Unit;
+namespace Vog\Test\Unit;
 
-use Composer\Util\Tar;
-use PHPUnit\Framework\TestCase;
 use Vog\Parser\JsonParser;
-use Vog\ValueObjects\Config;
-use Vog\ValueObjects\GeneratorOptions;
-use Vog\ValueObjects\TargetMode;
-use Vog\ValueObjects\ToArrayMode;
+use Vog\Test\VogTestCase;
 use Vog\ValueObjects\VogDefinitionFile;
 
-class UnitTestCase extends TestCase
+class UnitTestCase extends VogTestCase
 {
     private JsonParser $jsonParser;
 
@@ -28,13 +23,4 @@ class UnitTestCase extends TestCase
         return $this->jsonParser->parseFile($filepath);
     }
 
-    protected function dummyConfiguration(): Config
-    {
-        $generatorOptions = new GeneratorOptions(
-            TargetMode::MODE_PSR2(),
-            null,
-            ToArrayMode::DEEP()
-        );
-        return new Config($generatorOptions);
-    }
 }

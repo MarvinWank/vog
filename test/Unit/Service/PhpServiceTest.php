@@ -1,7 +1,7 @@
 <?php
 
-use Unit\UnitTestCase;
 use Vog\Service\PhpService;
+use Vog\Test\Unit\UnitTestCase;
 use Vog\ValueObjects\TargetMode;
 
 class PhpServiceTest extends UnitTestCase
@@ -51,7 +51,7 @@ class PhpServiceTest extends UnitTestCase
             'FooClass' => 'fooClass',
             'string' => 'name'
         ];
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $getters = $this->genericPhpHelper->generateGetters(
@@ -66,7 +66,7 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateGettersPSR2NoDataType()
     {
         $constructorArguments = ['fooClass','name'];
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $getters = $this->genericPhpHelper->generateGetters(
@@ -84,7 +84,7 @@ class PhpServiceTest extends UnitTestCase
             'FooClass' => 'fooClass',
             'string' => 'name'
         ];
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_FPP());
 
         $getters = $this->genericPhpHelper->generateGetters(
@@ -119,7 +119,7 @@ class PhpServiceTest extends UnitTestCase
             'string' => 'name'
         ];
 
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $setters = $this->genericPhpHelper->generateSetters(
@@ -135,7 +135,7 @@ class PhpServiceTest extends UnitTestCase
     {
         $values = ['fooClass','name'];
 
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $setters = $this->genericPhpHelper->generateSetters(
@@ -154,7 +154,7 @@ class PhpServiceTest extends UnitTestCase
             'string' => 'name'
         ];
 
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_FPP());
 
         $setters = $this->genericPhpHelper->generateSetters(
@@ -187,7 +187,7 @@ class PhpServiceTest extends UnitTestCase
             'name' => 'string'
         ];
 
-        $generatorOptions = $this->dummyConfiguration()->getGeneratorOptions();
+        $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $methods = $this->genericPhpHelper->generateWithMethods($values, $generatorOptions);

@@ -95,7 +95,7 @@ class PhpService
             public function __construct (
         EOT;
 
-        foreach ($values as $data_type => $name) {
+        foreach ($values as $name => $data_type) {
             $phpcode .= <<<EOT
             
                     $data_type $$name,

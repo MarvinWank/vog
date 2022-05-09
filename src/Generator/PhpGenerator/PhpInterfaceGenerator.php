@@ -10,7 +10,6 @@ class PhpInterfaceGenerator extends AbstractPhpGenerator
     public function __construct(string $targetFilepath, Config $generatorOptions)
     {
         parent::__construct($targetFilepath, $generatorOptions);
-        $this->type = "interface";
         $this->setIsFinal(false);
         $this->setIsMutable(false);
     }

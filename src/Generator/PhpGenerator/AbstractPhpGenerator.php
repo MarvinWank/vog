@@ -12,6 +12,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
 {
     protected string $rootNamespace;
     protected ?string $extends;
+    protected ?string $dateTimeFormat;
     protected array $implements = [];
     protected bool $is_final;
     protected bool $is_mutable;
@@ -28,6 +29,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
         $this->is_final = false;
         $this->is_mutable = false;
         $this->rootNamespace = $rootNamespace;
+        $this->dateTimeFormat = $definition->dateTimeFormat();
     }
 
     abstract public function getPhpCode(): string;
@@ -66,7 +68,7 @@ EOT;
     {
         return $this->phpService->getTargetNamespace(
             $this->rootNamespace,
-            $this->definition->directory()
+            $this->directory
         );
     }
 

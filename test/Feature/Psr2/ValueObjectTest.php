@@ -1,5 +1,8 @@
 <?php
 
+namespace Vog\Test\Feature\Psr2;
+
+use Psr2TestCase;
 use Test\Interface1;
 use Test\Interface2;
 use Test\BaseClass;

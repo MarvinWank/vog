@@ -14,7 +14,6 @@ use Vog\ValueObjects\VogDefinition;
 class PhpValueObjectGenerator extends AbstractPhpGenerator
 {
     private string $stringValue;
-    private ?string $dateTimeFormat;
 
     private const INTERFACE_NAME = "ValueObject";
     protected array $implements = [self::INTERFACE_NAME];
@@ -61,7 +60,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
     public function getPhpCode(): string
     {
         $phpcode = $this->phpService->generateGenericPhpHeader(
-            $this->definition->name(),
+            $this->name,
             $this->getNamespace()
         );
         $phpcode .= $this->generateProperties($this->getValues());
@@ -77,7 +76,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $phpcode .= $this->generateToArray($this->getValues());
         $phpcode .= $this->generateFromArray($this->getValues(), $this->dateTimeFormat);
         if ($this->generatorOptions->getToArrayMode()->equals(ToArrayMode::DEEP())){
-            $phpcode .= $this->generateValueToArray($phpcode);
+            $phpcode .= $this->generateValueToArray($this->dateTimeFormat);
         }
         $phpcode .= $this->generateEquals();
 
@@ -92,10 +91,10 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
     private function generateProperties(array $values): string
     {
         $phpcode = "";
-        foreach ($values as $name => $data_type) {
+        foreach ($values as $name => $dataType) {
             $phpcode .= <<<EOT
             
-                private $data_type $$name;
+                private $dataType $$name;
             EOT;
         }
 

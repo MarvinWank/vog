@@ -4,24 +4,32 @@ namespace Vog\Commands\Generate;
 
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
+use Vog\ValueObjects\VogTypes;
 
 abstract class AbstractGenerator
 {
     protected GeneratorOptions $generatorOptions;
-    protected VogDefinition $definition;
 
     protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
 
-    abstract public function setValues(array $values): void;
+    protected string $name;
+    protected string $directory;
+    protected ?array $values;
+    protected VogTypes $type;
+
 
     abstract public function getAbsoluteFilepath(): string;
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
-        $this->definition = $definition;
         $this->generatorOptions = $generatorOptions;
+
+        $this->name = $definition->name();
+        $this->directory = $definition->directory();
+        $this->type = $definition->type();
+        $this->values = $definition->values();
     }
 
     public function getType(): string
@@ -41,7 +49,7 @@ abstract class AbstractGenerator
 
     protected function getValues(): ?array
     {
-        return array_flip($this->definition->values());
+        return $this->values;
     }
 
 
