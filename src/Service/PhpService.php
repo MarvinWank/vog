@@ -9,10 +9,6 @@ use Vog\ValueObjects\ToArrayMode;
 
 class PhpService
 {
-    protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
-    protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
-    protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
-
     private const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
 
     private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
@@ -92,7 +88,7 @@ class PhpService
         $phpcode = <<<EOT
         
         
-            public function __construct (
+            public function __construct(
         EOT;
 
         foreach ($values as $name => $data_type) {
@@ -105,7 +101,8 @@ class PhpService
         $phpcode = rtrim($phpcode, ',');
         $phpcode .= <<<ETO
         
-            ) {
+            )
+            {
         ETO;
         foreach ($values as $name => $data_type) {
             $name = lcfirst($name);
@@ -127,7 +124,7 @@ class PhpService
     public function generateGetters(array $values, GeneratorOptions $generatorOptions): string
     {
         $phpcode = "";
-        foreach ($values as $dataType => $name) {
+        foreach ($values as $name => $dataType) {
             $functionName = $this->getGetterName($name, $generatorOptions);
 
             if (is_numeric($dataType)) {
@@ -227,21 +224,19 @@ class PhpService
 
     public function generateFromArray(array $values, string $dateTimeFormat): string
     {
-        $phpcode = <<<'EOT'
-        
-            public static function fromArray(array $array): self
-            {
-        EOT;
+        $phpcode = '
+
+    public static function fromArray(array $array): self
+    {';
 
         foreach ($values as $name => $datatype) {
             if (!$this->isDataTypeNullable($datatype)) {
                 $phpcode .= <<<EOT
-                    
-                    if (!array_key_exists('$name', \$array)) {
-                        throw new UnexpectedValueException('Array key $name does not exist');
-                    }
-                    
-            EOT;
+                
+                        if (!array_key_exists('$name', \$array)) {
+                            throw new UnexpectedValueException('Array key $name does not exist');
+                        }
+                EOT;
             }
 
             $datatype = $this->sanitizeNullableDatatype($datatype);
@@ -277,6 +272,7 @@ class PhpService
         
                 );
             }
+        
         EOT;
 
         return $phpcode;
@@ -296,14 +292,14 @@ class PhpService
             foreach ($values as $name => $datatype) {
                 if (!$this->isPrimitivePhpType($datatype)) {
                     $phpcode .= <<<EOT
-                
-                            '$name' =>  \$this->valueToArray(\$this->$name),
-                EOT;
+                    
+                                '$name' =>  \$this->valueToArray(\$this->$name),
+                    EOT;
                 } else {
                     $phpcode .= <<<EOT
-                
-                            '$name' => \$this->$name,
-                EOT;
+                    
+                                '$name' => \$this->$name,
+                    EOT;
                 }
             }
 
@@ -319,12 +315,9 @@ class PhpService
             throw new \UnexpectedValueException("Unexpected Config value for toArrayMode");
         }
 
-        $phpcode .= <<<EOT
-        
-                ];
-            }
-            
-        EOT;
+        $phpcode .= "
+        ];
+    }";
 
         return $phpcode;
     }

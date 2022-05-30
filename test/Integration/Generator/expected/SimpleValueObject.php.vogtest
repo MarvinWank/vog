@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Vog\Test\TestObjects\App\DTOs;
 
+
+use UnexpectedValueException;
+use InvalidArgumentException;
+
 class TestClass
 {
     private string $title;
@@ -34,250 +38,81 @@ class TestClass
         return $this->amount;
     }
 
-    public function getActive(): boolean
+    public function getActive(): bool
     {
         return $this->active;
     }
 
-    public function withString(title $string): self
+    public function withTitle(string $title): self
     {
         return new self(
-            $string,
-            $this->int,
-            $this->boolean
+            $title,
+            $this->amount,
+            $this->active
         );
     }
 
-    public function withInt(amount $int): self
+    public function withAmount(int $amount): self
     {
         return new self(
-            $this->string,
-            $int,
-            $this->boolean
+            $this->title,
+            $amount,
+            $this->active
         );
     }
 
-    public function withBoolean(active $boolean): self
+    public function withActive(bool $active): self
     {
         return new self(
-            $this->string,
-            $this->int,
-            $boolean
+            $this->title,
+            $this->amount,
+            $active
         );
     }
 
     public function toArray(): array
     {
         return [
-            'string' => $this->valueToArray($this->string),
-            'int' => $this->valueToArray($this->int),
-            'boolean' => $this->valueToArray($this->boolean),
+            'title' => $this->title,
+            'amount' => $this->amount,
+            'active' => $this->active,
         ];
     }
 
     public static function fromArray(array $array): self
     {
-        if (!array_key_exists('string', $array)) {
-            throw new UnexpectedValueException('Array key string does not exist');
+        if (!array_key_exists('title', $array)) {
+            throw new UnexpectedValueException('Array key title does not exist');
         }
-
-        if (isset($array['string']) && is_string($array['string']) && is_a(title::class, Enum::class, true)) {
-            $array['string'] = title::fromName($array['string']);
+        if (!array_key_exists('amount', $array)) {
+            throw new UnexpectedValueException('Array key amount does not exist');
         }
-
-        if (isset($array['string']) && is_array($array['string']) && (is_a(title::class, Set::class, true) || is_a(title::class, ValueObject::class, true))) {
-            $array['string'] = title::fromArray($array['string']);
-        }
-        if (!array_key_exists('int', $array)) {
-            throw new UnexpectedValueException('Array key int does not exist');
-        }
-
-        if (isset($array['int']) && is_string($array['int']) && is_a(amount::class, Enum::class, true)) {
-            $array['int'] = amount::fromName($array['int']);
-        }
-
-        if (isset($array['int']) && is_array($array['int']) && (is_a(amount::class, Set::class, true) || is_a(amount::class, ValueObject::class, true))) {
-            $array['int'] = amount::fromArray($array['int']);
-        }
-        if (!array_key_exists('boolean', $array)) {
-            throw new UnexpectedValueException('Array key boolean does not exist');
-        }
-
-        if (isset($array['boolean']) && is_string($array['boolean']) && is_a(active::class, Enum::class, true)) {
-            $array['boolean'] = active::fromName($array['boolean']);
-        }
-
-        if (isset($array['boolean']) && is_array($array['boolean']) && (is_a(active::class, Set::class, true) || is_a(active::class, ValueObject::class, true))) {
-            $array['boolean'] = active::fromArray($array['boolean']);
+        if (!array_key_exists('active', $array)) {
+            throw new UnexpectedValueException('Array key active does not exist');
         }
 
         return new self(
-            $array['string'] ?? null,
-            $array['int'] ?? null,
-            $array['boolean'] ?? null
+            $array['title'] ?? null,
+            $array['amount'] ?? null,
+            $array['active'] ?? null
         );
     }
 
     private function valueToArray($value)
     {
-        if ($value === null) {
+        if ($value === null){
             return null;
         }
 
         if (method_exists($value, 'toArray')) {
-            return $value->toArray();
+             return $value->toArray();
         }
 
-        if (is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)) {
-            return $value->format('Y-m-d');
+        if (is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
+              return $value->format('Y-m-d');
         }
 
-        return (string)$value;
-    }
-
-    public function equals($value): bool
-    {
-        $ref = $this->toArray();
-        $val = $value->toArray();
-
-        return ($ref === $val);
-    }
-<?php
-    /**
-     * code generated by vog
-     * https://github.com/MarvinWank/vog
-     */
-declare(strict_types = 1);
-
-namespace Vog\Test\TestObjects\App\DTOs;
-
-
-class TestClass
-{
-    private title $string;
-    private amount $int;
-    private active $boolean;
-
-    public function __construct(
-        string  $title,
-        int     $amount,
-        boolean $active
-    )
-    {
-        $this->string = $string;
-        $this->int = $int;
-        $this->boolean = $boolean;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getAmount(): int
-    {
-        return $this->amount;
-    }
-
-    public function getActive(): boolean
-    {
-        return $this->active;
-    }
-
-    public function withString(title $string): self
-    {
-        return new self(
-            $string,
-            $this->int,
-            $this->boolean
-        );
-    }
-
-    public function withInt(amount $int): self
-    {
-        return new self(
-            $this->string,
-            $int,
-            $this->boolean
-        );
-    }
-
-    public function withBoolean(active $boolean): self
-    {
-        return new self(
-            $this->string,
-            $this->int,
-            $boolean
-        );
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'string' => $this->valueToArray($this->string),
-            'int' => $this->valueToArray($this->int),
-            'boolean' => $this->valueToArray($this->boolean),
-        ];
-    }
-
-    public static function fromArray(array $array): self
-    {
-        if (!array_key_exists('string', $array)) {
-            throw new UnexpectedValueException('Array key string does not exist');
-        }
-
-        if (isset($array['string']) && is_string($array['string']) && is_a(title::class, Enum::class, true)) {
-            $array['string'] = title::fromName($array['string']);
-        }
-
-        if (isset($array['string']) && is_array($array['string']) && (is_a(title::class, Set::class, true) || is_a(title::class, ValueObject::class, true))) {
-            $array['string'] = title::fromArray($array['string']);
-        }
-        if (!array_key_exists('int', $array)) {
-            throw new UnexpectedValueException('Array key int does not exist');
-        }
-
-        if (isset($array['int']) && is_string($array['int']) && is_a(amount::class, Enum::class, true)) {
-            $array['int'] = amount::fromName($array['int']);
-        }
-
-        if (isset($array['int']) && is_array($array['int']) && (is_a(amount::class, Set::class, true) || is_a(amount::class, ValueObject::class, true))) {
-            $array['int'] = amount::fromArray($array['int']);
-        }
-        if (!array_key_exists('boolean', $array)) {
-            throw new UnexpectedValueException('Array key boolean does not exist');
-        }
-
-        if (isset($array['boolean']) && is_string($array['boolean']) && is_a(active::class, Enum::class, true)) {
-            $array['boolean'] = active::fromName($array['boolean']);
-        }
-
-        if (isset($array['boolean']) && is_array($array['boolean']) && (is_a(active::class, Set::class, true) || is_a(active::class, ValueObject::class, true))) {
-            $array['boolean'] = active::fromArray($array['boolean']);
-        }
-
-        return new self(
-            $array['string'] ?? null,
-            $array['int'] ?? null,
-            $array['boolean'] ?? null
-        );
-    }
-
-    private function valueToArray($value)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        if (method_exists($value, 'toArray')) {
-            return $value->toArray();
-        }
-
-        if (is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)) {
-            return $value->format('Y-m-d');
-        }
-
-        return (string)$value;
+        return (string) $value;
     }
 
     public function equals($value): bool

@@ -50,13 +50,12 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
         $this->values = $values;
     }
 
-    protected function closeClass($phpcode): string
+    protected function closeClass(): string
     {
-        $phpcode .= <<<EOT
+        return <<<EOT
 
 }
 EOT;
-        return $phpcode;
     }
 
     public static function toCamelCase(string $string): string

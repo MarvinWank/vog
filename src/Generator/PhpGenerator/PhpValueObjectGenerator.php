@@ -17,6 +17,9 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
 
     private const INTERFACE_NAME = "ValueObject";
     protected array $implements = [self::INTERFACE_NAME];
+    protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
+    protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
+    protected const USE_EXCEPTIONS = [self::UNEXPECTED_VALUE_EXCEPTION, self::INVALID_ARGUMENT_EXCEPTION];
 
     public function setValues(array $values): void
     {
@@ -61,7 +64,8 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
     {
         $phpcode = $this->phpService->generateGenericPhpHeader(
             $this->name,
-            $this->getNamespace()
+            $this->getNamespace(),
+            self::USE_EXCEPTIONS
         );
         $phpcode .= $this->generateProperties($this->getValues());
 
@@ -84,7 +88,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
             $phpcode .= $this->generateToString();
         }
 
-        $phpcode .= $this->closeClass($phpcode);
+        $phpcode .= $this->closeClass();
         return $phpcode;
     }
 
@@ -160,15 +164,15 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
     private function generateEquals(): string
     {
         return <<<'EOT'
-            
+
             public function equals($value): bool
             {
                 $ref = $this->toArray();
                 $val = $value->toArray();
-                
+
                 return ($ref === $val);
             }
-            
+
         EOT;
     }
 
