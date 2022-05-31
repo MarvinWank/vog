@@ -43,7 +43,7 @@ class PhpService
         }
 
         if (!empty($implements)) {
-            $classStatement .= ' implements ' . implode(',', $implements);
+            $classStatement .= ' implements ' . implode(', ', $implements);
         }
 
         foreach ($use as $className) {

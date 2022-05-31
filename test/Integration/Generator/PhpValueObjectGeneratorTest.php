@@ -36,4 +36,31 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
         $expected = file_get_contents(__DIR__ . '/expected/SimpleValueObject.php.vogtest');
         $this->assertEquals($expected, $phpcode);
     }
+
+    public function testGenerateValueObjectExtendingImplementing()
+    {
+        $definition = new VogDefinition(
+            'TestClass',
+            'app/DTOs',
+            VogTypes::valueObject(),
+            [
+                'title' => 'string',
+                'amount' => 'int',
+                'active' => 'bool'
+            ],
+            'title',
+            'Y-m-d',
+            null,
+            'ParentClass',
+            ['FooInterface', 'BarInterface'],
+            true,
+            null
+        );
+        $config = $this->getDummyConfiguration();
+        $generator = new PhpValueObjectGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+
+        $phpcode = $generator->getPhpCode();
+
+        $this->assertStringContainsString('final class TestClass extends ParentClass implements FooInterface, BarInterface', $phpcode);
+    }
 }

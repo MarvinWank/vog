@@ -14,8 +14,8 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected ?string $extends;
     protected ?string $dateTimeFormat;
     protected array $implements = [];
-    protected bool $is_final;
-    protected bool $is_mutable;
+    protected bool $isFinal;
+    protected bool $isMutable;
 
     protected PhpService $phpService;
 
@@ -25,9 +25,10 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
 
         $this->phpService = new PhpService();
 
-        $this->extends = null;
-        $this->is_final = false;
-        $this->is_mutable = false;
+        $this->extends = $definition->extends();
+        $this->implements = $definition->implements() ?? [];
+        $this->isFinal = $definition->final();
+        $this->isMutable = $definition->mutable() ?? false;
         $this->rootNamespace = $rootNamespace;
         $this->dateTimeFormat = $definition->dateTimeFormat();
     }
@@ -94,22 +95,22 @@ EOT;
 
     public function isIsFinal(): bool
     {
-        return $this->is_final;
+        return $this->isFinal;
     }
 
-    public function setIsFinal(bool $is_final): void
+    public function setIsFinal(bool $isFinal): void
     {
-        $this->is_final = $is_final;
+        $this->isFinal = $isFinal;
     }
 
     public function isMutable(): bool
     {
-        return $this->is_mutable;
+        return $this->isMutable;
     }
 
-    public function setIsMutable(bool $is_mutable): void
+    public function setIsMutable(bool $isMutable): void
     {
-        $this->is_mutable = $is_mutable;
+        $this->isMutable = $isMutable;
     }
 
     public function getAbsoluteFilepath(): string

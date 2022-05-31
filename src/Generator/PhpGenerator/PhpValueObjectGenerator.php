@@ -65,14 +65,17 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $phpcode = $this->phpService->generateGenericPhpHeader(
             $this->name,
             $this->getNamespace(),
-            self::USE_EXCEPTIONS
+            self::USE_EXCEPTIONS,
+            $this->isFinal,
+            $this->extends,
+            $this->implements
         );
         $phpcode .= $this->generateProperties($this->getValues());
 
         $phpcode .= $this->generateConstructor($this->getValues());
         $phpcode .= $this->generateGetters($this->getValues(), $this->generatorOptions);
 
-        if ($this->is_mutable) {
+        if ($this->isMutable) {
             $phpcode .= $this->generateSetters($this->getValues(), $this->generatorOptions);
         }
 

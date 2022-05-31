@@ -20,7 +20,7 @@ class VogDefinition implements ValueObject
     private ?string $dateTimeFormat;
     private ?string $itemType;
     private ?string $extends;
-    private ?string $implements;
+    private ?array $implements;
     private ?string $final;
     private ?bool $mutable;
 
@@ -33,7 +33,7 @@ class VogDefinition implements ValueObject
         ?string $dateTimeFormat,
         ?string $itemType,
         ?string $extends,
-        ?string $implements,
+        ?array $implements,
         ?string $final,
         ?bool $mutable
     ) {
@@ -90,7 +90,7 @@ class VogDefinition implements ValueObject
         return $this->extends;
     }
     
-    public function implements(): ?string 
+    public function implements(): ?array
     {
         return $this->implements;
     }
@@ -241,7 +241,7 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_implements(?string $implements): self 
+    public function with_implements(?array $implements): self
     {
         return new self(
             $this->name,
