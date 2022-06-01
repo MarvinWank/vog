@@ -25,7 +25,7 @@
  */
 use Vog\Vog;
 
-require __DIR__.'/../autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $hub = new Vog();
 $hub->run($argv);

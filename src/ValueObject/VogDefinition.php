@@ -21,7 +21,7 @@ class VogDefinition implements ValueObject
     private ?string $itemType;
     private ?string $extends;
     private ?array $implements;
-    private ?string $final;
+    private ?bool $final;
     private ?bool $mutable;
 
     public function __construct (
@@ -34,7 +34,7 @@ class VogDefinition implements ValueObject
         ?string $itemType,
         ?string $extends,
         ?array $implements,
-        ?string $final,
+        ?bool $final,
         ?bool $mutable
     ) {
         $this->name = $name;
@@ -95,7 +95,7 @@ class VogDefinition implements ValueObject
         return $this->implements;
     }
     
-    public function final(): ?string 
+    public function final(): ?bool
     {
         return $this->final;
     }
@@ -258,7 +258,7 @@ class VogDefinition implements ValueObject
         );
     }
     
-    public function with_final(?string $final): self 
+    public function with_final(?bool $final): self
     {
         return new self(
             $this->name,

@@ -9,11 +9,10 @@ use Vog\ValueObjects\ToArrayMode;
 
 class PhpService
 {
-    private const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
-
-    private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
-
     private TemplateEngine $templateEngine;
+
+    private const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
+    private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
 
     public function __construct()
     {

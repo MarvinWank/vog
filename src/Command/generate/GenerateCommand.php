@@ -39,10 +39,11 @@ class GenerateCommand extends AbstractCommand
             );
             $this->writeToFile($generator);
 
-            $this->writeIfNotExists();
+            $this->writeIfNotExists($generator->getInterfaceGenerator());
         }
     }
 
+    //TODO: Move to Service
     private function writeToFile(AbstractGenerator $generator)
     {
         return file_put_contents($generator->getAbsoluteFilepath(), $generator->getCode());
@@ -54,29 +55,5 @@ class GenerateCommand extends AbstractCommand
             return file_put_contents($generator->getAbsoluteFilepath(), $generator->getCode());
         }
         return false;
-    }
-
-
-
-
-
-    private function generateMarkerInterfaces(string $targetFilepath): void
-    {
-        $interfaces = [
-            'ValueObject',
-            'Enum',
-            'Set'
-        ];
-
-        foreach ($interfaces as $interface) {
-            $object = new PhpInterfaceGenerator($interface, $this->config);
-            $object->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
-            $object->setNamespace($this->getTargetNamespace($targetFilepath));
-            $success = $this->writeToFile($object);
-
-            if ($success) {
-                echo PHP_EOL . 'Object ' . $object->getName() . ' successfully written to ' . $object->getAbsoluteFilepath();
-            }
-        }
     }
 }

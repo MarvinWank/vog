@@ -13,7 +13,6 @@ class PhpEnumClassGenerator extends AbstractPhpClassGenerator
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace)
     {
         parent::__construct($definition, $generatorOptions, $rootNamespace);
-        $this->definition = $this->definition->with_values($this->formatValues($this->definition->values()));
     }
 
     public function getCode(): string

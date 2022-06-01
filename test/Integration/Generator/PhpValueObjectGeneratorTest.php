@@ -4,7 +4,6 @@ namespace Vog\Test\Integration\Generator;
 
 use Integration\IntegrationTestCase;
 use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
-use Vog\Generator\Php\Interfaces\ValueObjectInterfaceGenerator;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
 
@@ -87,7 +86,7 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
         $config = $this->getDummyConfiguration();
 
         $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
-        $actual = $generator->getInterfaceCode();
+        $actual = $generator->getInterfaceGenerator()->getCode();
         $expected = file_get_contents(__DIR__ . '/expected/ValueObjectInterface.vogtest');
 
         $this->assertEquals($expected, $actual);

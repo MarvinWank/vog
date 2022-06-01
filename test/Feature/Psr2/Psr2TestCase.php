@@ -1,21 +1,18 @@
 <?php
 
 use Feature\FeatureTestCase;
-use Vog\CommandFactory;
+use Vog\Factories\CommandFactory;
+use Vog\ValueObjects\Config;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
 
 class Psr2TestCase extends FeatureTestCase
 {
-    public function setUp(): void
+    protected function runGeneration(string $valueFile)
     {
-        parent::setUp();
-
         $argv = [
-            "test",
-            "generate",
-            __DIR__ . "/testObjects/value.json"
+            __DIR__ . "/testObjects/" . $valueFile
         ];
         $hub = new CommandFactory();
 
@@ -26,6 +23,7 @@ class Psr2TestCase extends FeatureTestCase
                 'toArrayMode' => ToArrayMode::DEEP()
             ],
         ];
-        $hub->buildCommand($argv, $config);
+        $command = $hub->buildCommand('generate', $argv, Config::fromArray($config));
+        $command->run();
     }
 }

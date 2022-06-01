@@ -2,4 +2,4 @@ vendor/
 .phpunit.result.cache
 composer.lock
 .idea
-test/test_objects
+test/Feature/Psr2/testObjects/*.php

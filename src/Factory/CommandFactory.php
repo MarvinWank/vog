@@ -8,9 +8,9 @@ use UnexpectedValueException;
 use Vog\Commands\Generate\AbstractCommand;
 use Vog\Commands\Generate\GenerateCommand;
 use Vog\Commands\GenerateTypescript\GenerateTypescriptCommand;
+use Vog\Exception\VogException;
 use Vog\FppConvertCommand;
 use Vog\ValueObjects\Config;
-use VogException;
 
 class CommandFactory
 {

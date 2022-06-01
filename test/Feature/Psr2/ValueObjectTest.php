@@ -6,28 +6,16 @@ use Psr2TestCase;
 use Test\Interface1;
 use Test\Interface2;
 use Test\BaseClass;
-use Test\TestObjects\ChildOfNotFinal;
-use Test\TestObjects\DesertRecipe;
-use Test\TestObjects\DietStyle;
-use Test\TestObjects\ExplicitlyImmutableObject;
-use Test\TestObjects\ImplementsMany;
-use Test\TestObjects\ImplementsOne;
-use Test\TestObjects\ImplicitlyImmutableObject;
-use Test\TestObjects\MutableObject;
-use Test\TestObjects\NotFinal;
-use Test\TestObjects\Recipe;
-use Test\TestObjects\RecipeCollection;
-use Test\TestObjects\RecipeEnumStringValue;
-use Test\TestObjects\RecipeIntStringValue;
-use Test\TestObjects\RecipeWithDate;
-use Test\TestObjects\RecipeWithIndividualDateFormat;
-use Test\TestObjects\RecipeWithNullableProperties;
-use Test\TestObjects\ValueObjectNoDataType;
-use Test\TestObjects\WithCamelCase;
-use Test\TestObjects\WithUnderscore;
 
 class ValueObjectTest extends Psr2TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->runGeneration('valueObjects.json');
+    }
+
     /**
      * @test
      */

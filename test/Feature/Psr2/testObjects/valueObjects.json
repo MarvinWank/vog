@@ -1,0 +1,189 @@
+{
+  "root_path": "./test/testObjects",
+  "namespace": "Test\\TestObjects",
+  ".": [
+    {
+      "type": "valueObject",
+      "name": "Recipe",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      },
+      "string_value": "title"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeNoStringValue",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeIntStringValue",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      },
+      "string_value": "rating"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeEnumStringValue",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "DietStyle"
+      },
+      "string_value": "dietStyle"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeCollection",
+      "values": {
+        "recipe1": "RecipeIntStringValue",
+        "recipe2": "RecipeEnumStringValue"
+      },
+      "string_value": "recipe1"
+    },
+    {
+      "type": "valueObject",
+      "name": "ValueObjectNoDataType",
+      "values": {
+        "property": ""
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "DesertRecipe",
+      "values": {
+          "lactosefree": "bool",
+          "light": "bool"
+      },
+      "extends": "\\Test\\BaseClass"
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsOne",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["\\Test\\Interface1"]
+    },
+    {
+      "type": "valueObject",
+      "name": "implementsMany",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "implements": ["\\Test\\Interface1", "\\Test\\Interface2"]
+    },
+    {
+      "type": "valueObject",
+      "name": "NotFinal",
+      "values": {
+        "foo": "string",
+        "bar": "int"
+      },
+      "final": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ChildOfNotFinal",
+      "values": {
+        "foo": "string"
+      },
+      "extends": "NotFinal"
+    },
+    {
+      "type": "valueObject",
+      "name": "MutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": true
+    },
+    {
+      "type": "valueObject",
+      "name": "ExplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "ImplicitlyImmutableObject",
+      "values": {
+        "foo": "string"
+      },
+      "mutable": false
+    },
+    {
+      "type": "valueObject",
+      "name": "WithCamelCase",
+      "values": {
+        "camelCased": "string"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "WithUnderscore",
+      "values": {
+        "no_camel_case": "string"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "ValueObjectWithNestedSet",
+      "values": {
+        "title": "string",
+        "recipes": "RecipeSet"
+      }
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithDate",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "creationDate": "\\DateTimeImmutable"
+      },
+      "string_value": "title"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithIndividualDateFormat",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "creationDate": "\\DateTimeImmutable"
+      },
+      "string_value": "title",
+      "dateTimeFormat": "d.m.Y"
+    },
+    {
+      "type": "valueObject",
+      "name": "RecipeWithNullableProperties",
+      "values": {
+        "title": "string",
+        "minutesToPrepare": "?int",
+        "rating": "float",
+        "dietStyle": "?DietStyle"
+      },
+      "string_value": "title"
+    }
+  ]
+}

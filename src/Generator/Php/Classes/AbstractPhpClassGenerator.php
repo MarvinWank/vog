@@ -27,7 +27,7 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
         $this->isFinal = $definition->final() ?? false;
         $this->isMutable = $definition->mutable() ?? false;
         $this->rootNamespace = $rootNamespace;
-        $this->dateTimeFormat = $definition->dateTimeFormat();
+        $this->dateTimeFormat = $definition->dateTimeFormat() ?? $generatorOptions->getDateTimeFormat();
 
         $interfaceGeneratorFactory = new GeneratorFactory();
         $this->interfaceGenerator = $interfaceGeneratorFactory->buildPhpInterfaceGenerator(
@@ -37,9 +37,9 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
         );
     }
 
-    public function getInterfaceCode(): string
+    public function getInterfaceGenerator(): AbstractPhpInterfaceGenerator
     {
-        return $this->interfaceGenerator->getCode();
+        return $this->interfaceGenerator;
     }
 
     public function setValues(array $values): void
