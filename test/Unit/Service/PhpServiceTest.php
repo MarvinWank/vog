@@ -17,7 +17,7 @@ class PhpServiceTest extends UnitTestCase
 
     public function testGenerateGenericPhpHeaderWithSimpleHeader()
     {
-        $phpHeader = $this->genericPhpHelper->generateGenericPhpHeader(
+        $phpHeader = $this->genericPhpHelper->generatePhpHeader(
             'testClass',
             'App\Test'
         );

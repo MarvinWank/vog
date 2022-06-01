@@ -2,10 +2,10 @@
 
 namespace Unit\Factory;
 
-use Unit\UnitTestCase;
 use Vog\Exception\VogException;
 use Vog\Factories\ParserFactory;
 use Vog\Parser\JsonParser;
+use Vog\Test\Unit\UnitTestCase;
 
 class ParserFactoryTest extends UnitTestCase
 {

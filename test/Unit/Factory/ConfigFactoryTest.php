@@ -2,8 +2,8 @@
 
 namespace Unit\Factory;
 
-use Unit\UnitTestCase;
 use Vog\Factories\ConfigFactory;
+use Vog\Test\Unit\UnitTestCase;
 
 class ConfigFactoryTest extends UnitTestCase
 {

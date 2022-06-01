@@ -2,9 +2,9 @@
 
 namespace Vog\Test\Unit\Generator;
 
-use Unit\UnitTestCase;
-use Vog\Commands\Generate\PhpValueObjectGenerator;
 use Vog\Exception\VogException;
+use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
+use Vog\Test\Unit\UnitTestCase;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
 
@@ -25,12 +25,12 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             null,
             null
         );
-        $generator = new PhpValueObjectGenerator(
+        $generator = new PhpValueObjectClassGenerator(
             $emptyDefinition,
             $this->dummyConfiguration()->getGeneratorOptions(),
             'foo'
         );
         $this->expectException(VogException::class);
-        $generator->getPhpCode();
+        $generator->getCode();
     }
 }

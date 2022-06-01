@@ -22,6 +22,8 @@ abstract class AbstractGenerator
 
     abstract public function getAbsoluteFilepath(): string;
 
+    abstract public function getCode(): string;
+
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
     {
         $this->generatorOptions = $generatorOptions;

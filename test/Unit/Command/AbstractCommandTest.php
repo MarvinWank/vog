@@ -1,8 +1,9 @@
 <?php
 
-namespace Unit\Command;
+namespace Vog\Test\Unit\Command;
 
-use Unit\UnitTestCase;
+
+use Vog\Test\Unit\UnitTestCase;
 
 class AbstractCommandTest extends UnitTestCase
 {

@@ -2,11 +2,10 @@
 
 namespace Unit\Factory;
 
-use Unit\UnitTestCase;
 use Vog\Commands\Generate\AbstractCommand;
 use Vog\Commands\Generate\GenerateCommand;
 use Vog\Factories\CommandFactory;
-use VogException;
+use Vog\Test\Unit\UnitTestCase;
 
 class CommandFactoryTest extends UnitTestCase
 {

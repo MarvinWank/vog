@@ -3,7 +3,7 @@
 namespace Unit\TemplateEngineTest;
 
 use TemplateEngine\TemplateEngine;
-use Unit\UnitTestCase;
+use Vog\Test\Unit\UnitTestCase;
 
 class TemplateEngineTest extends UnitTestCase
 {

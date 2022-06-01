@@ -2,7 +2,8 @@
 
 namespace Feature;
 
-use VogTestCase;
+
+use Vog\Test\VogTestCase;
 
 class FeatureTestCase extends VogTestCase
 {

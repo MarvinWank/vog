@@ -2,9 +2,9 @@
 
 namespace Unit\Factory;
 
-use Unit\UnitTestCase;
-use Vog\Commands\Generate\PhpEnumGenerator;
 use Vog\Factories\GeneratorFactory;
+use Vog\Generator\Php\Classes\PhpEnumClassGenerator;
+use Vog\Test\Unit\UnitTestCase;
 
 class GeneratorFactoryTest extends UnitTestCase
 {
@@ -24,6 +24,6 @@ class GeneratorFactoryTest extends UnitTestCase
             $this->dummyConfiguration()->getGeneratorOptions()
         );
 
-        $this->assertInstanceOf(PhpEnumGenerator::class, $enumGenerator);
+        $this->assertInstanceOf(PhpEnumClassGenerator::class, $enumGenerator);
     }
 }

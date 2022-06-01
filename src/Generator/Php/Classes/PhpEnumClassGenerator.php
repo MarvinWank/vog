@@ -1,12 +1,12 @@
 <?php
 
-namespace Vog\Commands\Generate;
+namespace Vog\Generator\Php\Classes;
 
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
 
-class PhpEnumGenerator extends AbstractPhpGenerator
+class PhpEnumClassGenerator extends AbstractPhpClassGenerator
 {
     protected array $implements = ['Enum'];
 
@@ -16,7 +16,7 @@ class PhpEnumGenerator extends AbstractPhpGenerator
         $this->definition = $this->definition->with_values($this->formatValues($this->definition->values()));
     }
 
-    public function getPhpCode(): string
+    public function getCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader([AbstractGenerator::INVALID_ARGUMENT_EXCEPTION]);
         $phpcode = $this->generateConstNamesAndValues($phpcode);
@@ -25,7 +25,7 @@ class PhpEnumGenerator extends AbstractPhpGenerator
         $phpcode = $this->generateMethods($phpcode);
         $phpcode = $this->generateFromNameFromValue($phpcode);
         $phpcode = $this->generateGenericFunctions($phpcode);
-        $phpcode = $this->closeClass($phpcode);
+        $phpcode = $this->closeRootScope($phpcode);
 
         return $phpcode;
     }

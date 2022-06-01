@@ -3,7 +3,7 @@
 namespace Vog\Test\Integration\Generator;
 
 use Integration\IntegrationTestCase;
-use Vog\Commands\Generate\PhpValueObjectGenerator;
+use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
 
@@ -30,9 +30,9 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
 
         );
         $config = $this->getDummyConfiguration();
-        $generator = new PhpValueObjectGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
 
-        $phpcode = $generator->getPhpCode();
+        $phpcode = $generator->getCode();
         $expected = file_get_contents(__DIR__ . '/expected/SimpleValueObject.php.vogtest');
         $this->assertEquals($expected, $phpcode);
     }
@@ -57,9 +57,9 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
             null
         );
         $config = $this->getDummyConfiguration();
-        $generator = new PhpValueObjectGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
 
-        $phpcode = $generator->getPhpCode();
+        $phpcode = $generator->getCode();
 
         $this->assertStringContainsString('final class TestClass extends ParentClass implements FooInterface, BarInterface', $phpcode);
     }

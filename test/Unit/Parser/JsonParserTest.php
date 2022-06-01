@@ -1,7 +1,9 @@
 <?php
 
-use Unit\UnitTestCase;
+namespace Vog\Test\Unit\Parser;
+
 use Vog\Parser\JsonParser;
+use Vog\Test\Unit\UnitTestCase;
 
 class JsonParserTest extends UnitTestCase
 {

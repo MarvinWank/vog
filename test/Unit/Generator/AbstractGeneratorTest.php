@@ -1,6 +1,10 @@
 <?php
 
-class AbstractGeneratorTest extends \Unit\UnitTestCase
+namespace Vog\Test\Unit\Generator;
+
+use Vog\Test\Unit\UnitTestCase;
+
+class AbstractGeneratorTest extends UnitTestCase
 {
 
 }

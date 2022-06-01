@@ -2,7 +2,6 @@
 
 namespace Feature\Fpp;
 
-use FppTestCase;
 use Test\TestObjectsFpp\DietStyle;
 
 class FppEnumTest extends FppTestCase

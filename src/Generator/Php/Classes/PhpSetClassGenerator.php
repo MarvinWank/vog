@@ -1,10 +1,10 @@
 <?php
 
-namespace Vog\Commands\Generate;
+namespace Vog\Generator\Php\Classes;
 
 use Vog\ValueObjects\Config;
 
-class PhpSetGenerator extends AbstractPhpGenerator
+class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
@@ -15,7 +15,7 @@ class PhpSetGenerator extends AbstractPhpGenerator
         $this->type = 'set';
     }
 
-    public function getPhpCode(): string
+    public function getCode(): string
     {
         $phpcode = $this->generateGenericPhpHeader([
             AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION,
@@ -25,7 +25,7 @@ class PhpSetGenerator extends AbstractPhpGenerator
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateToArray($phpcode);
         $phpcode = $this->generateGenericFunctions($phpcode);
-        $phpcode = $this->closeClass($phpcode);
+        $phpcode = $this->closeRootScope($phpcode);
 
         return $phpcode;
     }

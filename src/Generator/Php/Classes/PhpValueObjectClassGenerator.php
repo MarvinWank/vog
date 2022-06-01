@@ -1,17 +1,15 @@
 <?php
 
 
-namespace Vog\Commands\Generate;
+namespace Vog\Generator\Php\Classes;
+
 
 use UnexpectedValueException;
 use Vog\Exception\VogException;
-use Vog\ValueObjects\Config;
 use Vog\ValueObjects\GeneratorOptions;
-use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
-use Vog\ValueObjects\VogDefinition;
 
-class PhpValueObjectGenerator extends AbstractPhpGenerator
+class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
 {
     private string $stringValue;
 
@@ -60,9 +58,9 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
     /**
      * @throws VogException
      */
-    public function getPhpCode(): string
+    public function getCode(): string
     {
-        $phpcode = $this->phpService->generateGenericPhpHeader(
+        $phpcode = $this->phpService->generatePhpHeader(
             $this->name,
             $this->getNamespace(),
             self::USE_EXCEPTIONS,
@@ -91,7 +89,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
             $phpcode .= $this->generateToString();
         }
 
-        $phpcode .= $this->closeClass();
+        $phpcode .= $this->closeRootScope();
         return $phpcode;
     }
 
@@ -116,7 +114,7 @@ class PhpValueObjectGenerator extends AbstractPhpGenerator
         $values = parent::getValues();
 
         if ($values === null){
-            $name = $this->definition->name();
+            $name = $this->name;
             throw new VogException("No values where specified for value object '$name'");
         }
 

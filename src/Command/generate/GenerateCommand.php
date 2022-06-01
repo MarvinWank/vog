@@ -38,92 +38,22 @@ class GenerateCommand extends AbstractCommand
                 $data->namespace()
             );
             $this->writeToFile($generator);
+
+            $this->writeIfNotExists();
         }
     }
 
-    /**
-     * @throws VogException
-     */
-    private function buildObject(array $data, string $targetFilepath): AbstractPhpGenerator
+    private function writeToFile(AbstractGenerator $generator)
     {
-        if (!$targetFilepath || $targetFilepath === "") {
-            throw new VogException(
-                "No namespace was given" . " for object " . $data['name']
-            );
-        }
-        $this->validateObject($data);
-
-        $vog_obj = null;
-
-        switch ($data['type']) {
-            case "set":
-                $vog_obj = new PhpSetGenerator($data['name'], $this->config);
-                break;
-            case "enum":
-                $vog_obj = new PhpEnumGenerator($data['name'], $this->config);
-                break;
-            case "nullableEnum":
-                $vog_obj = new NullablePhpEnumGenerator($data['name'], $this->config);
-                break;
-            case "valueObject":
-                $vog_obj = new PhpValueObjectGenerator($data['name'], $this->config);
-                break;
-            default:
-                throw new UnexpectedValueException("Data typ " . $data['type'] . " should be allowed, but is not
-                implemented. This is an internal error. Please open an issue on GitHub");
-        }
-
-        if (!$vog_obj instanceof PhpSetGenerator) {
-            $vog_obj->setValues($data['values']);
-        }
-
-        //These Options are only allowed on value objects
-        if ($vog_obj instanceof PhpValueObjectGenerator){
-            if (array_key_exists("string_value", $data)) {
-                $vog_obj->setStringValue($data['string_value']);
-            }
-            if (array_key_exists("dateTimeFormat", $data)){
-                $vog_obj->setDateTimeFormat($data["dateTimeFormat"]);
-            }
-        }
-
-        $vog_obj->setTargetFilepath($this->getTargetFilePath($this->rootPath, $targetFilepath));
-
-        $target_namespace = $this->getTargetNamespace($targetFilepath);
-        $vog_obj->setNamespace($target_namespace);
-
-        if (array_key_exists('itemType', $data)) {
-            $vog_obj->setItemType($data['itemType']);
-        }
-
-        if (array_key_exists('extends', $data)) {
-            $vog_obj->setExtends($data['extends']);
-        }
-
-        if (array_key_exists('implements', $data)) {
-            $vog_obj->setImplements($data['implements']);
-        }
-
-        if (array_key_exists('final', $data)) {
-            $vog_obj->setIsFinal($data['final']);
-        }
-
-        if (array_key_exists('mutable', $data)) {
-            if ( !($vog_obj instanceof PhpValueObjectGenerator) && !($vog_obj instanceof PhpSetGenerator)){
-                $name = $vog_obj->getName();
-                $type = $vog_obj->getType();
-                throw new UnexpectedValueException("Mutability is only available on value objects, yet object 
-                $name is of type $type");
-            }
-            $vog_obj->setIsMutable($data['mutable']);
-        }
-
-        return $vog_obj;
+        return file_put_contents($generator->getAbsoluteFilepath(), $generator->getCode());
     }
 
-    private function writeToFile(AbstractPhpGenerator $builderInstance)
+    private function writeIfNotExists(AbstractGenerator $generator)
     {
-        return file_put_contents($builderInstance->getAbsoluteFilepath(), $builderInstance->getPhpCode());
+        if (!file_exists($generator->getAbsoluteFilepath())){
+            return file_put_contents($generator->getAbsoluteFilepath(), $generator->getCode());
+        }
+        return false;
     }
 
 

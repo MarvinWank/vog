@@ -3,12 +3,9 @@
 use PHPUnit\Framework\TestCase;
 use Test\TestObjects\DietStyle;
 use Test\TestObjects\Recipe;
-use Vog\CommandFactory;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-require_once __DIR__ . "/../vendor/autoload.php";
-require_once __DIR__ . "/../autoload.php";
 
 class ShallowArrayGenerationTest extends TestCase
 {

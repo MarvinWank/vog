@@ -1,12 +1,16 @@
 <?php
 
-use Vog\Commands\Generate\PhpEnumGenerator;
+namespace Vog\Test\Unit\Generator;
 
-class PhpEnumGeneratorTest extends \Unit\UnitTestCase
+
+use Vog\Generator\Php\Classes\PhpEnumClassGenerator;
+use Vog\Test\Unit\UnitTestCase;
+
+class PhpEnumGeneratorTest extends UnitTestCase
 {
     public function testEnumGeneration()
     {
-        $generator = new PhpEnumGenerator(
+        $generator = new PhpEnumClassGenerator(
             $this->dummyVogDefinition()->FilePathGroup()[0],
             $this->dummyConfiguration()->getGeneratorOptions()
         );

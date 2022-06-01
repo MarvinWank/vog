@@ -20,7 +20,7 @@ class PhpService
         $this->templateEngine = new TemplateEngine();
     }
 
-    public function generateGenericPhpHeader(
+    public function generatePhpHeader(
         string $name,
         string $namespace,
         array  $use = [],
@@ -241,13 +241,13 @@ class PhpService
 
             $datatype = $this->sanitizeNullableDatatype($datatype);
             if ($datatype === "\\DateTime" || $datatype === "\\DateTimeImmutable") {
-                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR .'PHpFromArrayDateTime.vtpl', [
+                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PHpFromArrayDateTime.vtpl', [
                     'name' => $name,
                     'format' => $dateTimeFormat,
                     'dateObject' => $datatype
                 ]);
             } elseif (!$this->isPrimitivePhpType($datatype)) {
-                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR .'PhpFromArrayForVog.vtpl', [
+                $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PhpFromArrayForVog.vtpl', [
                     'name' => $name,
                     'dataType' => $datatype
                 ]);
@@ -360,6 +360,13 @@ class PhpService
         return $phpcode;
     }
 
+    public function getValueObjectInterfaceMethods(): string
+    {
+        return $this->templateEngine->replaceValues(
+            self::TEMPLATE_DIR . '/PhpValueObjectInterfaceMethods.vtpl',
+            []
+        );
+    }
 
     private function getWithFunctionName(string $name, GeneratorOptions $generatorOptions): string
     {
