@@ -9,6 +9,9 @@ use Vog\Generator\Php\Classes\PhpEnumClassGenerator;
 use Vog\Generator\Php\Classes\PhpSetClassGenerator;
 use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
 use Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator;
+use Vog\Generator\Php\Interfaces\EnumInterfaceGenerator;
+use Vog\Generator\Php\Interfaces\SetInterfaceGenerator;
+use Vog\Generator\Php\Interfaces\ValueObjectInterfaceGenerator;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
@@ -22,7 +25,6 @@ class GeneratorFactory
         string           $rootNamepath
     ): AbstractPhpClassGenerator
     {
-        $fullFilepath = $definition->directory() . DIRECTORY_SEPARATOR . $definition->name() . '.php';
         switch ($definition->type()) {
             case VogTypes::enum():
                 return new PhpEnumClassGenerator($definition, $generatorOptions, $rootNamepath);
@@ -38,12 +40,21 @@ class GeneratorFactory
     }
 
     public function buildPhpInterfaceGenerator(
-        VogDefinition $definition,
-        GeneratorOptions $generatorOptions
+        VogDefinition    $definition,
+        GeneratorOptions $generatorOptions,
+        string           $rootNameSpace
     ): AbstractPhpInterfaceGenerator
     {
-        switch ($definition->type()){
-            case VogTypes::enum()
+        switch ($definition->type()) {
+            case VogTypes::nullableEnum():
+            case VogTypes::enum():
+                return new EnumInterfaceGenerator($definition, $generatorOptions, $rootNameSpace);
+            case VogTypes::valueObject():
+                return new ValueObjectInterfaceGenerator($definition, $generatorOptions, $rootNameSpace);
+            case VogTypes::set():
+                return new SetInterfaceGenerator($definition, $generatorOptions, $rootNameSpace);
+            default:
+                throw new LogicException("Switch not exhaustive");
         }
     }
 }
