@@ -5,9 +5,10 @@
     {
       "type": "valueObject",
       "name": "GenerateCommandOptions",
+      "implements": ["CommandOptions"],
       "values": {
-        "workingDir": "string",
-        "configFile": "string"
+        "workingDir": "?string",
+        "configFile": "?string"
       }
     }
   ]

@@ -41,12 +41,33 @@ class CommandFactoryTest extends UnitTestCase
 
     public function testParseOptionalArguments()
     {
-        $this->commandFactory->buildCommand(
+        $command = $this->commandFactory->buildCommand(
             'generate',
             [
-                "--working-dir ./foo",
-                "--config-file ./OtherVogConfig.json"
+                __DIR__ . '/../../testDataSources/value.json',
+                "--workingDir   ./foo",
+                "--configFile ./OtherVogConfig.json"
             ]
         );
+
+        $options = $command->getCommandOptions()->toArray();
+
+        $this->assertEquals('./foo', $options['workingDir']);
+        $this->assertEquals('./OtherVogConfig.json', $options['configFile']);
+    }
+
+    public function testParseOptionalArgument()
+    {
+        $command = $this->commandFactory->buildCommand(
+            'generate',
+            [
+                __DIR__ . '/../../testDataSources/value.json',
+                "--configFile ./OtherVogConfig.json"
+            ]
+        );
+
+        $options = $command->getCommandOptions();
+
+        $this->assertEquals('./OtherVogConfig.json', $options['configFile']);
     }
 }

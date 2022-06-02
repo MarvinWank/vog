@@ -7,6 +7,7 @@ namespace Vog\Commands\Generate;
 use InvalidArgumentException;
 use UnexpectedValueException;
 use Vog\Factories\ParserFactory;
+use Vog\ValueObjects\CommandOptions;
 use Vog\ValueObjects\Config;
 use Vog\ValueObjects\VogDefinitionFile;
 
@@ -30,10 +31,7 @@ abstract class AbstractCommand
 
     abstract public function run(): void;
 
-    public function getCommandOptions(): array
-    {
-        return self::AVAILABLE_OPTIONS;
-    }
+    abstract public function getCommandOptions(): CommandOptions;
 
     protected function parseFile(string $filepath): VogDefinitionFile
     {

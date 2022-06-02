@@ -11,31 +11,31 @@ namespace Vog\ValueObjects;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-class GenerateCommandOptions
+class GenerateCommandOptions implements CommandOptions
 {
-    private string $workingDir;
-    private string $configFile;
+    private ?string $workingDir;
+    private ?string $configFile;
 
     public function __construct(
-        string $workingDir,
-        string $configFile
+        ?string $workingDir,
+        ?string $configFile
     )
     {
         $this->workingDir = $workingDir;
         $this->configFile = $configFile;
     }
 
-    public function getWorkingDir(): string
+    public function getWorkingDir(): ?string
     {
         return $this->workingDir;
     }
 
-    public function getConfigFile(): string
+    public function getConfigFile(): ?string
     {
         return $this->configFile;
     }
 
-    public function withWorkingDir(string $workingDir): self
+    public function withWorkingDir(?string $workingDir): self
     {
         return new self(
             $workingDir,
@@ -43,7 +43,7 @@ class GenerateCommandOptions
         );
     }
 
-    public function withConfigFile(string $configFile): self
+    public function withConfigFile(?string $configFile): self
     {
         return new self(
             $this->workingDir,
@@ -61,12 +61,6 @@ class GenerateCommandOptions
 
     public static function fromArray(array $array): self
     {
-        if (!array_key_exists('workingDir', $array)) {
-            throw new UnexpectedValueException('Array key workingDir does not exist');
-        }
-        if (!array_key_exists('configFile', $array)) {
-            throw new UnexpectedValueException('Array key configFile does not exist');
-        }
 
         return new self(
             $array['workingDir'] ?? null,

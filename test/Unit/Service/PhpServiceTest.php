@@ -180,6 +180,21 @@ class PhpServiceTest extends UnitTestCase
         $this->assertEquals($expected, $method);
     }
 
+    public function testGenerateFromArrayWithNullableValues()
+    {
+        $values = [
+            'root_path' => '?string',
+            'namespace' => '?string',
+            'filePathGroup' => '?VogDefinitionSet'
+        ];
+
+        $method = $this->genericPhpHelper->generateFromArray($values, 'Y-m-d');
+
+        $this->assertStringNotContainsString("if (!array_key_exists('root_path', \$array))", $method);
+        $this->assertStringNotContainsString("if (!array_key_exists('namespace', \$array))", $method);
+        $this->assertStringNotContainsString("if (!array_key_exists('filePathGroup', \$array))", $method);
+    }
+
     public function testGenerateWithMethodsPsr2()
     {
         $values = [

@@ -11,6 +11,7 @@ use Vog\Commands\GenerateTypescript\GenerateTypescriptCommand;
 use Vog\Exception\VogException;
 use Vog\FppConvertCommand;
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\GenerateCommandOptions;
 
 class CommandFactory
 {
@@ -60,15 +61,31 @@ class CommandFactory
             throw new VogException("No file was found at $target");
         }
         $options = $this->parseOptions($argv);
+        $options = GenerateCommandOptions::fromArray($options);
 
-        return new GenerateCommand($config, $target);
+        return new GenerateCommand($config, $target, $options);
     }
 
     private function parseOptions(array $argv): array
     {
         $matches = [];
-        preg_match_all('/--\w+\s+(\w+)/', implode(' ', $argv), $matches);
+        preg_match_all('/--\w+\s+[\w\/\.]+/', implode(' ', $argv), $matches);
+        if (empty($matches)){
+            return [];
+        }
 
-        return $matches;
+        $matches = $matches[0];
+        $options = [];
+
+        foreach ($matches as $match){
+            $match = str_replace('--', '', $match);
+            $option = explode(' ', $match);
+            $option = array_filter($option);
+            $option = array_values($option);
+
+            $options[$option[0]] = $option[1];
+        }
+
+        return $options;
     }
 }

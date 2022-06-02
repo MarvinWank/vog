@@ -7,7 +7,9 @@ use UnexpectedValueException;
 
 use Vog\Exception\VogException;
 use Vog\Factories\GeneratorFactory;
+use Vog\ValueObjects\CommandOptions;
 use Vog\ValueObjects\Config;
+use Vog\ValueObjects\GenerateCommandOptions;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogDefinitionFile;
 use Vog\ValueObjects\VogDefinitionSet;
@@ -16,13 +18,16 @@ use function json_decode;
 class GenerateCommand extends AbstractCommand
 {
     private GeneratorFactory $generatorFactory;
+    private GenerateCommandOptions $generateCommandOptions;
     private string $targetDir;
 
-    public function __construct(Config $config, string $target)
+    public function __construct(Config $config, string $target, GenerateCommandOptions $generateCommandOptions)
     {
         parent::__construct($config);
 
         $this->targetDir = $target;
+        $this->generateCommandOptions = $generateCommandOptions;
+
         $this->generatorFactory = new GeneratorFactory();
     }
 
@@ -42,6 +47,11 @@ class GenerateCommand extends AbstractCommand
 
             $this->writeIfNotExists($generator->getInterfaceGenerator());
         }
+    }
+
+    public function getCommandOptions(): GenerateCommandOptions
+    {
+        return $this->generateCommandOptions;
     }
 
     //TODO: Move to Service
