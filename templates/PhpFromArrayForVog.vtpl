@@ -3,6 +3,6 @@
             $array['{{name}}'] = {{dataType}}::fromName($array['{{name}}']);
         }
 
-        if (isset($array['{{name}}']) && is_array($array['{{name}}']) && (is_a({{dataType}}::class, Set::class, true) || is_a({{dataType}}::class, ValueObject::class, true))) {
+        if (isset($array['{{name}}']) && is_array($array['{{name}}'])) {
             $array['{{name}}'] = {{dataType}}::fromArray($array['{{name}}']);
         }

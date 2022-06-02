@@ -9,6 +9,7 @@ class ConfigFactory
 {
     public function buildConfig(): Config
     {
+        //TODO: Extend for other config formats
         return $this->getJsonConfig();
     }
 

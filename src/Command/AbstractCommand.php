@@ -15,12 +15,25 @@ abstract class AbstractCommand
     protected Config $config;
     private const ALL_DATA_TYPES = ['enum', 'nullableEnum', 'valueObject', 'set'];
 
+    private const OPTION_WORKING_DIR = 'working-dir';
+    private const OPTION_CONFIG_FILE = 'config-file';
+
+    private const AVAILABLE_OPTIONS = [
+        self::OPTION_WORKING_DIR,
+        self::OPTION_CONFIG_FILE
+    ];
+
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
     abstract public function run(): void;
+
+    public function getCommandOptions(): array
+    {
+        return self::AVAILABLE_OPTIONS;
+    }
 
     protected function parseFile(string $filepath): VogDefinitionFile
     {

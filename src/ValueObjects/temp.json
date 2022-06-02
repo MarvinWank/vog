@@ -1,0 +1,14 @@
+{
+  "root_path": "./src",
+  "namespace": "Vog",
+  "ValueObjects": [
+    {
+      "type": "valueObject",
+      "name": "GenerateCommandOptions",
+      "values": {
+        "workingDir": "string",
+        "configFile": "string"
+      }
+    }
+  ]
+}

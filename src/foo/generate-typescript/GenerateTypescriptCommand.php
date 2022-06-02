@@ -9,7 +9,7 @@ use Vog\Commands\Generate\AbstractCommand;
 
 class GenerateTypescriptCommand extends AbstractCommand
 {
-    public function run(string $sourcePath, string $targetPath)
+    public function run(string $sourcePath, string $targetPath): void
     {
         $json = $this->parseFile($sourcePath);
 

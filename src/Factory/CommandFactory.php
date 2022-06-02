@@ -52,14 +52,23 @@ class CommandFactory
      */
     private function buildGenerateCommand(Config $config, array $argv): GenerateCommand
     {
-        if (!isset($argv[0])){
+        if (!isset($argv[0])) {
             throw new VogException("No target was given");
         }
         $target = $argv[0];
-        if (!file_exists($target)){
+        if (!file_exists($target)) {
             throw new VogException("No file was found at $target");
         }
+        $options = $this->parseOptions($argv);
 
         return new GenerateCommand($config, $target);
+    }
+
+    private function parseOptions(array $argv): array
+    {
+        $matches = [];
+        preg_match_all('/--\w+\s+(\w+)/', implode(' ', $argv), $matches);
+
+        return $matches;
     }
 }
