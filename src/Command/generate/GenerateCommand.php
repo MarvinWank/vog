@@ -35,7 +35,8 @@ class GenerateCommand extends AbstractCommand
             $generator = $this->generatorFactory->buildPhpGenerator(
                 $item,
                 $this->config->getGeneratorOptions(),
-                $data->namespace()
+                $data->namespace(),
+                $data->root_path()
             );
             $this->writeToFile($generator);
 

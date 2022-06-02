@@ -15,21 +15,22 @@ abstract class AbstractGenerator
     protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
 
     protected string $name;
-    protected string $directory;
+    protected string $rootDirectory;
+    protected string $subDirectory;
     protected ?array $values;
     protected VogTypes $type;
-
 
     abstract public function getAbsoluteFilepath(): string;
 
     abstract public function getCode(): string;
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootDirectory)
     {
         $this->generatorOptions = $generatorOptions;
 
         $this->name = $definition->name();
-        $this->directory = $definition->directory();
+        $this->rootDirectory = $rootDirectory;
+        $this->subDirectory = $definition->directory() === "./" ? '' : $definition->directory();
         $this->type = $definition->type();
         $this->values = $definition->values();
     }
@@ -53,7 +54,6 @@ abstract class AbstractGenerator
     {
         return $this->values;
     }
-
 
 
 }

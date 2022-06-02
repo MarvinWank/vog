@@ -1,5 +1,5 @@
 {
-  "root_path": "./test/testObjects",
+  "root_path": "./test/Feature/Psr2/testObjects",
   "namespace": "Test\\TestObjects",
   ".": [
     {

@@ -10,9 +10,9 @@ use Vog\ValueObjects\VogDefinition;
 abstract class AbstractPhpInterfaceGenerator extends AbstractPhpGenerator
 {
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNameSpace)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNameSpace, string $rootDir)
     {
-        parent::__construct($definition, $generatorOptions, $rootNameSpace);
+        parent::__construct($definition, $generatorOptions, $rootNameSpace, $rootDir);
     }
 
     abstract public function getCode(): string;

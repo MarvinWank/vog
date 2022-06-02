@@ -9,9 +9,9 @@ class ValueObjectInterfaceGenerator extends AbstractPhpInterfaceGenerator
 {
     private const INTERFACE_NAME = 'ValueObject';
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNameSpace)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNameSpace, string $rootDir)
     {
-        parent::__construct($definition, $generatorOptions, $rootNameSpace);
+        parent::__construct($definition, $generatorOptions, $rootNameSpace, $rootDir);
 
         $this->name = self::INTERFACE_NAME;
     }

@@ -19,9 +19,9 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
     protected bool $isFinal;
     protected bool $isMutable;
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
     {
-        parent::__construct($definition, $generatorOptions, $rootNamespace);
+        parent::__construct($definition, $generatorOptions, $rootNamespace, $rootDir);
 
         $this->extends = $definition->extends();
         $this->isFinal = $definition->final() ?? false;
@@ -33,7 +33,8 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
         $this->interfaceGenerator = $interfaceGeneratorFactory->buildPhpInterfaceGenerator(
             $definition,
             $generatorOptions,
-            $rootNamespace
+            $rootNamespace,
+            $rootDir
         );
     }
 
@@ -92,11 +93,6 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
     public function setIsMutable(bool $isMutable): void
     {
         $this->isMutable = $isMutable;
-    }
-
-    public function getAbsoluteFilepath(): string
-    {
-        return $this->directory . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
     }
 
 }

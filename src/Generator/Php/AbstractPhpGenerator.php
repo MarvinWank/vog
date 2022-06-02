@@ -14,9 +14,9 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     protected string $rootNamespace;
     protected array $implements = [];
 
-    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
     {
-        parent::__construct($definition, $generatorOptions);
+        parent::__construct($definition, $generatorOptions, $rootDir);
 
         $this->rootNamespace = $rootNamespace;
         $this->implements = $definition->implements() ?? [];
@@ -26,14 +26,16 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
 
     public function getAbsoluteFilepath(): string
     {
-        return $this->directory . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
+        $absolutePath = realpath($this->rootDirectory . DIRECTORY_SEPARATOR . $this->subDirectory);
+        return $this->rootDirectory . DIRECTORY_SEPARATOR . $this->subDirectory . DIRECTORY_SEPARATOR . ucfirst($this->name) . ".php";
+
     }
 
     protected function getNamespace(): string
     {
         return $this->phpService->getTargetNamespace(
             $this->rootNamespace,
-            $this->directory
+            $this->subDirectory
         );
     }
 
