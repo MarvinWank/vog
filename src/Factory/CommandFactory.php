@@ -61,7 +61,7 @@ class CommandFactory
             throw new VogException("No file was found at $target");
         }
         $options = $this->parseOptions($argv);
-        $options = GenerateCommandOptions::fromArray($options);
+        $options = $this->getCommandOptions($options);
 
         return new GenerateCommand($config, $target, $options);
     }
@@ -87,5 +87,19 @@ class CommandFactory
         }
 
         return $options;
+    }
+
+    /** @throws VogException */
+    private function getCommandOptions(array $options): GenerateCommandOptions
+    {
+        $commandOptions = GenerateCommandOptions::fromArray($options);
+
+        $diff = array_diff($options, $commandOptions->toArray());
+        if ($diff !== []){
+            $diffKeys = array_keys($diff);
+            throw new VogException("Invalid option(s): " . implode(", ", $diffKeys));
+        }
+
+        return $commandOptions;
     }
 }

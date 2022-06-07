@@ -66,8 +66,21 @@ class CommandFactoryTest extends UnitTestCase
             ]
         );
 
-        $options = $command->getCommandOptions();
+        $options = $command->getCommandOptions()->toArray();
 
         $this->assertEquals('./OtherVogConfig.json', $options['configFile']);
+    }
+
+    public function testThrowExceptionWhenArgumentIsUnknown()
+    {
+        $this->expectException(VogException::class);
+        $this->expectExceptionMessage("Invalid option(s): fooBar");
+        $command = $this->commandFactory->buildCommand(
+            'generate',
+            [
+                __DIR__ . '/../../testDataSources/value.json',
+                "--fooBar ./OtherVogConfig.json"
+            ]
+        );
     }
 }

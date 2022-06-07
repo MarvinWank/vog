@@ -12,7 +12,7 @@ class Psr2TestCase extends FeatureTestCase
     protected function runGeneration(string $valueFile)
     {
         $argv = [
-            __DIR__ . "/testObjects/" . $valueFile
+            __DIR__ . "/testObjects/" . $valueFile,
         ];
         $hub = new CommandFactory();
 
