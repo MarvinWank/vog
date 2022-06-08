@@ -22,19 +22,19 @@ class GeneratorFactory
     public function buildPhpGenerator(
         VogDefinition    $definition,
         GeneratorOptions $generatorOptions,
-        string           $rootNamepath,
+        string           $rootNamespace,
         string           $rootDir
     ): AbstractPhpClassGenerator
     {
         switch ($definition->type()) {
             case VogTypes::enum():
-                return new PhpEnumClassGenerator($definition, $generatorOptions, $rootNamepath);
+                return new PhpEnumClassGenerator($definition, $generatorOptions, $rootNamespace);
             case VogTypes::nullableEnum():
-                return new NullablePhpEnumGenerator($definition, $generatorOptions, $rootNamepath);
+                return new NullablePhpEnumGenerator($definition, $generatorOptions, $rootNamespace);
             case VogTypes::valueObject():
-                return new PhpValueObjectClassGenerator($definition, $generatorOptions, $rootNamepath, $rootDir);
+                return new PhpValueObjectClassGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
             case VogTypes::set():
-                return new PhpSetClassGenerator($definition, $generatorOptions, $rootNamepath);
+                return new PhpSetClassGenerator($definition, $generatorOptions, $rootNamespace);
             default:
                 throw new LogicException("Switch not exhaustive");
         }

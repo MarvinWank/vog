@@ -27,8 +27,9 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
         );
         $generator = new PhpValueObjectClassGenerator(
             $emptyDefinition,
-            $this->dummyConfiguration()->getGeneratorOptions(),
-            'foo'
+            $this->getDummyConfiguration()->getGeneratorOptions(),
+            'foo',
+            __DIR__
         );
         $this->expectException(VogException::class);
         $generator->getCode();

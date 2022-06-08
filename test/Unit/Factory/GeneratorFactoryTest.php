@@ -21,7 +21,9 @@ class GeneratorFactoryTest extends UnitTestCase
     {
         $enumGenerator = $this->generatorFactory->buildPhpGenerator(
             $this->dummyVogDefinition()->FilePathGroup()[0],
-            $this->dummyConfiguration()->getGeneratorOptions()
+            $this->getDummyConfiguration()->getGeneratorOptions(),
+            'Vog\TestObjects',
+            __DIR__
         );
 
         $this->assertInstanceOf(PhpEnumClassGenerator::class, $enumGenerator);

@@ -30,7 +30,12 @@ class ValueObjectInterfaceGeneratorTest extends IntegrationTestCase
         );
         $config = $this->getDummyConfiguration();
 
-        $generator = new ValueObjectInterfaceGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new ValueObjectInterfaceGenerator(
+            $definition,
+            $config->getGeneratorOptions(),
+            'Vog\Test\TestObjects',
+            __DIR__
+        );
         $actual = $generator->getCode();
         $expected = file_get_contents(__DIR__ . '/expected/ValueObjectInterface.vogtest');
 

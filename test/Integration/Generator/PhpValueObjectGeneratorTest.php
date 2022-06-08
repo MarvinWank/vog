@@ -30,7 +30,12 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
 
         );
         $config = $this->getDummyConfiguration();
-        $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new PhpValueObjectClassGenerator(
+            $definition,
+            $config->getGeneratorOptions(),
+            'Vog\Test\TestObjects',
+            __DIR__
+        );
 
         $phpcode = $generator->getCode();
         $expected = file_get_contents(__DIR__ . '/expected/SimpleValueObject.php.vogtest');
@@ -57,7 +62,12 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
             null
         );
         $config = $this->getDummyConfiguration();
-        $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new PhpValueObjectClassGenerator(
+            $definition,
+            $config->getGeneratorOptions(),
+            'Vog\Test\TestObjects',
+            __DIR__
+        );
 
         $phpcode = $generator->getCode();
 
@@ -85,7 +95,12 @@ class PhpValueObjectGeneratorTest extends IntegrationTestCase
         );
         $config = $this->getDummyConfiguration();
 
-        $generator = new PhpValueObjectClassGenerator($definition, $config->getGeneratorOptions(), 'Vog\Test\TestObjects');
+        $generator = new PhpValueObjectClassGenerator(
+            $definition,
+            $config->getGeneratorOptions(),
+            'Vog\Test\TestObjects',
+            __DIR__
+        );
         $actual = $generator->getInterfaceGenerator()->getCode();
         $expected = file_get_contents(__DIR__ . '/expected/ValueObjectInterface.vogtest');
 

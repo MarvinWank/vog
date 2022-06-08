@@ -6,4 +6,5 @@ parameters:
     excludePaths:
         - test/testDataSources/*
         - test/testObjectsFpp/*
+        - */testObjects/*
 

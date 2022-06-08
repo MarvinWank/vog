@@ -12,9 +12,10 @@ class PhpEnumGeneratorTest extends UnitTestCase
     {
         $generator = new PhpEnumClassGenerator(
             $this->dummyVogDefinition()->FilePathGroup()[0],
-            $this->dummyConfiguration()->getGeneratorOptions()
+            $this->getDummyConfiguration()->getGeneratorOptions(),
+            __DIR__
         );
 
-
+        throw new \Exception("To be implemented");
     }
 }
