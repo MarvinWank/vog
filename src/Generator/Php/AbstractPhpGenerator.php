@@ -27,7 +27,7 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
     public function getAbsoluteFilepath(): string
     {
         $absolutePath = realpath($this->rootDirectory . DIRECTORY_SEPARATOR . $this->subDirectory);
-        return $this->rootDirectory . DIRECTORY_SEPARATOR . $this->subDirectory . ucfirst($this->name) . ".php";
+        return $absolutePath . ucfirst($this->name) . ".php";
     }
 
     protected function getNamespace(): string

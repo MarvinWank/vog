@@ -3,11 +3,12 @@
 namespace Vog\Factories;
 
 use LogicException;
-use Vog\Generator\Php\Classes\AbstractPhpClassGenerator;
-use Vog\Generator\Php\Classes\NullablePhpEnumGenerator;
-use Vog\Generator\Php\Classes\PhpEnumClassGenerator;
+use Vog\Generator\Php\AbstractPhpGenerator;
 use Vog\Generator\Php\Classes\PhpSetClassGenerator;
 use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
+use Vog\Generator\Php\Enum\NullablePhpLegacyEnumGenerator;
+use Vog\Generator\Php\Enum\PhpEnumGenerator;
+use Vog\Generator\Php\Enum\PhpLegacyEnumClassGenerator;
 use Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator;
 use Vog\Generator\Php\Interfaces\EnumInterfaceGenerator;
 use Vog\Generator\Php\Interfaces\SetInterfaceGenerator;
@@ -24,13 +25,18 @@ class GeneratorFactory
         GeneratorOptions $generatorOptions,
         string           $rootNamespace,
         string           $rootDir
-    ): AbstractPhpClassGenerator
+    ): AbstractPhpGenerator
     {
         switch ($definition->type()) {
             case VogTypes::enum():
-                return new PhpEnumClassGenerator($definition, $generatorOptions, $rootNamespace);
             case VogTypes::nullableEnum():
-                return new NullablePhpEnumGenerator($definition, $generatorOptions, $rootNamespace);
+                return $this->buildEnumGenerator(
+                    $definition,
+                    $generatorOptions,
+                    $rootNamespace,
+                    $rootDir,
+                    phpversion()
+                );
             case VogTypes::valueObject():
                 return new PhpValueObjectClassGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
             case VogTypes::set():
@@ -38,6 +44,28 @@ class GeneratorFactory
             default:
                 throw new LogicException("Switch not exhaustive");
         }
+    }
+
+    private function buildEnumGenerator(
+        VogDefinition    $definition,
+        GeneratorOptions $generatorOptions,
+        string           $rootNamespace,
+        string           $rootDir,
+        string           $phpVersion
+    ): AbstractPhpGenerator
+    {
+        //TODO: manually toggle between standard/legacy enums
+        if (version_compare($phpVersion, '8.1') >= 0){
+            return new PhpEnumGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
+        }
+        if ($definition->type()->equals(VogTypes::enum())){
+            return new PhpLegacyEnumClassGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
+        }
+        if ($definition->type()->equals(VogTypes::nullableEnum())){
+            return new NullablePhpLegacyEnumGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
+        }
+
+        throw new LogicException("Clause not exhaustive");
     }
 
     public function buildPhpInterfaceGenerator(

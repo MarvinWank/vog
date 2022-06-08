@@ -1,8 +1,9 @@
 <?php
 
-namespace Vog\Generator\Php\Classes;
+namespace Vog\Generator\Php\Enum;
 
-class NullablePhpEnumGenerator extends PhpEnumClassGenerator
+
+class NullablePhpLegacyEnumGenerator extends PhpLegacyEnumClassGenerator
 {
     protected function generateConstructor(string $phpcode): string
     {

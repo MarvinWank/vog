@@ -3,14 +3,14 @@
 namespace Vog\Test\Unit\Generator;
 
 
-use Vog\Generator\Php\Classes\PhpEnumClassGenerator;
+use Vog\Generator\Php\Classes\PhpLegacyEnumClassGenerator;
 use Vog\Test\Unit\UnitTestCase;
 
 class PhpEnumGeneratorTest extends UnitTestCase
 {
     public function testEnumGeneration()
     {
-        $generator = new PhpEnumClassGenerator(
+        $generator = new PhpLegacyEnumClassGenerator(
             $this->dummyVogDefinition()->FilePathGroup()[0],
             $this->getDummyConfiguration()->getGeneratorOptions(),
             __DIR__
