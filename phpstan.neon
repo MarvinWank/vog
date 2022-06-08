@@ -1,0 +1,9 @@
+parameters:
+    paths:
+        - src
+        - test
+    level: 4
+    excludePaths:
+        - test/testDataSources/*
+        - test/testObjectsFpp/*
+

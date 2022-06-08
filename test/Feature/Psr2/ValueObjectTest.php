@@ -6,6 +6,7 @@ use Psr2TestCase;
 use Test\Interface1;
 use Test\Interface2;
 use Test\BaseClass;
+use Test\TestObjects\Recipe;
 
 class ValueObjectTest extends Psr2TestCase
 {
