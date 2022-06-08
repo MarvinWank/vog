@@ -106,21 +106,6 @@ class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    /**
-     * @throws VogException
-     */
-    protected function getValues(): array
-    {
-        $values = parent::getValues();
-
-        if ($values === null){
-            $name = $this->name;
-            throw new VogException("No values where specified for value object '$name'");
-        }
-
-        return $values;
-    }
-
     private function generateConstructor(array $values): string
     {
         return $this->phpService->generateConstructor($values);

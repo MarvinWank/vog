@@ -3,6 +3,7 @@
 namespace Vog\Generator\Php;
 
 use Vog\Commands\Generate\AbstractGenerator;
+use Vog\Exception\VogException;
 use Vog\Service\PhpService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
@@ -44,5 +45,21 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
 
 }
 EOT;
+    }
+
+    /**
+     * @throws VogException
+     * TODO: move to constructor
+     */
+    protected function getValues(): array
+    {
+        $values = parent::getValues();
+
+        if ($values === null){
+            $name = $this->name;
+            throw new VogException("No values where specified for value object '$name'");
+        }
+
+        return $values;
     }
 }
