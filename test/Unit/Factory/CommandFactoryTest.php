@@ -83,4 +83,14 @@ class CommandFactoryTest extends UnitTestCase
             ]
         );
     }
+
+    public function testChangesRootDirOnOptionSet()
+    {
+        throw new \Exception("To be implemented");
+    }
+
+    public function testChangesConfigFileOnOptionSet()
+    {
+        throw new \Exception("To be implemented");
+    }
 }

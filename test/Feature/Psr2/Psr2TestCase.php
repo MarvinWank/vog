@@ -13,6 +13,7 @@ class Psr2TestCase extends FeatureTestCase
     {
         $argv = [
             __DIR__ . "/testObjects/" . $valueFile,
+            '--workingDir ' . realpath(__DIR__ . '/../../../')
         ];
         $hub = new CommandFactory();
 

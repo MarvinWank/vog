@@ -36,17 +36,38 @@ class GenerateCommand extends AbstractCommand
         $data = $this->parseFile($this->targetDir);
 
         /** @var VogDefinition $item */
-        foreach ($data->FilePathGroup() as $item){
+        foreach ($data->FilePathGroup() as $item) {
             $generator = $this->generatorFactory->buildPhpGenerator(
                 $item,
                 $this->config->getGeneratorOptions(),
                 $data->namespace(),
-                $data->root_path()
+                $this->getRootDir($data->root_path(), $this->generateCommandOptions->getWorkingDir())
             );
             $this->writeToFile($generator);
 
             $this->writeIfNotExists($generator->getInterfaceGenerator());
         }
+    }
+
+    /** @throws VogException */
+    private function getRootDir(string $rootPath, ?string $workingDir): string
+    {
+        if (!$workingDir) {
+            return $rootPath;
+        }
+
+        $rootPath = preg_replace('/$\.\//','' , $rootPath);
+        $rootDir = realpath($workingDir . DIRECTORY_SEPARATOR . $rootPath);
+
+        if (!$rootDir) {
+            throw new VogException("Directory " . $workingDir . DIRECTORY_SEPARATOR . $rootPath .
+                " composed off --workingDir Argument with value " . $workingDir .
+                " and file-defined root_path wit value " . $rootPath .
+                " is not valid"
+            );
+        }
+
+        return $rootDir;
     }
 
     public function getCommandOptions(): GenerateCommandOptions
@@ -62,7 +83,7 @@ class GenerateCommand extends AbstractCommand
 
     private function writeIfNotExists(AbstractGenerator $generator)
     {
-        if (!file_exists($generator->getAbsoluteFilepath())){
+        if (!file_exists($generator->getAbsoluteFilepath())) {
             return file_put_contents($generator->getAbsoluteFilepath(), $generator->getCode());
         }
         return false;

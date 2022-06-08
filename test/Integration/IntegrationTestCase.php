@@ -10,12 +10,5 @@ use Vog\ValueObjects\ToArrayMode;
 
 class IntegrationTestCase extends VogTestCase
 {
-    protected function generateConfig(): Config
-    {
-        return new Config(new GeneratorOptions(
-            TargetMode::MODE_PSR2(),
-            null,
-            ToArrayMode::DEEP()
-        ));
-    }
+
 }
