@@ -18,7 +18,7 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
 
     public function getCode(): string
     {
-        $phpcode = $this->phpService->generatePhpHeader();
+        $phpcode = $this->phpService->generatePhpClassHeader();
         $phpcode = $this->generateConstNamesAndValues($phpcode);
         $phpcode = $this->generateConstOptions($phpcode);
         $phpcode = $this->generateConstructor($phpcode);

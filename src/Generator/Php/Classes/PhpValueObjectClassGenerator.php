@@ -60,7 +60,7 @@ class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
      */
     public function getCode(): string
     {
-        $phpcode = $this->phpService->generatePhpHeader(
+        $phpcode = $this->phpService->generatePhpClassHeader(
             $this->name,
             $this->getNamespace(),
             self::USE_EXCEPTIONS,

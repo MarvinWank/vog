@@ -19,7 +19,7 @@ class PhpService
         $this->templateEngine = new TemplateEngine();
     }
 
-    public function generatePhpHeader(
+    public function generatePhpClassHeader(
         string $name,
         string $namespace,
         array  $use = [],
@@ -27,6 +27,20 @@ class PhpService
         string $extends = null,
         array  $implements = [],
         string $type = 'class'
+    ): string
+    {
+        return $this->generatePhpHeader($name, $namespace, $use, $isFinal, $extends, $implements, $type);
+    }
+
+    public function generatePhpHeader(
+        string  $name,
+        string  $namespace,
+        array   $use = [],
+        bool    $isFinal = false,
+        string  $extends = null,
+        array   $implements = [],
+        string  $type = 'class',
+        ?string $enumType = null
     ): string
     {
         $classStatement = $type . ' ' . ucfirst($name);
@@ -43,6 +57,10 @@ class PhpService
 
         if (!empty($implements)) {
             $classStatement .= ' implements ' . implode(', ', $implements);
+        }
+
+        if ($enumType) {
+            $classStatement .= ": " . $enumType;
         }
 
         foreach ($use as $className) {

@@ -23,6 +23,7 @@ class VogDefinition implements ValueObject
     private ?array $implements;
     private ?bool $final;
     private ?bool $mutable;
+    private ?string $enumDataType;
 
     public function __construct (
         string $name,
@@ -35,7 +36,8 @@ class VogDefinition implements ValueObject
         ?string $extends,
         ?array $implements,
         ?bool $final,
-        ?bool $mutable
+        ?bool $mutable,
+        ?string $enumDataType
     ) {
         $this->name = $name;
         $this->directory = $directory;
@@ -48,6 +50,7 @@ class VogDefinition implements ValueObject
         $this->implements = $implements;
         $this->final = $final;
         $this->mutable = $mutable;
+        $this->enumDataType = $enumDataType;
     }
     
     public function name(): string 
@@ -104,7 +107,12 @@ class VogDefinition implements ValueObject
     {
         return $this->mutable;
     }
-    
+
+    public function enumDataType(): ?string
+    {
+        return $this->enumDataType;
+    }
+
     public function with_name(string $name): self 
     {
         return new self(
@@ -118,7 +126,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -135,7 +144,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -152,7 +162,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -169,7 +180,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -186,7 +198,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -203,7 +216,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -220,7 +234,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -237,7 +252,8 @@ class VogDefinition implements ValueObject
             $extends,
             $this->implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -254,7 +270,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $implements,
             $this->final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -271,7 +288,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $final,
-            $this->mutable
+            $this->mutable,
+            $this->enumDataType,
         );
     }
     
@@ -288,7 +306,8 @@ class VogDefinition implements ValueObject
             $this->extends,
             $this->implements,
             $this->final,
-            $mutable
+            $mutable,
+            $this->enumDataType,
         );
     }
     
@@ -306,6 +325,7 @@ class VogDefinition implements ValueObject
             'implements' => $this->implements,
             'final' => $this->final,
             'mutable' => $this->mutable,
+            'enumDataType' => $this->enumDataType,
         ];
     }
     
@@ -342,7 +362,8 @@ class VogDefinition implements ValueObject
             $array['extends'] ?? null,
             $array['implements'] ?? null,
             $array['final'] ?? null,
-            $array['mutable'] ?? null
+            $array['mutable'] ?? null,
+            $array['enumDataType'] ?? null
         );
     }
         
