@@ -4,6 +4,7 @@ namespace Vog\Factories;
 
 use LogicException;
 use Vog\Generator\Php\AbstractPhpGenerator;
+use Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator;
 use Vog\Generator\Php\Classes\PhpSetClassGenerator;
 use Vog\Generator\Php\Classes\PhpValueObjectClassGenerator;
 use Vog\Generator\Php\Enum\NullablePhpLegacyEnumGenerator;
@@ -25,7 +26,7 @@ class GeneratorFactory
         GeneratorOptions $generatorOptions,
         string           $rootNamespace,
         string           $rootDir
-    ): AbstractPhpGenerator
+    ): AbstractPhpVogDefinitionObjectGenerator
     {
         switch ($definition->type()) {
             case VogTypes::enum():
@@ -52,7 +53,7 @@ class GeneratorFactory
         string           $rootNamespace,
         string           $rootDir,
         string           $phpVersion
-    ): AbstractPhpGenerator
+    ): AbstractPhpVogDefinitionObjectGenerator
     {
         //TODO: manually toggle between standard/legacy enums
         if (version_compare($phpVersion, '8.1') >= 0){

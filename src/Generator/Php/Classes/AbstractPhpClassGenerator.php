@@ -5,14 +5,15 @@ namespace Vog\Generator\Php\Classes;
 
 use Vog\Factories\GeneratorFactory;
 use Vog\Generator\Php\AbstractPhpGenerator;
+use Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator;
 use Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
 
-abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
+abstract class AbstractPhpClassGenerator extends AbstractPhpVogDefinitionObjectGenerator
 {
-    protected AbstractPhpInterfaceGenerator $interfaceGenerator;
+
 
     protected ?string $extends;
     protected ?string $dateTimeFormat;
@@ -28,19 +29,6 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpGenerator
         $this->isMutable = $definition->mutable() ?? false;
         $this->rootNamespace = $rootNamespace;
         $this->dateTimeFormat = $definition->dateTimeFormat() ?? $generatorOptions->getDateTimeFormat();
-
-        $interfaceGeneratorFactory = new GeneratorFactory();
-        $this->interfaceGenerator = $interfaceGeneratorFactory->buildPhpInterfaceGenerator(
-            $definition,
-            $generatorOptions,
-            $rootNamespace,
-            $rootDir
-        );
-    }
-
-    public function getInterfaceGenerator(): AbstractPhpInterfaceGenerator
-    {
-        return $this->interfaceGenerator;
     }
 
     public function setValues(array $values): void

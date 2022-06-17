@@ -2,12 +2,11 @@
 
 namespace Vog\Generator\Php\Enum;
 
-use Vog\Generator\Php\Classes\AbstractPhpClassGenerator;
+use Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator;
 use Vog\ValueObjects\GeneratorOptions;
-use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\VogDefinition;
 
-class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
+class PhpLegacyEnumClassGenerator extends AbstractPhpVogDefinitionObjectGenerator
 {
     protected array $implements = ['Enum'];
 

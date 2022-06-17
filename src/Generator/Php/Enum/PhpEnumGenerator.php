@@ -3,10 +3,11 @@
 namespace Vog\Generator\Php\Enum;
 
 use Vog\Generator\Php\AbstractPhpGenerator;
+use Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 
-class PhpEnumGenerator extends AbstractPhpGenerator
+class PhpEnumGenerator extends AbstractPhpVogDefinitionObjectGenerator
 {
     private ?string $enumDataType;
 
