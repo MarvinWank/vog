@@ -14,7 +14,7 @@ class ValueObjectTest extends Psr2TestCase
     {
         parent::setUp();
 
-        $this->runGeneration('valueObjects.json');
+        $this->runGeneration('value.json');
     }
 
     /**
