@@ -2,25 +2,29 @@
 
 namespace Vog\Generator\Php\Classes;
 
-use Vog\ValueObjects\Config;
+use Vog\ValueObjects\GeneratorOptions;
+use Vog\ValueObjects\VogDefinition;
 
 class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
     private string $itemType = '';
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
 
-    public function __construct(string $targetFilepath, Config $generatorOptions)
+    public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
     {
-        parent::__construct($targetFilepath, $generatorOptions);
-        $this->type = 'set';
+        parent::__construct($definition, $generatorOptions, $rootNamespace, $rootDir);
     }
 
     public function getCode(): string
     {
-        $phpcode = $this->generateGenericPhpHeader([
-            AbstractGenerator::UNEXPECTED_VALUE_EXCEPTION,
-            AbstractGenerator::BAD_METHOD_CALL_EXCEPTION
-        ]);
+        $phpcode = $this->phpService->generatePhpClassHeader(
+            $this->name,
+            $this->getNamespace(),
+            [],
+            $this->isFinal,
+            $this->extends,
+            $this->implements
+        );
         $phpcode = $this->generateConstructor($phpcode);
         $phpcode = $this->generateFromArray($phpcode);
         $phpcode = $this->generateToArray($phpcode);
