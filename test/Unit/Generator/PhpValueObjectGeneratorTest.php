@@ -27,8 +27,8 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             null,
             null,
             null,
+            null,
             null
-
         );
         $config = $this->getDummyConfiguration();
         $generator = new PhpValueObjectClassGenerator(
@@ -60,6 +60,7 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             'ParentClass',
             ['FooInterface', 'BarInterface'],
             true,
+            null,
             null
         );
         $config = $this->getDummyConfiguration();
@@ -92,6 +93,7 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             'ParentClass',
             null,
             true,
+            null,
             null
         );
         $config = $this->getDummyConfiguration();
@@ -114,6 +116,7 @@ class PhpValueObjectGeneratorTest extends UnitTestCase
             'fooTest',
             'test',
             VogTypes::valueObject(),
+            null,
             null,
             null,
             null,

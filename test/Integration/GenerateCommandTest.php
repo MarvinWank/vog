@@ -3,7 +3,6 @@
 namespace Integration;
 
 use Vog\Commands\Generate\GenerateCommand;
-use Vog\Exception\VogException;
 use Vog\ValueObjects\GenerateCommandOptions;
 
 class GenerateCommandTest extends IntegrationTestCase

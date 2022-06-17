@@ -14,41 +14,65 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
     {
         parent::__construct($definition, $generatorOptions, $rootNamespace, $rootDir);
-    }
 
-    public function getCode(): string
-    {
-        $phpcode = $this->phpService->generatePhpClassHeader();
-        $phpcode = $this->generateConstNamesAndValues($phpcode);
-        $phpcode = $this->generateConstOptions($phpcode);
-        $phpcode = $this->generateConstructor($phpcode);
-        $phpcode = $this->generateMethods($phpcode);
-        $phpcode = $this->generateFromNameFromValue($phpcode);
-        $phpcode = $this->generateGenericFunctions($phpcode);
-        $phpcode = $this->closeRootScope($phpcode);
-
-        return $phpcode;
+        $this->values = $this->formatValues($this->values);
     }
 
     private function formatValues(array $values): array
     {
-        $psrMode = TargetMode::MODE_PSR2();
-        if ($psrMode->equals($this->generatorOptions->getTarget())) {
-            $upper = [];
-            foreach ($values as $key => $value) {
-                $upper[strtoupper($key)] = $value;
+        $valuesFormatted = [];
+
+        foreach ($values as $name => $value){
+            if (is_numeric($name)){
+                $valuesFormatted[strtoupper($value)] = $value;
             }
-            return $upper;
         }
 
-        return $values;
+        return $valuesFormatted;
     }
 
-    protected function generateConstOptions(string $phpcode): string
+    public function getCode(): string
     {
-        $phpcode .= <<<EOT
-        
-            public const OPTIONS = [ 
+        $phpcode = $this->phpService->generatePhpClassHeader(
+            $this->name,
+            $this->getNamespace(),
+            ['InvalidArgumentException'],
+            false,
+            null,
+            $this->implements,
+        );
+        $phpcode .= $this->generateConstNamesAndValues($this->values);
+        $phpcode .= $this->generateConstOptions();
+        $phpcode .= $this->generateConstructor();
+        $phpcode .= $this->generateMethods();
+        $phpcode .= $this->generateFromNameFromValue();
+        $phpcode .= $this->generateGenericFunctions();
+        $phpcode .= $this->closeRootScope();
+
+        return $phpcode;
+    }
+
+
+    protected function generateConstNamesAndValues(array $values): string
+    {
+        $phpcode = "\n";
+
+        $valuesOnly = implode("', '",$values);
+        $namesOnly = implode("', '",array_keys($values));
+
+        $valuesAsString = "['" . $valuesOnly . "']";
+        $phpcode .= "    public const VALUES = " . $valuesAsString . ";\n";
+
+        $namesAsString = "['" . $namesOnly . "']";
+        $phpcode .= "    public const NAMES = " . $namesAsString . ";\n";
+
+        return $phpcode;
+    }
+
+    protected function generateConstOptions(): string
+    {
+        $phpcode = <<<EOT
+            public const OPTIONS = [
         EOT;
 
         foreach ($this->values as $name => $value) {
@@ -66,41 +90,17 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
         foreach ($this->values as $name => $value) {
             $phpcode .= <<<EOT
 
-                public const $name = '$value';               
+                public const $name = '$value';
             EOT;
         }
         return $phpcode;
     }
 
-    protected function generateConstNamesAndValues($phpcode): string
+    protected function generateConstructor(): string
     {
-        $valuesOnly = "";
-        $namesOnly = "";
-
-        foreach ($this->values as $name => $value) {
-            $valuesOnly .= "'".$value."', ";
-            $namesOnly .= "'".$name."', ";
-        }
-
-        $valuesAsString = "[" . $valuesOnly . "]";
-        $phpcode .= <<<EOT
-
-                public const VALUES = $valuesAsString;               
-            EOT;
-
-        $namesAsString = "[" . $namesOnly . "]";
-        $phpcode .= <<<EOT
-
-                public const NAMES = $namesAsString;               
-            EOT;
-
-        return $phpcode;
-    }
-
-    protected function generateConstructor(string $phpcode): string
-    {
-        $phpcode .= <<<'EOT'
-                
+        $phpcode = <<<'EOT'
+        
+          
             private string $name;
             private string $value;
                 
@@ -113,9 +113,9 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    protected function generateMethods(string $phpcode): string
+    protected function generateMethods(): string
     {
-        $phpcode .= PHP_EOL;
+        $phpcode = PHP_EOL;
         foreach ($this->values as $name => $value) {
             $phpcode .= <<<EOT
             
@@ -129,9 +129,9 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    protected function generateFromNameFromValue(string $phpcode): string
+    protected function generateFromNameFromValue(): string
     {
-        $phpcode .= <<<'EOT'
+        $phpcode = <<<'EOT'
         
             public static function fromValue(string $value): self
             {
@@ -157,9 +157,9 @@ class PhpLegacyEnumClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    protected function generateGenericFunctions(string $phpcode): string
+    protected function generateGenericFunctions(): string
     {
-        $phpcode .= <<<'EOT'
+        $phpcode = <<<'EOT'
         
             public function equals(?self $other): bool
             {
