@@ -1,13 +1,13 @@
 <?php
 
-namespace Vog\Test\Integration\Generator;
+namespace Vog\Test\Unit\Generator;
 
-use Integration\IntegrationTestCase;
 use Vog\Generator\Php\Interfaces\ValueObjectInterfaceGenerator;
+use Vog\Test\Unit\UnitTestCase;
 use Vog\ValueObjects\VogDefinition;
 use Vog\ValueObjects\VogTypes;
 
-class ValueObjectInterfaceGeneratorTest extends IntegrationTestCase
+class ValueObjectInterfaceGeneratorTest extends UnitTestCase
 {
     public function testGenerateValueObjectInterface()
     {
@@ -26,6 +26,7 @@ class ValueObjectInterfaceGeneratorTest extends IntegrationTestCase
             'ParentClass',
             null,
             true,
+            null,
             null
         );
         $config = $this->getDummyConfiguration();

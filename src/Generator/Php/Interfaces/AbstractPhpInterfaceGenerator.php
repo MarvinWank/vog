@@ -17,19 +17,17 @@ abstract class AbstractPhpInterfaceGenerator extends AbstractPhpGenerator
 
     abstract public function getCode(): string;
 
-    protected function getHeader(): string
+    protected function getHeader(string $name, array $implements = []): string
     {
-        $phpcode = $this->phpService->generatePhpClassHeader(
-            $this->name,
+        return $this->phpService->generatePhpClassHeader(
+            $name,
             $this->getNamespace(),
             [],
             false,
             null,
-            $this->implements,
+            $implements,
             'interface'
         );
-
-        return $phpcode;
     }
 
 }

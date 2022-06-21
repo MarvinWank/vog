@@ -41,7 +41,7 @@ class GeneratorFactory
             case VogTypes::valueObject():
                 return new PhpValueObjectClassGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
             case VogTypes::set():
-                return new PhpSetClassGenerator($definition, $generatorOptions, $rootNamespace);
+                return new PhpSetClassGenerator($definition, $generatorOptions, $rootNamespace, $rootDir);
             default:
                 throw new LogicException("Switch not exhaustive");
         }

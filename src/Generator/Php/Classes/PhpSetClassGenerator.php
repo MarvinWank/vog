@@ -25,11 +25,11 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
             $this->extends,
             $this->implements
         );
-        $phpcode = $this->generateConstructor($phpcode);
-        $phpcode = $this->generateFromArray($phpcode);
-        $phpcode = $this->generateToArray($phpcode);
-        $phpcode = $this->generateGenericFunctions($phpcode);
-        $phpcode = $this->closeRootScope($phpcode);
+        $phpcode .= $this->generateConstructor();
+        $phpcode .= $this->generateFromArray();
+        $phpcode .= $this->generateToArray();
+        $phpcode .= $this->generateGenericFunctions();
+        $phpcode .= $this->closeRootScope();
 
         return $phpcode;
     }

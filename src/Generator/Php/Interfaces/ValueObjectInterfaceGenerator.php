@@ -12,14 +12,12 @@ class ValueObjectInterfaceGenerator extends AbstractPhpInterfaceGenerator
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNameSpace, string $rootDir)
     {
         parent::__construct($definition, $generatorOptions, $rootNameSpace, $rootDir);
-
-        $this->name = self::INTERFACE_NAME;
     }
 
     public function getCode(): string
     {
-        $phpCode = $this->getHeader();
-        $phpCode .= $this->phpService->getValueObjectInterfaceMethods();
+        $phpCode = $this->getHeader(self::INTERFACE_NAME);
+        $phpCode .= $this->phpService->getInterfaceMethods();
         $phpCode .= $this->closeRootScope();
 
         return $phpCode;

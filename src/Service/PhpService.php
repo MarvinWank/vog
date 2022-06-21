@@ -377,7 +377,7 @@ class PhpService
         return $phpcode;
     }
 
-    public function getValueObjectInterfaceMethods(): string
+    public function getInterfaceMethods(): string
     {
         return $this->templateEngine->replaceValues(
             self::TEMPLATE_DIR . '/PhpValueObjectInterfaceMethods.vtpl',
