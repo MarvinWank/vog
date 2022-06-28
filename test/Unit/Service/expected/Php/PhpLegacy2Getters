@@ -1,7 +1,7 @@
 
-    public function fooClass(): FooClass
+    public function foo(): FooClass
     {
-        return $this->fooClass;
+        return $this->foo;
     }
 
     public function name(): string

@@ -6,11 +6,11 @@
         }
 
         if (method_exists($value, 'toArray')) {
-             return $value->toArray();
+            return $value->toArray();
         }
 
         if (is_a($value, \DateTime::class, true) || is_a($value, \DateTimeImmutable::class, true)){
-              return $value->format('{{dateTimeFormat}}');
+            return $value->format('Y-m-d');
         }
 
         return (string) $value;

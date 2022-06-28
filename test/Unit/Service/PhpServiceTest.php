@@ -1,12 +1,13 @@
 <?php
 
-use Vog\Service\PhpService;
+use Vog\Service\Php\PhpService;
 use Vog\Test\Unit\UnitTestCase;
 use Vog\ValueObjects\TargetMode;
 
 class PhpServiceTest extends UnitTestCase
 {
     private PhpService $genericPhpHelper;
+    private const EXPECTED_DIR = __DIR__ . '/expected/Php';
 
     public function setUp(): void
     {
@@ -21,7 +22,7 @@ class PhpServiceTest extends UnitTestCase
             'testClass',
             'App\Test'
         );
-        $expectedHeader = file_get_contents(__DIR__ . '/SimplePhpHeder');
+        $expectedHeader = file_get_contents(self::EXPECTED_DIR . '/SimplePhpHeder');
 
         $this->assertEquals($expectedHeader, $phpHeader);
     }
@@ -36,11 +37,11 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateConstructor()
     {
         $constructorArguments = [
-          'FooClass' => 'fooClass',
-          'BarClass' => 'barClass'
+          'foo' => 'FooClass',
+          'bar' => 'BarClass'
         ];
         $constructor = $this->genericPhpHelper->generateConstructor($constructorArguments);
-        $expected = file_get_contents(__DIR__ . '/SimplePhpConstructor');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/SimplePhpConstructor');
 
         $this->assertEquals($expected, $constructor);
     }
@@ -48,8 +49,8 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateGettersPSR2()
     {
         $constructorArguments = [
-            'FooClass' => 'fooClass',
-            'string' => 'name'
+            'foo' => 'FooClass',
+            'name' => 'string'
         ];
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
@@ -58,14 +59,16 @@ class PhpServiceTest extends UnitTestCase
             $constructorArguments,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpPsr2Getters');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpPsr2Getters');
 
         $this->assertEquals($expected, $getters);
     }
 
     public function testGenerateGettersPSR2NoDataType()
     {
-        $constructorArguments = ['fooClass','name'];
+        $this->markTestIncomplete("move to Integration, Generator has to take care of values");
+
+        $constructorArguments = ['foo','name'];
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
@@ -73,7 +76,7 @@ class PhpServiceTest extends UnitTestCase
             $constructorArguments,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpPsr2GettersNoDataType');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpPsr2GettersNoDataType');
 
         $this->assertEquals($expected, $getters);
     }
@@ -81,8 +84,8 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateGettersLegacyMode()
     {
         $constructorArguments = [
-            'FooClass' => 'fooClass',
-            'string' => 'name'
+            'foo' => 'FooClass',
+            'name' => 'string'
         ];
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_FPP());
@@ -91,7 +94,7 @@ class PhpServiceTest extends UnitTestCase
             $constructorArguments,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpLegacy2Getters');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpLegacy2Getters');
 
         $this->assertEquals($expected, $getters);
     }
@@ -99,7 +102,7 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateToStringMethod()
     {
         $method = $this->genericPhpHelper->generateToStringMethod('id');
-        $expected = file_get_contents(__DIR__ . '/TestToStringMethod');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/TestToStringMethod');
 
         $this->assertEquals($expected, $method);
     }
@@ -107,7 +110,7 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateValueToArrayMethod()
     {
         $method = $this->genericPhpHelper->generateValueToArrayMethod('Y-m-d');
-        $expected = file_get_contents(__DIR__ . '/PhpTestGenerateValueToArray');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpTestGenerateValueToArray');
 
         $this->assertEquals($expected, $method);
     }
@@ -115,8 +118,8 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateSettersPsr2()
     {
         $values = [
-            'FooClass' => 'fooClass',
-            'string' => 'name'
+            'foo' => 'FooClass',
+            'name' => 'string'
         ];
 
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
@@ -126,13 +129,15 @@ class PhpServiceTest extends UnitTestCase
             $values,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpPsr2Setters');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpPsr2Setters');
 
         $this->assertEquals($expected, $setters);
     }
 
     public function testGenerateSettersPsr2NoDataType()
     {
+        $this->markTestIncomplete("move to Integration, Generator has to take care of values");
+
         $values = ['fooClass','name'];
 
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
@@ -142,7 +147,7 @@ class PhpServiceTest extends UnitTestCase
             $values,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpPsr2SettersNoDataType');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpPsr2SettersNoDataType');
 
         $this->assertEquals($expected, $setters);
     }
@@ -150,8 +155,8 @@ class PhpServiceTest extends UnitTestCase
     public function testGenerateSettersLegacy()
     {
         $values = [
-            'FooClass' => 'fooClass',
-            'string' => 'name'
+            'foo' => 'FooClass',
+            'name' => 'string'
         ];
 
         $generatorOptions = $this->getDummyConfiguration()->getGeneratorOptions();
@@ -161,12 +166,12 @@ class PhpServiceTest extends UnitTestCase
             $values,
             $generatorOptions
         );
-        $expected = file_get_contents(__DIR__ . '/PhpLegacySetters');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpLegacySetters');
 
         $this->assertEquals($expected, $setters);
     }
 
-    public function testGenerateFromArray()
+    public function testGenerateFromArrayWithMethodExistsCheck()
     {
         $values = [
             'root_path' => 'string',
@@ -175,7 +180,7 @@ class PhpServiceTest extends UnitTestCase
         ];
 
         $method = $this->genericPhpHelper->generateFromArray($values, 'Y-m-d');
-        $expected = file_get_contents(__DIR__ . '/PhpFromArray');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpFromArray');
 
         $this->assertEquals($expected, $method);
     }
@@ -206,7 +211,7 @@ class PhpServiceTest extends UnitTestCase
         $generatorOptions = $generatorOptions->withTarget(TargetMode::MODE_PSR2());
 
         $methods = $this->genericPhpHelper->generateWithMethods($values, $generatorOptions);
-        $expected = file_get_contents(__DIR__ . '/PhpPsr2WithMethods');
+        $expected = file_get_contents(self::EXPECTED_DIR . '/PhpPsr2WithMethods');
 
         $this->assertEquals($expected, $methods);
     }

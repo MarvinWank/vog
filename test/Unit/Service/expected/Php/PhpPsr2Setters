@@ -1,7 +1,7 @@
 
-    public function setFooClass(FooClass $fooClass): void
+    public function setFoo(FooClass $foo): void
     {
-        $this->fooClass = $fooClass;
+        $this->foo = $foo;
     }
 
     public function setName(string $name): void

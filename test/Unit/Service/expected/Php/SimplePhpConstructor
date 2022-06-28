@@ -1,0 +1,10 @@
+
+
+    public function __construct(
+        FooClass $foo,
+        BarClass $bar
+    )
+    {
+        $this->foo = $foo;
+        $this->bar = $bar;
+    }

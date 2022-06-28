@@ -1,0 +1,7 @@
+
+        if (is_string($array['{{name}}']) && method_exists({{dataType}}::class, 'fromName')) {
+            $array['{{name}}'] = {{dataType}}::fromName($array['{{name}}']);
+        }
+        if (is_array($array['{{name}}']) && method_exists({{dataType}}::class, 'fromArray')) {
+            $array['{{name}}'] = {{dataType}}::fromArray($array['{{name}}']);
+        }

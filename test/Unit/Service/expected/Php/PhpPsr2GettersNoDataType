@@ -1,7 +1,7 @@
 
     public function getFooClass()
     {
-        return $this->fooClass;
+        return $this->foo;
     }
 
     public function getName()

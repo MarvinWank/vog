@@ -1,8 +1,0 @@
-
-        if (isset($array['{{name}}']) && is_string($array['{{name}}']) && is_a({{dataType}}::class, Enum::class, true)) {
-            $array['{{name}}'] = {{dataType}}::fromName($array['{{name}}']);
-        }
-
-        if (isset($array['{{name}}']) && is_array($array['{{name}}'])) {
-            $array['{{name}}'] = {{dataType}}::fromArray($array['{{name}}']);
-        }

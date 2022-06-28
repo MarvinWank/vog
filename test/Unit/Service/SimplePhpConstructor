@@ -1,9 +1,0 @@
-
-
-    public function __construct (
-        FooClass $fooClass,
-        BarClass $barClass
-    ) {
-        $this->fooClass = $fooClass;
-        $this->barClass = $barClass;
-    }

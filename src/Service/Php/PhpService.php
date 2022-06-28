@@ -1,23 +1,17 @@
 <?php
 
-namespace Vog\Service;
+namespace Vog\Service\Php;
 
 use TemplateEngine\TemplateEngine;
+use Vog\Service\Service;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-class PhpService
+class PhpService extends Service
 {
-    private TemplateEngine $templateEngine;
-
-    private const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
-    private const TEMPLATE_DIR = __DIR__ . '/../../templates/';
-
-    public function __construct()
-    {
-        $this->templateEngine = new TemplateEngine();
-    }
+    protected const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
+    protected const TEMPLATE_DIR =  parent::TEMPLATE_DIR . 'Php/';
 
     public function generatePhpClassHeader(
         string $name,
@@ -175,7 +169,7 @@ class PhpService
     public function generateSetters(array $values, GeneratorOptions $generatorOptions): string
     {
         $phpcode = "";
-        foreach ($values as $dataType => $name) {
+        foreach ($values as $name => $dataType) {
             $functionName = $this->getSetter($name, $generatorOptions);
 
             if (is_numeric($dataType)) {
@@ -242,10 +236,10 @@ class PhpService
     public function generateFromArray(array $values, string $dateTimeFormat): string
     {
         $phpcode = '
-
     public static function fromArray(array $array): self
     {';
 
+        //TODO: move loop to generator
         foreach ($values as $name => $datatype) {
             if (!$this->isDataTypeNullable($datatype)) {
                 $phpcode .= <<<EOT
@@ -263,7 +257,9 @@ class PhpService
                     'format' => $dateTimeFormat,
                     'dateObject' => $datatype
                 ]);
-            } elseif (!$this->isPrimitivePhpType($datatype)) {
+            }
+            //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
+            elseif (!$this->isPrimitivePhpType($datatype)) {
                 $phpcode .= $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'PhpFromArrayForVog.vtpl', [
                     'name' => $name,
                     'dataType' => $datatype
@@ -289,7 +285,6 @@ class PhpService
         
                 );
             }
-        
         EOT;
 
         return $phpcode;

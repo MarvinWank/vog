@@ -7,7 +7,7 @@ use Vog\ValueObjects\VogDefinition;
 
 class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
-    private string $itemType = '';
+    private string $itemType;
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
@@ -34,17 +34,9 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    /**
-     * @param string $itemType
-     */
-    public function setItemType(string $itemType): void
+    protected function generateConstructor(): string
     {
-        $this->itemType = $itemType;
-    }
-
-    protected function generateConstructor(string $phpcode): string
-    {
-        $phpcode .= <<<'EOT'
+        return <<<'EOT'
         
     private array $items;
     private int $position;
@@ -55,12 +47,11 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
         $this->items = $items;
     }
 EOT;
-        return $phpcode;
     }
 
-    protected function generateToArray(string $phpcode): string
+    protected function generateToArray(): string
     {
-        $phpcode .= <<<EOT
+        $phpcode = <<<EOT
         
             public function toArray() {
         EOT;
