@@ -1,0 +1,5 @@
+
+    public function toArray()
+    {
+        return $this->items;
+    }

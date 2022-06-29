@@ -1,0 +1,19 @@
+
+    public function toArray()
+    {
+        $return = [];
+
+        foreach($this->items as $item) {
+            if(method_exists($item, 'toArray') {
+                $return[] = $item->toArray();
+                continue;
+            }
+            if (method_exists($item, 'toString')) {
+                $return[] = $item->toString();
+                continue;
+            }
+            $return[] = $item;
+        }
+
+        return $return;
+    }

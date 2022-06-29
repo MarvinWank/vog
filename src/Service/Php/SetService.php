@@ -6,52 +6,23 @@ use Vog\ValueObjects\GeneratorOptions;
 
 class SetService extends AbstractPhpService
 {
+    protected const TEMPLATE_DIR = parent::TEMPLATE_DIR . 'Set/';
+
     //TODO: Make controller optionally public --> Generator
     public function generateConstructor(): string
     {
-        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . '/Set/Constructor.vtpl');
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'Constructor.vtpl');
     }
 
 
     public function generateToArray(string $itemType): string
     {
-        $phpcode = <<<EOT
-        
-            public function toArray() {
-        EOT;
-
         //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
+        //TODO: This if condition is also the generators job
         if (!in_array($itemType, parent::PHP_PRIMITIVE_TYPES)) {
-            $phpcode .= <<<EOT
-                
-                        \$return = [];
-                        foreach (\$this->items as \$item) {
-                            if(method_exists(\$item, 'toArray')) {
-                                \$return[] = \$item->toArray();
-                            }
-                            
-                            else if(method_exists(\$item, 'toString')) {
-                                \$return[] = \$item->toString();
-                            }
-                            
-                            else{
-                                \$return[] = \$item;
-                            }
-                        }
-                        
-                        return \$return;
-                EOT;
-        } else {
-            $phpcode .= <<<EOT
-                
-                        return \$this->items;
-                EOT;
+            return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'ToArrayNonPrimitive.vtpl');
         }
-
-        $phpcode .= <<<EOT
-        
-            }
-        EOT;
-        return $phpcode;
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'ToArrayPrimitive.vtpl');
     }
+
 }
