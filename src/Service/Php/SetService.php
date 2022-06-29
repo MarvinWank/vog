@@ -43,4 +43,11 @@ class SetService extends AbstractPhpService
             'setName' => $setName
         ]);
     }
+
+    public function generateGenericFunctions(string $itemType): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'GenericFunctions.vtpl', [
+           'itemType' => $itemType
+        ]);
+    }
 }

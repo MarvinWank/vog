@@ -1,0 +1,44 @@
+    
+    public function equals(?self $other): bool
+    {
+        $ref = $this->toArray();
+        $val = $other->toArray();
+        
+        return ($ref === $val);
+    }
+    
+    public function contains(FooClass $item): bool {
+        return array_search($item, $this->items) !== false;
+    }
+    
+    public function count(): int {
+        return count($this->items);
+    }
+    
+    public function offsetExists($offset) {
+        return isset($this->items[$offset]);
+    }
+    
+    public function offsetGet($offset) {
+        return $this->items[$offset];
+    }
+    
+    public function current() {
+        return $this->items[$this->position];
+    }
+    
+    public function rewind() {
+        $this->position = 0;
+    }
+    
+    public function key() {
+        return $this->position;
+    }
+    
+    public function next() {
+        ++$this->position;
+    }
+    
+    public function valid() {
+        return isset($this->items[$this->position]);
+    }

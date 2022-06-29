@@ -34,9 +34,9 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
             $this->implements
         );
         $phpcode .= $this->generateConstructor();
-        $phpcode .= $this->generateFromArray($this->name);
+        $phpcode .= $this->generateFromArray($this->name, $this->itemType);
         $phpcode .= $this->generateToArray($this->itemType);
-        $phpcode .= $this->generateGenericFunctions();
+        $phpcode .= $this->generateGenericFunctions($this->itemType);
         $phpcode .= $this->closeRootScope();
 
         return $phpcode;
@@ -56,106 +56,23 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         return $this->setService->generateToArrayNonPrimitive();
     }
 
-   protected function generateFromArray(string $name): string
+   protected function generateFromArray(string $name, string $itemType): string
     {
-        $phpcode = "";
-
-        if (empty($this->itemType)) {
+        if (empty($itemType)) {
             return $this->setService->generateFromArrayForUnspecifiedType();
-        } else if ($this->isPrimitiveType($this->itemType)) {
-            return $this->setService->generateFromArrayForPrimitiveType($this->itemType, $name);
+        } else if ($this->isPrimitiveType($itemType)) {
+            return $this->setService->generateFromArrayForPrimitiveType($itemType, $name);
         }
-        else {
-            $phpcode .= <<<EOT
-                public static function fromArray(array \$items) {
-                    foreach (\$items as \$key => \$item) {
-                        \$type = gettype(\$item);
-                        switch (\$type) {
-                            case 'object':
-                                if (!\$item instanceof $this->itemType){
-                                    throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key); 
-                                }    
-                                break;
-                            case 'array':
-                                if(is_a($this->itemType::class, ValueObject::class, true) || is_a($this->itemType::class, Set::class, true)) {
-                                    \$items[\$key] = $this->itemType::fromArray(\$item);
-                                } else {
-                                    throw new UnexpectedValueException('fromArray can not create $this->itemType from array on index ' . \$key);
-                                }
-                                break;    
-                            case 'string':
-                                if(is_a($this->itemType::class, Enum::class, true)) {
-                                    \$items[\$key] = $this->itemType::fromName(\$item);
-                                } else {
-                                    throw new UnexpectedValueException('fromArray can not create $this->itemType from string on index ' . \$key);
-                                }
-                                break;    
-                            default:
-                                if (\$type !== '$this->itemType') {
-                                    throw new UnexpectedValueException('fromArray expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
-                                }
-                                break;
-                        }
-                        
-                    }
-                    return new self(\$items);
-                }
-            EOT;
-        }
-
-        return $phpcode;
+        return $this->setService->generateFromArrayForNonPrimitiveType($itemType, $name);
     }
 
-    protected function generateGenericFunctions(string $phpcode): string
+    protected function generateGenericFunctions(string $itemType): string
     {
-        $phpcode .= <<<EOT
+        return $this->setService->generateGenericFunctions($itemType);
+    }
 
-    public function equals(?self \$other): bool
-    {
-        \$ref = \$this->toArray();
-        \$val = \$other->toArray();
-                
-        return (\$ref === \$val);
-    }    
+    protected function generateMutability(){
     
-    public function contains($this->itemType \$item): bool {
-        return array_search(\$item, \$this->items) !== false;
-    }
-    
-    public function count(): int
-    {
-        return count(\$this->items);
-    }
-    
-        public function offsetExists(\$offset) {
-        return isset(\$this->items[\$offset]);
-    }
-
-    public function offsetGet(\$offset) {
-        return \$this->items[\$offset];
-    }
-
-    public function current() {
-        return \$this->items[\$this->position];
-    }
-
-    public function rewind() {
-        \$this->position = 0;
-    }
-
-    public function key() {
-        return \$this->position;
-    }
-
-    public function next() {
-        ++\$this->position;
-    }
-
-    public function valid() {
-        return isset(\$this->items[\$this->position]);
-    }
-    
-EOT;
         if (!$this->isMutable()) {
             $phpcode .= <<< EOT
 
