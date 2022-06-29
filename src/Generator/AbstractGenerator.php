@@ -12,7 +12,6 @@ abstract class AbstractGenerator
 
     protected const UNEXPECTED_VALUE_EXCEPTION = 'UnexpectedValueException';
     protected const INVALID_ARGUMENT_EXCEPTION = 'InvalidArgumentException';
-    protected const BAD_METHOD_CALL_EXCEPTION = 'BadMethodCallException';
 
     protected string $name;
     protected string $rootDirectory;

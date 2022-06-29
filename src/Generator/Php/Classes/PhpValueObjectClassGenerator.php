@@ -9,7 +9,7 @@ use Vog\Exception\VogException;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\ToArrayMode;
 
-class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
+final class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
 {
     private string $stringValue;
 

@@ -28,4 +28,19 @@ class SetService extends AbstractPhpService
         return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'FromArrayForUnspecifiedType.vtpl');
     }
 
+    public function generateFromArrayForPrimitiveType(string $itemType, string $setName): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'FromArrayForPrimitive.vtpl', [
+            'itemType' => $itemType,
+            'setName' => $setName
+        ]);
+    }
+
+    public function generateFromArrayForNonPrimitiveType(string $itemType, string $setName): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'FromArrayForNonPrimitiveType.vtpl', [
+            'itemType' => $itemType,
+            'setName' => $setName
+        ]);
+    }
 }

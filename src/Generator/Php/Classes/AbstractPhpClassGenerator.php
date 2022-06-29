@@ -52,7 +52,7 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpVogDefinitionObjectG
         return lcfirst(str_replace('_', '', ucwords($string, '_')));
     }
 
-    protected function isPrimitivePhpType(string $type): bool
+    protected function isPrimitiveType(string $type): bool
     {
         return in_array($type, self::PHP_PRIMITIVE_TYPES);
     }

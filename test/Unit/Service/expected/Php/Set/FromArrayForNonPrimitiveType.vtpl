@@ -1,0 +1,33 @@
+    
+    public static function fromArray(array $items) {
+        foreach ($items as $key => $item) {
+            $type = gettype($item);
+            switch ($type) {
+                case 'object':
+                    if (!$item instanceof FooClass){
+                        throw new UnexpectedValueException('FooSet expects items of FooClass but has ' . $type . ' on index ' . $key);
+                    }
+                    break;
+                case 'array':
+                    if (method_exists(FooClass, 'fromArray')) {
+                        $items[$key] = FooClass::fromArray($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create FooClass from array on index ' . $key);
+                    }
+                    break;
+                case 'string':
+                    if (method_exists(FooClass, 'fromName')) {
+                        $items[$key] = FooClass::fromName($item);
+                    } else {
+                        throw new UnexpectedValueException('fromArray can not create FooClass from string on index ' . $key . ', value: ' . $items[$key]);
+                    }
+                    break;
+                default:
+                    if ($type !== 'FooClass') {
+                        throw new UnexpectedValueException('fromArray expects items of FooClass but has ' . $type . ' on index ' . $key);
+                    }
+                    break;
+            }
+        }
+        return new self($items);
+    }

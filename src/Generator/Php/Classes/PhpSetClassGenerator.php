@@ -7,7 +7,7 @@ use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 
 //TODO: Support for Union Types
-class PhpSetClassGenerator extends AbstractPhpClassGenerator
+final class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
     private SetService $setService;
@@ -34,7 +34,7 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
             $this->implements
         );
         $phpcode .= $this->generateConstructor();
-        $phpcode .= $this->generateFromArray();
+        $phpcode .= $this->generateFromArray($this->name);
         $phpcode .= $this->generateToArray($this->itemType);
         $phpcode .= $this->generateGenericFunctions();
         $phpcode .= $this->closeRootScope();
@@ -50,32 +50,20 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
     //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
     protected function generateToArray(string $itemType): string
     {
-        if ($this->isPrimitivePhpType($itemType)){
+        if ($this->isPrimitiveType($itemType)){
             return $this->setService->generateToArrayPrimitive();
         }
         return $this->setService->generateToArrayNonPrimitive();
     }
 
-    protected function generateFromArray(string $itemType): string
+   protected function generateFromArray(string $name): string
     {
         $phpcode = "";
 
         if (empty($this->itemType)) {
             return $this->setService->generateFromArrayForUnspecifiedType();
-        } else if ($this->phpService->isPrimitivePhpType($this->itemType)) {
-            $phpcode .= <<<EOT
-    public static function fromArray(array \$items) {
-        foreach (\$items as \$key => \$item) {
-            \$type = gettype(\$item);
-            if(\$type !== '$this->itemType'){
-                throw new UnexpectedValueException('array expects items of $this->itemType but has ' . \$type . ' on index ' . \$key);
-            }  
-        }
-        return new self(\$items);
-    }
-    
-EOT;
-
+        } else if ($this->isPrimitiveType($this->itemType)) {
+            return $this->setService->generateFromArrayForPrimitiveType($this->itemType, $name);
         }
         else {
             $phpcode .= <<<EOT
@@ -187,7 +175,7 @@ EOT;
     
 EOT;
 
-            if (!$this->isPrimitivePhpType($this->itemType)){
+            if (!$this->isPrimitiveType($this->itemType)){
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
@@ -236,7 +224,7 @@ EOT;
     }
     
 EOT;
-            if (!$this->isPrimitivePhpType($this->itemType)){
+            if (!$this->isPrimitiveType($this->itemType)){
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {

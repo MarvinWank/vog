@@ -1,0 +1,10 @@
+
+    public static function fromArray(array $items) {
+        foreach ($items as $key => $item) {
+            $type = gettype($item);
+            if ($type !== {{itemType}}) {
+                throw new UnexpectedValueException('{{setName}} expects items of $this->itemType but has ' . $type . ' on index ' . $key);
+            }
+        }
+        return new self($items);
+    }

@@ -2,7 +2,7 @@
 
 namespace Vog\Generator\Php\Classes;
 
-class PhpEnumClassGenerator
+final class PhpEnumClassGenerator
 {
 
 }
