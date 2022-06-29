@@ -11,6 +11,7 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
     private SetService $setService;
+    private string $itemType;
 
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
@@ -18,6 +19,8 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
         parent::__construct($definition, $generatorOptions, $rootNamespace, $rootDir);
 
         $this->setService = new SetService();
+
+        $this->itemType = $definition->itemType();
     }
 
     public function getCode(): string
@@ -32,7 +35,7 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
         );
         $phpcode .= $this->generateConstructor();
         $phpcode .= $this->generateFromArray();
-        $phpcode .= $this->generateToArray();
+        $phpcode .= $this->generateToArray($this->itemType);
         $phpcode .= $this->generateGenericFunctions();
         $phpcode .= $this->closeRootScope();
 
@@ -44,22 +47,22 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
         return $this->phpService->generateConstructor([]);
     }
 
+    //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
     protected function generateToArray(string $itemType): string
     {
-        return $this->setService->generateToArray($itemType);
+        if ($this->isPrimitivePhpType($itemType)){
+            return $this->setService->generateToArrayPrimitive();
+        }
+        return $this->setService->generateToArrayNonPrimitive();
     }
 
-    protected function generateFromArray(): string
+    protected function generateFromArray(string $itemType): string
     {
         $phpcode = "";
 
         if (empty($this->itemType)) {
-            $phpcode .= <<<EOT
-                public static function fromArray(array \$items) {
-                    return new self(\$items);
-                }
-            EOT;
-        } else if ($this->isPrimitivePhpType($this->itemType)) {
+            return $this->setService->generateFromArrayForUnspecifiedType();
+        } else if ($this->phpService->isPrimitivePhpType($this->itemType)) {
             $phpcode .= <<<EOT
     public static function fromArray(array \$items) {
         foreach (\$items as \$key => \$item) {

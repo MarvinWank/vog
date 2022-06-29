@@ -13,6 +13,8 @@ use Vog\ValueObjects\VogDefinition;
 
 abstract class AbstractPhpClassGenerator extends AbstractPhpVogDefinitionObjectGenerator
 {
+    protected const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
+
     protected ?string $extends;
     protected ?string $dateTimeFormat;
     protected bool $isFinal;
@@ -50,35 +52,9 @@ abstract class AbstractPhpClassGenerator extends AbstractPhpVogDefinitionObjectG
         return lcfirst(str_replace('_', '', ucwords($string, '_')));
     }
 
-
-    public function getExtends(): string
+    protected function isPrimitivePhpType(string $type): bool
     {
-        return $this->extends;
-    }
-
-    public function setExtends(string $extends): void
-    {
-        $this->extends = $extends;
-    }
-
-    public function isIsFinal(): bool
-    {
-        return $this->isFinal;
-    }
-
-    public function setIsFinal(bool $isFinal): void
-    {
-        $this->isFinal = $isFinal;
-    }
-
-    public function isMutable(): bool
-    {
-        return $this->isMutable;
-    }
-
-    public function setIsMutable(bool $isMutable): void
-    {
-        $this->isMutable = $isMutable;
+        return in_array($type, self::PHP_PRIMITIVE_TYPES);
     }
 
 }

@@ -2,8 +2,6 @@
 
 namespace Vog\Service\Php;
 
-use Vog\ValueObjects\GeneratorOptions;
-
 class SetService extends AbstractPhpService
 {
     protected const TEMPLATE_DIR = parent::TEMPLATE_DIR . 'Set/';
@@ -15,14 +13,19 @@ class SetService extends AbstractPhpService
     }
 
 
-    public function generateToArray(string $itemType): string
+    public function generateToArrayNonPrimitive(): string
     {
-        //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
-        //TODO: This if condition is also the generators job
-        if (!in_array($itemType, parent::PHP_PRIMITIVE_TYPES)) {
-            return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'ToArrayNonPrimitive.vtpl');
-        }
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'ToArrayNonPrimitive.vtpl');
+    }
+
+    public function generateToArrayPrimitive(): string
+    {
         return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'ToArrayPrimitive.vtpl');
+    }
+
+    public function generateFromArrayForUnspecifiedType(): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'FromArrayForUnspecifiedType.vtpl');
     }
 
 }

@@ -27,7 +27,7 @@ class PhpSetServiceTest extends UnitTestCase
 
     public function testGenerateToArrayWithNonPrimitiveType()
     {
-        $actual = $this->setService->generateToArray('fooClass');
+        $actual = $this->setService->generateToArrayNonPrimitive();
         $excpected = file_get_contents(self::EXPECTED_DIR . 'ToArrayNonPrimitive.vtpl');
 
         $this->assertEquals($excpected, $actual);
@@ -35,10 +35,18 @@ class PhpSetServiceTest extends UnitTestCase
 
     public function testGenerateToArrayWithPrimitiveType()
     {
-        $actual = $this->setService->generateToArray('int');
+        $actual = $this->setService->generateToArrayPrimitive();
         $excpected = file_get_contents(self::EXPECTED_DIR . 'ToArrayPrimitive.vtpl');
 
         $this->assertEquals($excpected, $actual);
+    }
+    
+    public function testGenerateFromArrayForUnspecifiedType()
+    {
+        $actual = $this->setService->generateFromArrayForUnspecifiedType();
+        $expected = file_get_contents(self::EXPECTED_DIR . 'FromArrayForUnspecifiedType.vtpl');
+
+        $this->assertEquals($expected, $actual);
     }
 
 }

@@ -401,9 +401,4 @@ class ValueObjectService extends AbstractPhpService
     {
         return str_replace('?', '', $datatype);
     }
-
-    private function isPrimitivePhpType(string $type): bool
-    {
-        return in_array($type, self::PHP_PRIMITIVE_TYPES);
-    }
 }
