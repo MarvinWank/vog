@@ -1,19 +1,21 @@
 <?php
 
-use Vog\Service\Php\PhpService;
+namespace Vog\Test\Unit\Service;
+
+use Vog\Service\Php\ValueObjectService;
 use Vog\Test\Unit\UnitTestCase;
 use Vog\ValueObjects\TargetMode;
 
 class PhpServiceTest extends UnitTestCase
 {
-    private PhpService $genericPhpHelper;
+    private ValueObjectService $genericPhpHelper;
     private const EXPECTED_DIR = __DIR__ . '/expected/Php';
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->genericPhpHelper = new PhpService();
+        $this->genericPhpHelper = new ValueObjectService();
     }
 
     public function testGenerateGenericPhpHeaderWithSimpleHeader()

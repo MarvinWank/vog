@@ -1,0 +1,8 @@
+
+    private int $position = 0;
+    private array $items;
+
+    private function __construct(array $items = [])
+    {
+        $this->items = $items;
+    }

@@ -8,11 +8,9 @@ use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\TargetMode;
 use Vog\ValueObjects\ToArrayMode;
 
-class PhpService extends Service
+//TODO: refactor, many methods actually belong in other services
+class ValueObjectService extends AbstractPhpService
 {
-    protected const PHP_PRIMITIVE_TYPES = ["", "string", "?string", "int", "?int", "float", "?float", "bool", "?bool", "array", "?array"];
-    protected const TEMPLATE_DIR =  parent::TEMPLATE_DIR . 'Php/';
-
     public function generatePhpClassHeader(
         string $name,
         string $namespace,

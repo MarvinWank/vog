@@ -13,8 +13,6 @@ use Vog\ValueObjects\VogDefinition;
 
 abstract class AbstractPhpClassGenerator extends AbstractPhpVogDefinitionObjectGenerator
 {
-
-
     protected ?string $extends;
     protected ?string $dateTimeFormat;
     protected bool $isFinal;

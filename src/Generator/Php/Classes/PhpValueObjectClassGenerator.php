@@ -106,7 +106,7 @@ class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
         return $phpcode;
     }
 
-    private function generateConstructor(array $values): string
+    protected function generateConstructor(array $values): string
     {
         return $this->phpService->generateConstructor($values);
     }
@@ -121,7 +121,7 @@ class PhpValueObjectClassGenerator extends AbstractPhpClassGenerator
         return $this->phpService->generateSetters($values, $generatorOptions);
     }
 
-    private function generateFromArray(array $values, string $dateTimeFormat): string
+    protected function generateFromArray(array $values, string $dateTimeFormat): string
     {
         return $this->phpService->generateFromArray($values, $dateTimeFormat);
     }

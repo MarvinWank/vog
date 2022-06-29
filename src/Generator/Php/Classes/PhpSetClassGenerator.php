@@ -2,17 +2,22 @@
 
 namespace Vog\Generator\Php\Classes;
 
+use Vog\Service\Php\SetService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 
+//TODO: Support for Union Types
 class PhpSetClassGenerator extends AbstractPhpClassGenerator
 {
-    private string $itemType;
     protected array $implements = ['Set', '\Countable', '\ArrayAccess', '\Iterator'];
+    private SetService $setService;
+
 
     public function __construct(VogDefinition $definition, GeneratorOptions $generatorOptions, string $rootNamespace, string $rootDir)
     {
         parent::__construct($definition, $generatorOptions, $rootNamespace, $rootDir);
+
+        $this->setService = new SetService();
     }
 
     public function getCode(): string
@@ -36,63 +41,18 @@ class PhpSetClassGenerator extends AbstractPhpClassGenerator
 
     protected function generateConstructor(): string
     {
-        return <<<'EOT'
-        
-    private array $items;
-    private int $position;
-        
-    private function __construct(array $items = [])
-    {
-        $this->position = 0;
-        $this->items = $items;
-    }
-EOT;
+        return $this->phpService->generateConstructor([]);
     }
 
-    protected function generateToArray(): string
+    protected function generateToArray(string $itemType): string
     {
-        $phpcode = <<<EOT
-        
-            public function toArray() {
-        EOT;
-
-
-        if (!in_array($this->itemType, parent::PHP_PRIMITIVE_TYPES)) {
-            $phpcode .= <<<EOT
-                
-                        \$return = [];
-                        foreach (\$this->items as \$item) {
-                            if(is_a($this->itemType::class, ValueObject::class, true) || is_a($this->itemType::class, Set::class, true)) {
-                                \$return[] = \$item->toArray();
-                            }
-                            
-                            else if(is_a($this->itemType::class, Enum::class, true)) {
-                                \$return[] = \$item->toString();
-                            }
-                            
-                            else{
-                                \$return[] = \$item;
-                            }
-                        }
-                        
-                        return \$return;
-                EOT;
-        } else {
-            $phpcode .= <<<EOT
-                
-                        return \$this->items;
-                EOT;
-        }
-
-        $phpcode .= <<<EOT
-        
-            }
-        EOT;
-        return $phpcode;
+        return $this->setService->generateToArray($itemType);
     }
 
-    protected function generateFromArray(string $phpcode): string
+    protected function generateFromArray(): string
     {
+        $phpcode = "";
+
         if (empty($this->itemType)) {
             $phpcode .= <<<EOT
                 public static function fromArray(array \$items) {

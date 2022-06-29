@@ -4,13 +4,13 @@ namespace Vog\Generator\Php;
 
 use Vog\Commands\Generate\AbstractGenerator;
 use Vog\Exception\VogException;
-use Vog\Service\PhpService;
+use Vog\Service\Php\ValueObjectService;
 use Vog\ValueObjects\GeneratorOptions;
 use Vog\ValueObjects\VogDefinition;
 
 abstract class AbstractPhpGenerator extends AbstractGenerator
 {
-    protected PhpService $phpService;
+    protected ValueObjectService $phpService;
 
     protected string $rootNamespace;
     protected array $implements = [];
@@ -22,7 +22,8 @@ abstract class AbstractPhpGenerator extends AbstractGenerator
         $this->rootNamespace = $rootNamespace;
         $this->implements = $definition->implements() ?? [];
 
-        $this->phpService = new PhpService();
+        //TODO: From Factory
+        $this->phpService = new ValueObjectService();
     }
 
     public function getAbsoluteFilepath(): string

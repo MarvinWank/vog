@@ -4,7 +4,8 @@ namespace TemplateEngine;
 
 class TemplateEngine
 {
-    public function replaceValues(string $target, array $findReplaceMap): string
+    // find => replace
+    public function replaceValues(string $target, array $findReplaceMap = []): string
     {
         $file = file_get_contents($target);
         $result = $file;
