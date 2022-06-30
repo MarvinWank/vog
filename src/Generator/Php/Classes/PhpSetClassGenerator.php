@@ -88,31 +88,10 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         } else {
             $phpcode .= $this->setService->generateMutableAddFunction($itemType);
             if (!$this->isPrimitiveType($this->itemType)) {
-                $phpcode .= <<< EOT
-
-    public function remove($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
-            unset(\$this->items[\$key]);
-        }
-        
-        \$this->items = array_values(\$this->items);
-        return \$this;
-    }
-EOT;
-            } else {
-                $phpcode .= <<< EOT
-
-    public function remove($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        if((\$key = array_search(\$item, \$values)) !== false) {
-            unset(\$this->items[\$key]);
-        }
-                
-        \$this->items = array_values(\$this->items);
-        return \$this;
-    }
-EOT;
+                $phpcode .= $this->setService->generateMutableRemoveForNonPrimitiveType();
+            }
+            else {
+                $phpcode .= $this->setService->generateMutableRemoveForPrimitiveType();
             }
         }
 
