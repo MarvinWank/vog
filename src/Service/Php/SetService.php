@@ -71,4 +71,25 @@ class SetService extends AbstractPhpService
             'arraySearchFirstParam' => '$item'
         ]);
     }
+
+    public function generateMutableAddFunction(string $itemType): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'MutableAddFunction.vtpl', [
+           'itemType' => $itemType
+        ]);
+    }
+
+    public function generateMutableRemoveForNonPrimitiveType(): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+            'arraySearchFirstParam' => '$item->toArray()'
+        ]);
+    }
+
+    public function generateMutableRemoveForPrimitiveType(): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+            'arraySearchFirstParam' => '$item'
+        ]);
+    }
 }

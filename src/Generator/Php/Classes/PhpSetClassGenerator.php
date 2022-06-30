@@ -76,7 +76,7 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
     {
         $phpcode = "";
 
-        if ($isMutable) {
+        if (!$isMutable) {
             $phpcode .= $this->setService->generateAddFunction($itemType);
 
             //TODO: Rethink $item->toArray() approach without further check
@@ -85,29 +85,8 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
             } else {
                 $phpcode .= $this->setService->generateRemoveForPrimitiveType();
             }
-        }
-        else {
-            $phpcode .= <<< EOT
-
-    public function add($this->itemType \$item): self {
-        array_push(\$this->items,\$item);
-        return \$this;
-    }
-
-    public function offsetSet(\$offset, \$value) {
-        if (empty(\$offset)) {
-            array_push(\$this->items, \$value);
         } else {
-            \$this->items[\$offset] = \$value;
-        }
-    }
-
-    public function offsetUnset(\$offset) {
-        unset(\$this->items[\$offset]);
-        \$this->items = array_values(\$this->items);
-    }
-    
-EOT;
+            $phpcode .= $this->setService->generateMutableAddFunction($itemType);
             if (!$this->isPrimitiveType($this->itemType)) {
                 $phpcode .= <<< EOT
 

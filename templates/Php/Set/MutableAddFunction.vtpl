@@ -1,0 +1,21 @@
+    
+    public function add({{itemType}} $item): self
+    {
+        array_push($this->items, $item);
+        return $this;
+    }
+    
+    public function offsetSet($offset, $value)
+    {
+        if (empty($offset)) {
+            array_push($this->items, $value);
+        } else {
+            $this->items[$offset] = $value;
+        }
+    }
+    
+    public function offsetUnset($offset)
+    {
+        unset($this->items[$offset]);
+        $this->items = array_values($this->items);
+    }

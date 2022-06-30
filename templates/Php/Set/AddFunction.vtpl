@@ -1,14 +1,17 @@
 
-    public function add({{itemType}} $item): self {
+    public function add({{itemType}} $item): self
+    {
         $values = $this->toArray();
         $values[] = $item;
         return self::fromArray($values);
     }
     
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
     }
     
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
     }
