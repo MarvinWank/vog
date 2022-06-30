@@ -1,0 +1,10 @@
+
+    public function remove($this->itemType $item): self {
+        $values = $this->toArray();
+        if (($key = array_search($item->toArray(), $values)) !== false) {
+            unset($values[$key]);
+        }
+        $values = array_values($values);
+
+        return self::fromArray($values);
+    }

@@ -57,4 +57,18 @@ class SetService extends AbstractPhpService
             'itemType' => $itemType
         ]);
     }
+
+    public function generateRemoveForNonPrimitiveType(): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+            'arraySearchFirstParam' => '$item->toArray()'
+        ]);
+    }
+
+    public function generateRemoveForPrimitiveType(): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+            'arraySearchFirstParam' => '$item'
+        ]);
+    }
 }

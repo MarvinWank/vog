@@ -37,7 +37,7 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         $phpcode .= $this->generateFromArray($this->name, $this->itemType);
         $phpcode .= $this->generateToArray($this->itemType);
         $phpcode .= $this->generateGenericFunctions($this->itemType);
-        $phpcode .= $this->generateMutability($this->isMutable);
+        $phpcode .= $this->generateMutability($this->isMutable, $this->itemType);
         $phpcode .= $this->closeRootScope();
 
         return $phpcode;
@@ -79,34 +79,14 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         if ($isMutable) {
             $phpcode .= $this->setService->generateAddFunction($itemType);
 
+            //TODO: Rethink $item->toArray() approach without further check
             if (!$this->isPrimitiveType($this->itemType)) {
-                $phpcode .= <<< EOT
-
-    public function remove($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        if((\$key = array_search(\$item->toArray(), \$values)) !== false) {
-            unset(\$values[\$key]);
-        }
-        \$values = array_values(\$values);
-        
-        return self::fromArray(\$values);
-    }
-EOT;
+                $phpcode .= $this->setService->generateRemoveForNonPrimitiveType();
             } else {
-                $phpcode .= <<< EOT
-
-    public function remove($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        if((\$key = array_search(\$item, \$values)) !== false) {
-            unset(\$values[\$key]);
-        }
-        \$values = array_values(\$values);
-        
-        return self::fromArray(\$values);
-    }
-EOT;
+                $phpcode .= $this->setService->generateRemoveForPrimitiveType();
             }
-        } else {
+        }
+        else {
             $phpcode .= <<< EOT
 
     public function add($this->itemType \$item): self {
