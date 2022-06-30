@@ -65,4 +65,12 @@ class PhpSetServiceTest extends UnitTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGenerateAddFunction()
+    {
+        $actual = $this->setService->generateAddFunction('FooClass');
+        $expected = file_get_contents(self::EXPECTED_DIR . 'AddFunction.vtpl');
+
+        $this->assertEquals($expected, $actual);
+    }
+
 }

@@ -50,4 +50,11 @@ class SetService extends AbstractPhpService
            'itemType' => $itemType
         ]);
     }
+
+    public function generateAddFunction(string $itemType): string
+    {
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'AddFunction.vtpl', [
+            'itemType' => $itemType
+        ]);
+    }
 }

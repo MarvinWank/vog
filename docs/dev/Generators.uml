@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>/home/marvinw/Projekte/vog/src/Generator/Php</OriginalElement>
+  <nodes>
+    <node x="704.75" y="-12.5">\Vog\Commands\Generate\AbstractGenerator</node>
+    <node x="1082.5887096774195" y="520.5">\Vog\Generator\Php\Interfaces\SetInterfaceGenerator</node>
+    <node x="801.7383419689118" y="706.5">\Vog\Generator\Php\Classes\PhpSetClassGenerator</node>
+    <node x="393.25" y="322.0">\Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator</node>
+    <node x="-240.79015544041448" y="690.8238341968913">\Vog\Generator\Php\Enum\PhpLegacyEnumClassGenerator</node>
+    <node x="-40.0" y="-16.5">/home/marvinw/Projekte/vog/src/Generator/Php/Enum</node>
+    <node x="-210.57901554404145" y="1062.4145077720207">\Vog\Generator\Php\Enum\NullablePhpLegacyEnumGenerator</node>
+    <node x="230.0887096774194" y="812.0142487046631">\Vog\Generator\Php\Classes\PhpValueObjectClassGenerator</node>
+    <node x="-57.0" y="-16.5">/home/marvinw/Projekte/vog/src/Generator/Php/Interfaces</node>
+    <node x="785.5887096774194" y="520.5">\Vog\Generator\Php\Interfaces\ValueObjectInterfaceGenerator</node>
+    <node x="1311.5887096774193" y="520.5">\Vog\Generator\Php\Interfaces\EnumInterfaceGenerator</node>
+    <node x="576.5887096774194" y="520.5">\Vog\Generator\Php\Enum\PhpEnumGenerator</node>
+    <node x="-46.0" y="-16.5">/home/marvinw/Projekte/vog/src/Generator/Php/Classes</node>
+    <node x="-210.57901554404145" y="1295.3536269430056">\Vog\Generator\Php\Classes\PhpEnumClassGenerator</node>
+    <node x="728.75" y="173.5">\Vog\Generator\Php\AbstractPhpGenerator</node>
+    <node x="308.5887096774194" y="408.0">\Vog\Generator\Php\Classes\AbstractPhpClassGenerator</node>
+    <node x="1071.0" y="309.5">\Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\Vog\Generator\Php\Enum\NullablePhpLegacyEnumGenerator" target="\Vog\Generator\Php\Enum\PhpLegacyEnumClassGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-16.5" />
+      <point x="-56.079015544041454" y="861.25" />
+      <point x="-90.79015544041448" y="861.25" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Enum\PhpLegacyEnumClassGenerator" target="\Vog\Generator\Php\Classes\AbstractPhpClassGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.5" />
+      <point x="-90.79015544041448" y="694.0" />
+      <point x="432.589" y="694.0" />
+      <point x="2.903225806107912E-4" y="118.0" />
+    </edge>
+    <edge source="\Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator" target="\Vog\Generator\Php\AbstractPhpGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.5" />
+      <point x="575.25" y="297.0" />
+      <point x="833.25" y="297.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Interfaces\EnumInterfaceGenerator" target="\Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator" relationship="GENERALIZATION">
+      <point x="2.903225806676346E-4" y="-30.5" />
+      <point x="1426.089" y="452.0" />
+      <point x="1210.5" y="452.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Classes\AbstractPhpClassGenerator" target="\Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator" relationship="GENERALIZATION">
+      <point x="2.903225806107912E-4" y="-118.0" />
+      <point x="432.589" y="408.0" />
+      <point x="575.25" y="408.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\AbstractPhpGenerator" target="\Vog\Commands\Generate\AbstractGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.5" />
+      <point x="0.0" y="80.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Interfaces\ValueObjectInterfaceGenerator" target="\Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator" relationship="GENERALIZATION">
+      <point x="2.903225806676346E-4" y="-30.5" />
+      <point x="924.089" y="452.0" />
+      <point x="1210.5" y="452.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator" target="\Vog\Generator\Php\AbstractPhpGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.5" />
+      <point x="1210.5" y="297.0" />
+      <point x="833.25" y="297.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Classes\PhpSetClassGenerator" target="\Vog\Generator\Php\Classes\AbstractPhpClassGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-30.5" />
+      <point x="941.7383419689118" y="694.0" />
+      <point x="432.589" y="694.0" />
+      <point x="2.903225806107912E-4" y="118.0" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Classes\PhpValueObjectClassGenerator" target="\Vog\Generator\Php\Classes\AbstractPhpClassGenerator" relationship="GENERALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="432.5887096774194" y="694.0" />
+      <point x="432.589" y="694.0" />
+      <point x="2.903225806107912E-4" y="118.0" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Interfaces\SetInterfaceGenerator" target="\Vog\Generator\Php\Interfaces\AbstractPhpInterfaceGenerator" relationship="GENERALIZATION">
+      <point x="2.9032258044026094E-4" y="-30.5" />
+      <point x="1187.089" y="452.0" />
+      <point x="1210.5" y="452.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+    <edge source="\Vog\Generator\Php\Enum\PhpEnumGenerator" target="\Vog\Generator\Php\AbstractPhpVogDefinitionObjectGenerator" relationship="GENERALIZATION">
+      <point x="2.903225806676346E-4" y="-30.5" />
+      <point x="671.089" y="408.0" />
+      <point x="575.25" y="408.0" />
+      <point x="0.0" y="30.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.7331433998100665" showDependencies="false" x="922.0" y="1082.0" />
+  <SelectedNodes>
+    <node>\Vog\Generator\Php\Classes\PhpValueObjectClassGenerator</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

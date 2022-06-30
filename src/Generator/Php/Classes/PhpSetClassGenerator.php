@@ -20,7 +20,7 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
 
         $this->setService = new SetService();
 
-        $this->itemType = $definition->itemType();
+        $this->itemType = $definition->itemType() ?? '';
     }
 
     public function getCode(): string
@@ -37,6 +37,7 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         $phpcode .= $this->generateFromArray($this->name, $this->itemType);
         $phpcode .= $this->generateToArray($this->itemType);
         $phpcode .= $this->generateGenericFunctions($this->itemType);
+        $phpcode .= $this->generateMutability($this->isMutable);
         $phpcode .= $this->closeRootScope();
 
         return $phpcode;
@@ -50,13 +51,13 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
     //TODO: toggle between method_exists() Check and Interface Check according to configuration --> Generator
     protected function generateToArray(string $itemType): string
     {
-        if ($this->isPrimitiveType($itemType)){
+        if ($this->isPrimitiveType($itemType)) {
             return $this->setService->generateToArrayPrimitive();
         }
         return $this->setService->generateToArrayNonPrimitive();
     }
 
-   protected function generateFromArray(string $name, string $itemType): string
+    protected function generateFromArray(string $name, string $itemType): string
     {
         if (empty($itemType)) {
             return $this->setService->generateFromArrayForUnspecifiedType();
@@ -71,28 +72,14 @@ final class PhpSetClassGenerator extends AbstractPhpClassGenerator
         return $this->setService->generateGenericFunctions($itemType);
     }
 
-    protected function generateMutability(){
-    
-        if (!$this->isMutable()) {
-            $phpcode .= <<< EOT
+    protected function generateMutability(bool $isMutable, string $itemType): string
+    {
+        $phpcode = "";
 
-    public function add($this->itemType \$item): self {
-        \$values = \$this->toArray();
-        \$values[] = \$item;
-        return self::fromArray(\$values);
-    }
+        if ($isMutable) {
+            $phpcode .= $this->setService->generateAddFunction($itemType);
 
-    public function offsetSet(\$offset, \$value) {
-        throw new BadMethodCallException('ArrayAccess offsetSet is forbidden, use ->add()');
-    }
-
-    public function offsetUnset(\$offset) {
-        throw new BadMethodCallException('ArrayAccess offsetUnset is forbidden, use ->remove()');
-    }
-    
-EOT;
-
-            if (!$this->isPrimitiveType($this->itemType)){
+            if (!$this->isPrimitiveType($this->itemType)) {
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
@@ -105,7 +92,7 @@ EOT;
         return self::fromArray(\$values);
     }
 EOT;
-            }else{
+            } else {
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
@@ -141,7 +128,7 @@ EOT;
     }
     
 EOT;
-            if (!$this->isPrimitiveType($this->itemType)){
+            if (!$this->isPrimitiveType($this->itemType)) {
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
@@ -154,7 +141,7 @@ EOT;
         return \$this;
     }
 EOT;
-            }else{
+            } else {
                 $phpcode .= <<< EOT
 
     public function remove($this->itemType \$item): self {
