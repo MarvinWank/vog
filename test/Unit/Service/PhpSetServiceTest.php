@@ -97,5 +97,20 @@ class PhpSetServiceTest extends UnitTestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGenerateMutableRemoveForNonPrimitiveType()
+    {
+        $actual = $this->setService->generateMutableRemoveForNonPrimitiveType();
+        $expected = file_get_contents(self::EXPECTED_DIR . 'MutableRemoveFunctionNonPrimitive.vtpl');
+
+        $this->assertEquals($actual, $expected);
+    }
+
+    public function testGenerateMutableRemoveForPrimitiveType()
+    {
+        $actual = $this->setService->generateMutableRemoveForPrimitiveType();
+        $expected = file_get_contents(self::EXPECTED_DIR . 'MutableRemoveFunctionPrimitive.vtpl');
+
+        $this->assertEquals($actual, $expected);
+    }
 
 }

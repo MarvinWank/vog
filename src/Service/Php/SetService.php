@@ -81,14 +81,14 @@ class SetService extends AbstractPhpService
 
     public function generateMutableRemoveForNonPrimitiveType(): string
     {
-        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'MutableRemoveFunction.vtpl', [
             'arraySearchFirstParam' => '$item->toArray()'
         ]);
     }
 
     public function generateMutableRemoveForPrimitiveType(): string
     {
-        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'RemoveFunction.vtpl', [
+        return $this->templateEngine->replaceValues(self::TEMPLATE_DIR . 'MutableRemoveFunction.vtpl', [
             'arraySearchFirstParam' => '$item'
         ]);
     }
